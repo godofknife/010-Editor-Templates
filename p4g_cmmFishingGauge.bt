@@ -1,0 +1,37 @@
+#include "p4g_enums.bt"
+
+LittleEndian();
+
+typedef struct
+{
+  uint FileSize;
+  uint DisplayList;
+} FileInfo <size=0x8, optimize=false>;
+
+typedef struct
+{
+  ubyte LeftRedGaugeRate <name = "Left Red Gauge Rate">;
+  ubyte LeftOrangeGaugeRate <name = "Left Orange Gauge Rate">;
+  ubyte LeftYellowGaugeRate <name = "Left Yellow Gauge Rate">;
+  ubyte BlueGaugeRate <name = "Blue Gauge Rate">;
+  ubyte RightYellowGaugeRate <name = "Right Yellow Gauge Rate">;
+  ubyte RightOrangeGaugeRate <name = "Right Orange Gauge Rate">;
+  ubyte RightRedGaugeRate <name = "Right Red Gauge Rate">;
+  ubyte field07;
+  ushort field08;
+  ushort field0A;
+} GaugeRateList <size=0xC, optimize=false>;
+
+SetBackColor( 0x880000 );
+
+typedef struct {
+	FileInfo Segmentinfo;
+} Initialinfo <optimize=false>;
+Initialinfo Initialinfo1;
+
+typedef struct {
+	FSeek(0x8);
+	GaugeRateList List[( (FileSize() - 16) / 12 )];
+} GaugeRate1 <optimize=false>;
+GaugeRate1 GaugeRate;
+

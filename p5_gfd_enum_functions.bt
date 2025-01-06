@@ -1,0 +1,214 @@
+string setTexcoordDisplay(EMaterialMapsTexcoord texcoord) {
+    string buffer;
+    switch (texcoord) {
+        case 7: SPrintf(buffer, "~"); break;
+        default: SPrintf(buffer, "%d", texcoord); break;
+    }
+    return buffer;
+}
+
+string showMaterialTexcoord(TMaterialMapsTexcoord& texcoord) {
+    string buffer;
+    SPrintf(buffer, "%s %s %s %s %s %s %s %s %s %s", 
+        setTexcoordDisplay(texcoord.Texture1), setTexcoordDisplay(texcoord.Texture2), setTexcoordDisplay(texcoord.Texture3), 
+        setTexcoordDisplay(texcoord.Texture4), setTexcoordDisplay(texcoord.Texture5), setTexcoordDisplay(texcoord.Texture6), 
+        setTexcoordDisplay(texcoord.Texture7), setTexcoordDisplay(texcoord.Texture8), setTexcoordDisplay(texcoord.Texture9),
+        setTexcoordDisplay(texcoord.Texture10)
+    );
+    return buffer;
+}
+
+u32 showMaterialTexcoord2(TMaterialMapsTexcoord& texcoord) {
+    u32 out;
+    out += texcoord.Texture1;
+    out += texcoord.Texture2 << 3;
+    out += texcoord.Texture3 << 6;
+    out += texcoord.Texture4 << 9;
+    out += texcoord.Texture5 << 12;
+    out += texcoord.Texture6 << 15;
+    out += texcoord.Texture7 << 18;
+    out += texcoord.Texture8 << 21;
+    out += texcoord.Texture9 << 24;
+    out += texcoord.Texture10 << 27;
+    return out;
+}
+
+string EModelFlagsToString(u64 value)
+{
+    local u32 prefixLength = Strlen("EModelFlags_"), i;
+    local EModelFlags current; local string result, currentStr;
+    for (i = 0; i <= 31; ++i) 
+    {
+        if (!(current = value & (1 << i))) continue; 
+        currentStr = SubStr(EnumToString(current), prefixLength);
+        result = i == 0 ? currentStr : Str("%s|%s", result, currentStr);
+    }
+    return result;
+}
+
+void StringToEModelFlags(EModelFlags& result, string input)
+{
+    local s32 prefixLength = Strlen("EModelFlags_"), i, pos, nextPos;
+    local EModelFlags current;
+    result = 0;
+    while (pos < Strlen(input)) {
+        nextPos = Strstr(SubStr(input, pos), "|");
+        if (nextPos == -1) nextPos = Strlen(input) - pos;
+        for (i = 0; i <= 31; ++i) {
+            current = 1 << i;
+            if (Strcmp(SubStr(EnumToString(current), prefixLength), SubStr(input, pos, nextPos)) == 0)
+                result |= current;
+        }
+        pos = pos + nextPos + 1;
+    }
+}
+
+string EVertexAttributeFlagsToString(u64 value)
+{
+    local u32 prefixLength = Strlen("EVertexAttributeFlags_"), i;
+    local EVertexAttributeFlags current; local string result, currentStr;
+    for (i = 0; i <= 31; ++i) 
+    {
+        if (!(current = value & (1 << i))) continue; 
+        currentStr = SubStr(EnumToString(current), prefixLength);
+        result = i == 0 ? currentStr : Str("%s|%s", result, currentStr);
+    }
+    return result;
+}
+
+void StringToEVertexAttributeFlags(EVertexAttributeFlags& result, string input)
+{
+    local s32 prefixLength = Strlen("EVertexAttributeFlags_"), i, pos, nextPos;
+    local EVertexAttributeFlags current;
+    result = 0;
+    while (pos < Strlen(input)) {
+        nextPos = Strstr(SubStr(input, pos), "|");
+        if (nextPos == -1) nextPos = Strlen(input) - pos;
+        for (i = 0; i <= 31; ++i) {
+            current = 1 << i;
+            if (Strcmp(SubStr(EnumToString(current), prefixLength), SubStr(input, pos, nextPos)) == 0)
+                result |= current;
+        }
+        pos = pos + nextPos + 1;
+    }
+}
+
+string EMaterialFlagsToString(u64 value)
+{
+    local u32 prefixLength = Strlen("EMaterialFlags_"), i;
+    local EMaterialFlags current; local string result, currentStr;
+    for (i = 0; i <= 31; ++i) 
+    {
+        if (!(current = value & (1 << i))) continue; 
+        currentStr = SubStr(EnumToString(current), prefixLength);
+        result = i == 0 ? currentStr : Str("%s|%s", result, currentStr);
+    }
+    return result;
+}
+
+void StringToEMaterialFlags(EMaterialFlags& result, string input)
+{
+    local s32 prefixLength = Strlen("EMaterialFlags_"), i, pos, nextPos;
+    local EMaterialFlags current;
+    result = 0;
+    while (pos < Strlen(input)) {
+        nextPos = Strstr(SubStr(input, pos), "|");
+        if (nextPos == -1) nextPos = Strlen(input) - pos;
+        for (i = 0; i <= 31; ++i) {
+            current = 1 << i;
+            if (Strcmp(SubStr(EnumToString(current), prefixLength), SubStr(input, pos, nextPos)) == 0)
+                result |= current;
+        }
+        pos = pos + nextPos + 1;
+    }
+}
+
+string EMeshFlagsToString(u64 value)
+{
+    local u32 prefixLength = Strlen("EMeshFlags_"), i;
+    local EMeshFlags current; local string result, currentStr;
+    for (i = 0; i <= 31; ++i) 
+    {
+        if (!(current = value & (1 << i))) continue; 
+        currentStr = SubStr(EnumToString(current), prefixLength);
+        result = i == 0 ? currentStr : Str("%s|%s", result, currentStr);
+    }
+    return result;
+}
+
+void StringToEMeshFlags(EMeshFlags& result, string input)
+{
+    local s32 prefixLength = Strlen("EMeshFlags_"), i, pos, nextPos;
+    local EMeshFlags current;
+    result = 0;
+    while (pos < Strlen(input)) {
+        nextPos = Strstr(SubStr(input, pos), "|");
+        if (nextPos == -1) nextPos = Strlen(input) - pos;
+        for (i = 0; i <= 31; ++i) {
+            current = 1 << i;
+            if (Strcmp(SubStr(EnumToString(current), prefixLength), SubStr(input, pos, nextPos)) == 0)
+                result |= current;
+        }
+        pos = pos + nextPos + 1;
+    }
+}
+
+string EAnimationPackFlagsToString(u64 value)
+{
+    local u32 prefixLength = Strlen("EAnimationPackFlags_"), i;
+    local EAnimationPackFlags current; local string result, currentStr;
+    for (i = 0; i <= 31; ++i) 
+    {
+        if (!(current = value & (1 << i))) continue; 
+        currentStr = SubStr(EnumToString(current), prefixLength);
+        result = i == 0 ? currentStr : Str("%s|%s", result, currentStr);
+    }
+    return result;
+}
+
+void StringToEAnimationPackFlags(EAnimationPackFlags& result, string input)
+{
+    local s32 prefixLength = Strlen("EAnimationPackFlags_"), i, pos, nextPos;
+    local EAnimationPackFlags current;
+    result = 0;
+    while (pos < Strlen(input)) {
+        nextPos = Strstr(SubStr(input, pos), "|");
+        if (nextPos == -1) nextPos = Strlen(input) - pos;
+        for (i = 0; i <= 31; ++i) {
+            current = 1 << i;
+            if (Strcmp(SubStr(EnumToString(current), prefixLength), SubStr(input, pos, nextPos)) == 0)
+                result |= current;
+        }
+        pos = pos + nextPos + 1;
+    }
+}
+
+string EAnimationFlagsToString(u64 value)
+{
+    local u32 prefixLength = Strlen("EAnimationFlags_"), i;
+    local EAnimationFlags current; local string result, currentStr;
+    for (i = 0; i <= 31; ++i) 
+    {
+        if (!(current = value & (1 << i))) continue; 
+        currentStr = SubStr(EnumToString(current), prefixLength);
+        result = i == 0 ? currentStr : Str("%s|%s", result, currentStr);
+    }
+    return result;
+}
+
+void StringToEAnimationFlags(EAnimationFlags& result, string input)
+{
+    local s32 prefixLength = Strlen("EAnimationFlags_"), i, pos, nextPos;
+    local EAnimationFlags current;
+    result = 0;
+    while (pos < Strlen(input)) {
+        nextPos = Strstr(SubStr(input, pos), "|");
+        if (nextPos == -1) nextPos = Strlen(input) - pos;
+        for (i = 0; i <= 31; ++i) {
+            current = 1 << i;
+            if (Strcmp(SubStr(EnumToString(current), prefixLength), SubStr(input, pos, nextPos)) == 0)
+                result |= current;
+        }
+        pos = pos + nextPos + 1;
+    }
+}

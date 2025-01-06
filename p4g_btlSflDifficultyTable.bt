@@ -1,0 +1,39 @@
+#include "p4g_enums.bt"
+
+LittleEndian();
+
+typedef struct
+{
+  ushort FileSize;
+  ushort DisplayList;
+  ushort field04;
+  ushort field06;
+} FileInfo <size=0x8, optimize=false>;
+
+typedef struct
+{
+  ubyte Unknown [8];
+} Shuffletable <size=0x8, optimize=false>;
+
+SetBackColor( 0x880000 );
+
+typedef struct {
+	FileInfo Segmentinfo;
+} Initialinfo <optimize=false>;
+Initialinfo Initialinfo1;
+
+typedef struct {
+	FSeek(0x8);
+	Shuffletable List<name="Shopping District">;
+    Shuffletable List1<name="Yukiko's Castle">;
+	Shuffletable List2<name="Steamy Bathhouse">;
+	Shuffletable List3<name="Marukyu Striptease">;
+	Shuffletable List4<name="Game">;
+	Shuffletable List5<name="Secret Laboratory">;
+	Shuffletable List6<name="Heaven">;
+	Shuffletable List7<name="Magatsu Inaba">;
+	Shuffletable List8<name="Hollow Forest">;
+	Shuffletable List9<name="Yomotsu Hirasaka">;
+} TableShuffle <optimize=false>;
+TableShuffle ShuffleTable1;
+

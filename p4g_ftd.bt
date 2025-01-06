@@ -1,0 +1,30 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+
+typedef struct( uint EntrySize )
+{
+  byte Entry[EntrySize];
+} TFtdEntry <optimize = false>;
+
+typedef struct
+{
+  uint FtdSize;
+  uint FtdEntries;
+  byte Padding[8];
+  TFtdEntry FtdEntry(FtdSize / FtdEntries)[FtdEntries];
+} TFtd <optimize = false>;
+
+TFtd File;

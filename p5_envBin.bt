@@ -1,0 +1,70 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File:
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: *.bin 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "common/include.h"
+
+local int64 fileSize = FileSize() - 16;
+
+typedef struct
+{
+	char Magic[4];
+	u32 Version;
+	u32 Field08;
+	u32 Field0C;
+}header;
+
+typedef struct
+{
+	char ddsName[132];
+	f32 Field94;
+	s16 Field98;
+	s16 Field9A;
+	f32 Field9C;
+	s16 FieldA0;
+	s16 FieldA2;
+	s16 FieldA4;
+	s16 FieldA6;
+	s32 FieldA8;
+	f32 FieldAC;
+	s16 FieldB0;
+	s16 FieldB2;
+	s16 FieldB4;
+	s16 FieldB6;
+	f32 FieldB8;
+	f32 FieldBC;
+	f32 FieldC0;
+	f32 FieldC4;
+	f32 FieldC8;
+	f32 FieldCC;
+	f32 FieldD0;
+	f32 FieldD4;
+	f32 FieldD8;
+	f32 FieldDC;
+	if (fileSize % 208 != 0)
+	{
+		f32 FieldE0;
+	}
+}EnvBin;
+
+header head;
+local int structSize;
+if (fileSize % 208 == 0)
+{
+	BigEndian();
+	structSize = 208;
+}
+else
+{
+	LittleEndian();
+	structSize = 212;
+}
+EnvBin data[ (fileSize) / structSize ]<optimize = false>;

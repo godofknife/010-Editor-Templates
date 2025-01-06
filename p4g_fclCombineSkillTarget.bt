@@ -1,0 +1,57 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+//#include "p4g_enums.bt"
+
+
+
+//if you know how please change the FtdEntry struct 
+//to use names from PersonaSkill enum inside of p4g_enums.bt
+
+
+
+LittleEndian();
+
+
+
+
+enum<byte>Level
+{
+    NonInheritable = 0,
+    InheritenceLevel1 = 1,
+    InheritenceLevel2 = 2,
+    InheritenceLevel3 = 3,
+    InheritenceLevel4 = 4,
+    InheritenceLevel5 = 5,
+    InheritenceLevel6 = 6,
+    InheritenceLevel7 = 7,
+    InheritenceLevel8 = 8,
+};
+
+typedef struct( uint EntrySize )
+{
+  Level Entry[EntrySize] <name = "Level of Inharitence">;
+} TFtdEntry <optimize = false>;
+
+
+
+typedef struct
+{
+  uint FtdSize <name = "Size">;
+  uint FtdEntries <name = "Number of entries">;
+  byte Padding[8];
+  
+  TFtdEntry FtdEntry(FtdSize / FtdEntries)[FtdEntries] <name = "Skill">;
+} TFtd <optimize = false>;
+
+TFtd File <name = "CombineSkillTragetLvS">;

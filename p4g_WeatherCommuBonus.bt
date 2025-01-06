@@ -1,0 +1,34 @@
+#include "p4g_enums.bt"
+
+LittleEndian();
+
+typedef struct
+{
+  uint FileSize;
+  ushort DisplayList;
+  ushort field06;
+  ushort field08;
+  ushort field0A;
+  ushort field0C;
+  ushort field0E;
+} FileInfo <size=0x10, optimize=false>;
+
+typedef struct
+{
+  float MultiplierBonus <name="Multiplier Bonus">;
+} Multiplier <size=0x4, optimize=false>;
+
+SetBackColor( 0x880000 );
+
+typedef struct {
+	FileInfo Segmentinfo;
+} Initialinfo <optimize=false>;
+Initialinfo Initialinfo1;
+
+typedef struct {
+	FSeek(0x10);
+    Multiplier List[( (FileSize() - 16 )/ 4 ) - 1 ];
+} MultiplierList <optimize=false>;
+
+MultiplierList MultiplierList1;
+

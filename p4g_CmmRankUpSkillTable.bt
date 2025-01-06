@@ -1,0 +1,43 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "p4g_enums.bt"
+
+LittleEndian();
+
+enum<ushort> PartyMember
+{
+  Yosuke = 2,
+  Chie = 3,
+  Yukiko = 4,
+  Rise = 5,
+  Kanji = 6,
+  Naoto = 7,
+  Teddie = 8
+};
+
+typedef struct
+{
+  PartyMember Member;
+  ushort Rank;
+  BattleSkill SkillToLearn;
+  BattleSkill SkillToReplace;
+} TEntry;
+
+typedef struct
+{
+  uint Size;
+  uint Entries;
+  TEntry Entry[Entries * 6];
+} TRankUpSkillTable;
+
+TRankUpSkillTable File;

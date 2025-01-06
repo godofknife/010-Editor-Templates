@@ -1,0 +1,62 @@
+#include "p4g_enums.bt"
+
+LittleEndian();
+
+typedef struct
+{
+  uint FileSize;
+  ushort DisplayList;
+  ushort field06;
+  ushort field08;
+  ushort field0A;
+  ushort field0C;
+  ushort field0E;
+} FileInfo <size=0x10, optimize=false>;
+
+typedef struct
+{
+  ushort field00;
+  ushort field02;
+  PersonasID PersonaRequest <name="Persona Request">;
+  ushort field06;
+  BattleSkill SkillRequest <name="Skill Request">;
+  ushort field0A;
+  ushort field0C;
+  ushort field0E;
+  ushort field10;
+  ushort field12;
+  ushort field14;
+  ushort field16;
+  ushort field18;
+  ushort field1A;
+  ushort field1C;
+  ushort field1E;
+  ushort field20;
+  ushort field22;
+  ushort field24;
+  ushort field26;
+  ushort field28;
+  ushort field2A;
+  ushort field2C;
+  ushort field2E;
+  ushort field30;
+  ushort field32;
+  ushort field34;
+  ushort field36;
+  ushort field38;
+  ushort field3A;
+} RequestList <size=0x3C, optimize=false>;
+
+SetBackColor( 0x880000 );
+
+typedef struct {
+	FileInfo Segmentinfo;
+} Initialinfo <optimize=false>;
+Initialinfo Initialinfo1;
+
+typedef struct {
+	FSeek(0x10);
+    RequestList List[(FileSize() - 16 )/ 60 ];
+} FusionRequest <optimize=false>;
+FusionRequest MargaretRequest;
+

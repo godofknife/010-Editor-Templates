@@ -1,0 +1,41 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+// File Mask: DNGRESULTDATA*.BIN
+//------------------------------------------------
+
+#include "common/include.h"
+
+LittleEndian();
+
+typedef struct 
+{	    
+
+    local string readStr;
+	s32 EndOfFileIndicator;
+
+    if ( EndOfFileIndicator == 0 ) {
+	    s32 MessageIndex;
+	    Bitflag NEW_ProgressBitFlag;
+	    Bitflag OLD_ProgressBitflag;
+	    s32 OLD_ProgressCount;
+	    s32 NEW_ProgressCount;
+	    s32 CountValueCompare;	    
+	    if (NEW_ProgressBitFlag > -1 || OLD_ProgressBitflag > -1) {
+		    readStr = Str(
+            "Msg Index :  %02d   ||  NEW Progress Flag :  %05d   ||   OLD Progress Flag :  %05d", 
+            MessageIndex, FlagConvert(NEW_ProgressBitFlag), FlagConvert(OLD_ProgressBitflag)
+            );
+        } else {
+		    readStr = Str(
+            "Msg Index :  %02d   ||  NEW Progress Count :  %03d   ||   OLD Progress Count :  %03d   ||   Compare Value :  %d", 
+            MessageIndex, NEW_ProgressCount, OLD_ProgressCount, CountValueCompare
+            );	
+        }
+	} else {
+        byte Dummy0[28];
+        readStr = "END OF FILE";
+    }
+
+} dngResultDataStruct <read=readStr>;
+
+dngResultDataStruct ResultConditional[FileSize() / 0x20] <optimize=false>;

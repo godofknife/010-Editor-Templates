@@ -1,0 +1,33 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: SCArkadia
+//   Version: 1.0
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+
+typedef struct( uint EntrySize )
+{
+  ushort level2 <name="Level 2 Status", comment=" This is the point needed to get to next level. Table[0] is Courage, [1] is Knowledge, [2] is Diligence, [3] is Understanding, [4] is Expression">;
+  ushort level3 <name="Level 3 Status", comment=" This is the point needed to get to next level. Table[0] is Courage, [1] is Knowledge, [2] is Diligence, [3] is Understanding, [4] is Expression">;
+  ushort level4 <name="Level 4 Status", comment=" This is the point needed to get to next level. Table[0] is Courage, [1] is Knowledge, [2] is Diligence, [3] is Understanding, [4] is Expression">;
+  ushort level5 <name="Level 5 Status", comment=" This is the point needed to get to next level. Table[0] is Courage, [1] is Knowledge, [2] is Diligence, [3] is Understanding, [4] is Expression">;
+} TFtdEntry <optimize = false>;
+
+typedef struct
+{
+  uint FtdSize;
+  uint FtdEntries;
+  TFtdEntry FtdEntry(FtdSize / FtdEntries)[FtdEntries];
+} TFtd <optimize = false>;
+
+SetBackColor( 0x880000 );
+TFtd File;
