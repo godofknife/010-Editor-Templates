@@ -1,0 +1,486 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: psp textures
+//   Authors: Pioziomgames
+//   Version: 1.0
+//   Purpose: Parsing psp gim textures
+//  Category: Textures
+// File Mask: *.gim
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/common.bt"
+
+#define GimChunkReservedId (0x0000) //0000-0fff
+#define GimChunkPrivateId  (0x1000) //1000-3fff
+#define GimChunkPublicId   (0x4000) //4000-7fff
+
+
+typedef enum<short>
+{
+    GimBlock    = 0x01,
+    GimFile     = 0x02,
+    GimPicture  = 0x03,
+    GimImage    = 0x04,
+    GimPalette  = 0x05,
+    GimSequence = 0x06,
+    GimFileInfo = 0xff,
+} GimChunkType;
+
+typedef enum<short>
+{
+    RGBA5650 = 0,
+    RGBA5551 = 1,
+    RGBA4444 = 2,
+    RGBA8888 = 3,
+    Index4   = 4,
+    Index8   = 5,
+    Index16  = 6,
+    Index32  = 7,
+    DXT1     = 8,
+    DXT3     = 9,
+    DXT5     = 10,
+    DXT1EXT  = 264,
+    DXT3EXT  = 265,
+    DXT5EXT  = 266,
+} GimFormat;
+
+typedef enum<short>
+{
+    Normal   = 0,
+    PSPImage = 1,
+} GimOrder;
+
+typedef enum<short>
+{
+    Generic = 0x0,
+    MipMap  = 0x1,
+    MipMap2 = 0x2,
+    Sequence = 0x3,
+} GimType;
+
+typedef enum<short>
+{
+    TypeMask       = 0x0f,
+    Dissolve       = 0x80,
+    Event          = 0x40,
+    
+    InterpConstant = 0x00,
+    InterpLinear   = 0x01,
+} GimInterp;
+
+typedef enum<short>
+{
+    Hold  = 0,
+    Cycle = 1,
+} GimRepeat;
+
+typedef enum<short>
+{
+    ImageIndex   = 0,
+    ImagePlane   = 1,
+    ImageLevel   = 2,
+    ImageFrame   = 3,
+    PaletteIndex = 8,
+    PaletteLevel = 10,
+    PaletteFrame = 11,
+    CropU        = 16,
+    CropV        = 17,
+    CropW        = 18,
+    CropH        = 19,
+    BlendMode    = 32,
+    FuncMode     = 34,
+    FuncComp     = 35,
+    FilterMag    = 36,
+    FilterMin    = 37,
+    WrapU        = 38,
+    WrapV        = 39,
+} GimParam;
+
+typedef enum<short>
+{
+    Off = 0,
+    Mix = 1,
+    Add = 2,
+    Sub = 3,
+    Min = 4,
+    Max = 5,
+    Abs = 6,
+} GimBlend;
+
+typedef enum<short>
+{
+    Modulate = 0,
+    Decal    = 1,
+} GimFunc;
+
+typedef enum<short>
+{
+    RGB  = 0,
+    RGBA = 1,
+} GimFunc2;
+
+typedef enum<short>
+{
+    Nearest = 0,
+    Linear  = 1,
+    NearestMipMapNearest = 4,
+    LinearMipMapNearest  = 5,
+    NearestMipMapLinear  = 6,
+    LinearMipMapLinear  = 7,
+} GimFilter;
+
+typedef enum<short>
+{
+    Repeat = 0,
+    Clamp  = 1,
+} GimWrap;
+
+typedef struct
+{
+    ubyte R : 5;
+    ubyte G : 6;
+    ubyte B : 5;
+} RGBA5650Pixel;
+
+typedef struct
+{
+    ubyte R : 5;
+    ubyte G : 5;
+    ubyte B : 5;
+    ubyte B : 1;
+} RGBA5551Pixel;
+
+typedef struct
+{
+    ubyte R : 4;
+    ubyte G : 4;
+    ubyte B : 4;
+    ubyte B : 4;
+} RGBA4444Pixel;
+
+typedef struct
+{
+    ubyte R : 8;
+    ubyte G : 8;
+    ubyte B : 8;
+    ubyte A : 8;
+} RGBA8888Pixel;
+
+typedef struct
+{
+    ubyte Index : 4;
+    ubyte Index2 : 4;
+} Index4TwoPixels;
+
+typedef struct
+{
+    ubyte Index;
+} Index8Pixel;
+
+typedef struct
+{
+    ushort Index;
+} Index16Pixel;
+
+typedef struct
+{
+    uint Index;
+} Index32Pixel;
+
+typedef struct (ushort Width)
+{
+    RGBA5650Pixel Pixels[Width];
+} RGBA5650Row <optimize=false>;
+
+typedef struct (ushort Width)
+{
+    RGBA5551Pixel Pixels[Width];
+} RGBA5551Row <optimize=false>;
+
+typedef struct (ushort Width)
+{
+    RGBA4444Pixel Pixels[Width];
+} RGBA4444Row <optimize=false>;
+
+typedef struct (ushort Width)
+{
+    RGBA8888Pixel Pixels[Width];
+} RGBA8888Row <optimize=false>;
+
+
+typedef struct (ushort Width)
+{
+    BitfieldDisablePadding();
+    //010 editor will not allow for a 4bit value on it's own
+    Index4TwoPixels Pixels[Width / 2];
+} Index4Row <optimize=false>;
+
+typedef struct (ushort Width)
+{
+    Index8Pixel Pixels[Width];
+} Index8Row <optimize=false>;
+
+typedef struct (ushort Width)
+{
+    Index16Pixel Pixels[Width];
+} Index16Row <optimize=false>;
+
+typedef struct (ushort Width)
+{
+    Index32Pixel Pixels[Width];
+} Index32Row <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    uint Signature;
+    uint Version;
+    uint Style;
+    uint Option;
+} GimFileHeader <optimize=false>;
+
+
+typedef struct {
+    local int Start = FTell();
+    ushort HeaderSize;
+    ushort Unused;
+    GimFormat Format;
+    GimOrder Order;
+    ushort Width;
+    ushort Height;
+    ushort BPP;
+    ushort PitchAlign;
+    ushort HeightAlign;
+    ushort DimCount;
+    ushort Reserved;
+    ushort Reserved2;
+    uint OffsetsOffs;
+    uint ImagesOffs;
+    uint TotalSize;
+    uint PlaneMask;
+    GimType LevelType;
+    ushort LevelCount;
+    GimType FrameType;
+    ushort FrameCount;
+
+    FSeek(Start + HeaderSize);
+} GimImageHeader <optimize=false>;
+
+
+typedef struct (int Start, ushort Width, ushort Height, GimFormat Format)
+{
+    uint ImageOffs;
+    local int cur = FTell();
+    FSeek(ImageOffs + Start);
+    switch (Format)
+    {
+        case Index4: Index4Row Rows(Width)[Height]; break;
+        case Index8: Index8Row Rows(Width)[Height]; break;
+        case Index16: Index16Row Rows(Width)[Height]; break;
+        case Index32: Index32Row Rows(Width)[Height]; break;
+        case RGBA5650: RGBA5650Row Rows(Width)[Height]; break;
+        case RGBA5551: RGBA5551Row Rows(Width)[Height]; break;
+        case RGBA4444: RGBA4444Row Rows(Width)[Height]; break;
+        case RGBA8888: RGBA8888Row Rows(Width)[Height]; break;
+    }
+    FSeek(cur);
+} Image <optimize=false>;
+
+typedef struct (ushort FrameCount, int Start, ushort Width, ushort Height, GimFormat Format)
+{
+    SetRandomBackColor();
+    Image Frame(Start, Width, Height, Format)[FrameCount];
+} ImageLevel <optimize=false>;
+
+
+typedef struct
+{
+    local int Start = FTell();
+    GimImageHeader Header;
+    FSeek(Start + Header.OffsetsOffs);
+    ImageLevel ImageLevels(Header.FrameCount, Header.Start, Header.Width, Header.Height, Header.Format)[Header.LevelCount];
+    FSeek(Start + Header.TotalSize);
+} GimImageData <optimize=false>;
+
+
+typedef struct {
+    local int Start = FTell();
+    ushort HeaderSize;
+    ushort Unused;
+    ushort FrameStart;
+    ushort FrameEnd;
+    ushort FrameRate;
+    GimRepeat FrameRepeat;
+    ushort ConstantCount;
+    ushort FunctionCount;
+    uint ConstantsOffs;
+    uint FunctionsOffs;
+    uint KeyFramesOffs;
+    uint TotalSize;
+    
+    FSeek(Start + HeaderSize);
+} GimSequenceHeader <optimize=false>;
+
+typedef struct
+{
+    short OrFrame; 
+    short Value;
+} AdKeyFrame <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    short CountOrFrame;
+    if (CountOrFrame < 0)
+    {
+        short Values[-CountOrFrame];
+    }
+    else if (CountOrFrame == 0)
+    {
+        short Value;
+    }
+    else
+    {
+        short Value;
+        
+        local short test = 1;
+        local int count = 0;
+        while (test != 0)
+        {
+            test = ReadShort(FTell() + count * 4);
+            count += 1;
+        }
+        AdKeyFrame AdditionalKeyFrames[count];
+    }
+
+} GimKeyFrame <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    GimParam Param;
+    short Value;
+} GimConstant <optimize=false>;
+
+typedef struct (int Start)
+{
+    SetRandomBackColor();
+    GimParam Param;
+    GimInterp Interp;
+    uint KeyFramesOffs;
+    local int cur = FTell();
+    FSeek(Start + KeyFramesOffs);
+    GimKeyFrame KeyFrame;
+    FSeek(cur);
+} GimFunction <optimize=false>;
+
+typedef struct {
+    local int Start = FTell();
+    GimSequenceHeader Header;
+    FSeek(Start + Header.ConstantsOffs);
+    GimConstant Constant[Header.ConstantCount];
+    FSeek(Start + Header.FunctionsOffs);
+    GimFunction Function(Start)[Header.FunctionCount];
+    FSeek(Start + Header.TotalSize);
+} GimSequenceData <optimize=false>;
+
+
+typedef struct
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    GimChunkType ChunkType;
+    ushort ArgsOffs;
+    uint NextOffs;
+    
+    uint ChildOffs;
+    uint DataOffs;
+
+    if (ArgsOffs >= 16)
+        FSkip(ArgsOffs - 16);
+    else
+        FSkip(ArgsOffs);
+    
+    FAlign(4);
+    
+    switch (ChunkType)
+    {
+        case GimImage: GimImageData Data; break;
+        case GimPalette: GimImageData Data; break;
+        case GimSequence: GimSequenceData Data; break;
+        default: FSeek(ChildOffs - DataOffs + Start); break;
+    }
+    FAlign(4);
+
+} GimPicChildChunk <optimize=false, read=GimPicChildChunkToString>;
+
+string GimPicChildChunkToString(GimPicChildChunk& value)
+{
+    return EnumToString( value.ChunkType ); 
+}
+
+typedef struct {
+    string ProjectName;
+    string UserName;
+    string SavedDate;
+    string Originator;
+} GimFileInfoData;
+
+typedef struct
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    GimChunkType ChunkType;
+    ushort ArgsOffs;
+    uint NextOffs;
+    
+    uint ChildOffs;
+    uint DataOffs;
+
+    switch (ChunkType)
+    {
+        case GimPicture: break;
+        case GimFileInfo: GimFileInfoData Data; break;
+    }
+    FAlign(4);
+
+    while (FTell() < (NextOffs - ChildOffs + Start))
+    {
+        GimPicChildChunk Chunk;
+    }
+
+} GimChunk <optimize=false, read=GimChunkToString>;
+
+string GimChunkToString(GimChunk& value)
+{
+    return EnumToString( value.ChunkType ); 
+}
+
+typedef struct 
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    GimChunkType ChunkType;
+    ushort ArgsOffs;
+    uint NextOffs;
+    
+    uint ChildOffs;
+    uint DataOffs;
+
+    while (FTell() < (NextOffs - ChildOffs + Start))
+    {
+        GimChunk Chunk;
+    }
+    
+} GimFileChunk <optimize=false>;
+
+
+struct
+{
+    GimFileHeader Header;
+    GimFileChunk FileChunk;
+    
+    
+} GimFile <optimize=false>;

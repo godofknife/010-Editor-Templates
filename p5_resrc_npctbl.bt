@@ -1,0 +1,62 @@
+#include "common/include.h"
+
+BigEndian();
+
+enum<u16> CharacterID
+{
+    None,
+    Joker,
+    Ryuji,
+    Mona,
+    Ann,
+    Yusuke,
+    Makoto,
+    Haru,
+    Futaba,
+    Akechi,
+	Kasumi,
+	Justine = 1001,
+	Caroline,
+	Sojiro,
+	Iwai,
+	Sae,
+	Hifumi,
+	Ohya,
+	Takemi,
+	Kawakami,
+	Shinya,
+	Mishima,
+	Yoshida,
+	Chihaya,
+	Maruki,
+};
+
+typedef struct
+{
+	SetBackColor( ( color++ ) * 0x0000FF );
+	u16 NPC_ID;
+	u16 Field02;
+	CharacterID ModelMajorID;
+	u8 ModelMinorID;
+	u8 ModelSubID;
+	u16 attach_major;
+	u8 attach_minor;
+	u8 umbrella;
+	u16 attach_major2;
+	u8 attach_minor2;
+	u8 anim_type;
+	u16 Field10;
+	u16 Field12;
+	u16 anim_base;
+	u16 anim_add;
+	u16 anim_base_rain;
+	u16 anim_add_rain;
+} resrcNPCTblEntry <optimize=false,read=Str("%05d - c%04d_%03d_%02d", this.NPC_ID, this.ModelMajorID, this.ModelMinorID, this.ModelSubID)>;
+
+typedef struct
+{
+  local uint color = 1;
+  resrcNPCTblEntry Data[ FileSize() /  0x1C ];
+} resrcNPCTblFile <optimize=false>;
+
+resrcNPCTblFile file;

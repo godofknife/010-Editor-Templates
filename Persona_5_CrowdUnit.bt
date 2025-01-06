@@ -1,0 +1,96 @@
+//------------------------------------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+// File Mask: resrcCrowdUnit.bin
+//------------------------------------------------------------------------------
+#include "common\include.h"
+
+typedef struct
+{
+    BigEndian();	
+    u32 Version<name="Version">;
+	u16 Unknown0;
+    u16 Entry_Num<name="Number of Entries">;
+    f32 Unknown1;
+    f32 Unknown2;
+}CrowdHeader<optimize=false>;
+
+typedef struct
+{ 
+    s16 CharModel_MajorID;
+    s16 CharModel_SubID;
+    s16 LHand_ItemMajorID;
+    s16 RHand_ItemMajorID;
+    s16 Shoulder_ItemMajorID;
+    s16 Hair_ItemMajorID;
+    s8 ItemSubID0;
+    s8 ItemSubID1;
+    s8 ItemSubID2;
+    s8 ItemSubID3; 
+    struct {
+        u16 AnimationRelated;
+        u16 AnimationRelated;
+        u32 Unknown10;
+        u32 Unknown11;
+        u32 Unknown12;
+        u32 Unknown13;
+        u32 Unknown14;
+        u32 Unknown15;
+        u32 Unknown16;
+        u32 Unknown17;
+        u32 Unknown18;
+        u32 Unknown19;
+        u32 Unknown20;
+        u32 Unknown21;
+        u32 Unknown22;
+        u32 Unknown23;
+        f32 Unknown24;
+        f32 Unknown25;
+        f32 Unknown26;
+        f32 Unknown27;
+        f32 Unknown28;
+    } Dummy0;
+    TVector3 PositionOffset;
+    f32 Unknown32;
+    TVector4 RotationOffset;
+    struct {
+        u8 Unknown38;
+        u8 Unknown39;
+        u8 Unknown40;
+        u8 Unknown41;
+        f32 Unknown42;
+        f32 Unknown43;
+        f32 Unknown44;
+        f32 Unknown45;
+        f32 Unknown46;
+        f32 Unknown47;
+        f32 Unknown48;
+        f32 Unknown49;
+        f32 Unknown50;
+        f32 Unknown51;
+        f32 Unknown52;
+    } Dummy1;
+}NPC<optimize=false, read=TypeRead>;
+
+typedef struct
+{ 
+    u16 ID;
+    u8 Num_Of_NPCs;
+    u8 Unknown1;
+    f32 Unknown2;
+    f32 Unknown3;
+    u16 Unknown4;
+    u16 Unknown5;
+    if ( Num_Of_NPCs > 0 ) {
+        NPC Entry[Num_Of_NPCs];
+    }
+}Crowd<optimize=false, read=(Str("EntryID: %i   ||   Number Of NPCS: %i", ID, Num_Of_NPCs ))>;
+
+string TypeRead(NPC& block )
+{
+    char buffer[32];
+    SPrintf( buffer, "Character %04i", block.CharModel_MajorID );
+    return buffer;
+}
+
+CrowdHeader Header;
+Crowd Segment[Header.Entry_Num];

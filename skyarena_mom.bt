@@ -1,0 +1,379 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Touhou Sky Arena Matsuri Climax Models
+//   Authors: Pioziomgames
+//   Version: 0.8
+//   Purpose: 
+//  Category: Models
+// File Mask: *.mom
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/common.bt"
+
+
+
+typedef struct
+{
+    uint StringSize;
+    char String[StringSize];
+} CString <optimize=false>;
+
+typedef struct
+{
+    Vector4 X;
+    Vector4 Y;
+    Vector4 Z;
+    Vector4 W;
+} Matrix4 <optimize=false>;
+
+
+
+typedef enum<uint>
+{
+	File		= 0x454c4946,
+	FileName    = 0x00000004,
+	Model		= 0x00001000,
+    Mesh        = 0x00001001,
+    Vertices    = 0x00001002,
+    Faces       = 0x00001003,
+	Material    = 0x00001004,
+	Texture     = 0x00001005,
+	Bone        = 0x00002000,
+	Rigging     = 0x00002002,
+	Animation   = 0x00003000,
+    Animate     = 0x00003001,
+    FCurve      = 0x00003002,
+    //Block?       = 0x00004000,
+} MomChunkType;
+
+typedef enum<uint>
+{
+	Transform = 0x0,
+    Scale = 0x1,
+    Rotation = 0x2
+} MomAnimationType;
+
+typedef struct
+{
+    local uint ChunkOffset = FTell();
+    MomChunkType ChunkType;
+    uint ChunkSize;
+} MomChunkHeader <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    
+} MomUnknownChunk <optimize=false>;
+
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    uint Reserved;
+    
+} MomFileChunk <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    uint Reserved;
+    CString FileName;
+    FAlign(128);
+} MomFileNameChunk <optimize=false>;
+
+
+
+typedef struct (uint VertType)
+{
+    Vector3 Vertex;
+    Vector3 Normal;
+    if (VertType == 287)
+    { //bounding points?
+        Vector3 Unk1;
+        Vector3 Unk2;
+    }
+    else if (VertType != 275) Assert(0, "Unimplemented Vert type");
+    Vector3 UVs;
+    Vector3 ProbablyColors;
+} MomVerticie <optimize=false>;
+
+typedef struct (uint VertCount, uint VertType)
+{
+    MomVerticie Vertices(VertType)[VertCount];
+} MomVertices <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    uint VertCount;
+    uint VertType;
+    
+    MomVertices Vertices (VertCount, VertType);
+
+    int EOC <bgcolor=cBlack>;
+    FAlign(16);
+} MomVerticesChunk <optimize=false>;
+
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    uint FaceCount;
+    uint Faces[FaceCount]; //Just uses triangles
+    int EOC <bgcolor=cBlack>;
+    FAlign(16);
+} MomFacesChunk <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString TexturePath;
+    FAlign(64);
+} MomTextureChunk <optimize=false>;
+
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString MaterialName;
+
+    SetRandomBackColor();
+    Vector4 Diffuse;
+    Vector4 Normal;
+    Vector4 Specular;
+    Vector4 UnkMap1;
+    float unk1;
+    uint unk2;
+    
+    while (ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        
+
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case Texture: MomTextureChunk Texture; break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    int EOC;
+    
+} MomMaterialChunk <optimize=false>;
+
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString MeshName;
+
+    local int CurChunkType = 0;
+    while (ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        
+
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case Vertices: MomVerticesChunk Vertices; break;
+            case Faces: MomFacesChunk Faces; break;
+            case Material: MomMaterialChunk Material; break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    int EOC;
+} MomMeshChunk <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString ModelName;
+
+    local int CurChunkType = 0;
+    while (ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        
+
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case Mesh: MomMeshChunk Mesh; break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    int EOC;
+
+} MomModelChunk <optimize=false>;
+
+
+typedef struct
+{
+    uint VertIndex;
+    float value;
+} MomRig <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString MaterialName;
+    uint Count;
+    MomRig Rigging[Count];
+    int EOC;
+} MomRiggingChunk <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString BoneName;
+    CString ParentName;
+    Matrix4 Position;
+    Matrix4 Unk1;
+
+    local int CurChunkType = 0;
+    while (ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        
+
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case Rigging: MomRiggingChunk Rigging; FAlign(16); break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    int EOC;
+    
+} MomBoneChunk <optimize=false>;
+
+typedef struct (int type)
+{
+    float Frame;
+    uint Unk1;
+
+    if (type == 0)
+        Vector3 Transform;
+    else if (type == 1)
+        Vector3 Scale;
+    else if (type == 2)
+        Vector4 Quaternion;
+} MomKeyFrame <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    MomAnimationType AnimationType;
+    uint FrameCount;
+    uint Unk1;
+    
+    MomKeyFrame KeyFrames(AnimationType)[FrameCount];
+    FSeek(ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize);
+} MomFCurveChunk <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString BoneName;
+
+    local int CurChunkType = 0;
+    while (ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case FCurve: MomFCurveChunk FCurve; FAlign(16); break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    int EOC;
+} MomAnimateChunk <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    MomChunkHeader ChunkHeader;
+    CString AnimationName;
+
+    local int CurChunkType = 0;
+    while (ChunkHeader.ChunkOffset + ChunkHeader.ChunkSize - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case Animate: MomAnimateChunk Animate; FAlign(16); break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    int EOC;
+} MomAnimationChunk;
+
+typedef struct
+{
+    char MAGIC[19];
+    
+    local int CurChunkType = 0;
+    while (FileSize() - 4 > FTell())
+    {
+    `   CurChunkType = ReadInt();
+        
+
+        switch (CurChunkType)
+        {
+            case 0: FAlign(16); if (ReadInt() == 0) {FSkip(16);}; break;
+            case -1: FAlign(16); FSkip(16); break;
+            case File: MomFileChunk File; break;
+            case FileName: MomFileNameChunk FileName; break;
+            case Model: MomModelChunk Model; break;
+            case Mesh: MomMeshChunk Mesh; break;
+            case Vertices: MomVerticesChunk Vertices; break;
+            case Faces: MomFacesChunk Faces; break;
+            case Material: MomMaterialChunk Material; break;
+            case Texture: MomTextureChunk Texture; break;
+            case Bone: MomBoneChunk Bone; break;
+            case Rigging: MomRiggingChunk Rigging; break;
+            case Animation: MomAnimationChunk Animation; break;
+
+            default: MomUnknownChunk Chunk; FSeek(Chunk.ChunkHeader.ChunkOffset + Chunk.ChunkHeader.ChunkSize); break;
+        }
+    }
+    
+    char EOF[3];
+} mainFile;
+
+
+
+
+LittleEndian();
+mainFile MofModel <optimize=false>;

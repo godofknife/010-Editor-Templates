@@ -1,0 +1,111 @@
+//------------------------------------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+// File Mask: *.pcd
+//------------------------------------------------------------------------------
+
+typedef char bool;
+typedef char s8;
+typedef uchar u8;
+typedef int16 s16;
+typedef uint16 u16;
+typedef int16 s16;
+typedef int32 s32;
+typedef uint32 u32;
+typedef int64 s64;
+typedef uint64 u64;
+typedef hfloat f16;
+typedef float f32;
+typedef double f64;
+
+typedef struct {
+    char magic[4];
+    u32 version;
+    u32 endian;
+    u32 size;
+    u32 flag;
+    u32 reserve0;
+    u32 reserve1;
+    u32 reserve2;
+}fldPCDHeader_tag;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float maxRange;
+}fldPCDTgtOfs_t<read=Str("x: %f, y: %f, z: %f, maxRange %f", x, y, z, maxRange)>;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+}fldPCDCtrlPnt_t<read=Str("x: %f, y: %f, z: %f", x, y, z)>;
+
+typedef struct {
+    float pitch;
+    float yaw;
+    float roll;
+    float fovy;
+}fldPCDIdxDat_t<read=Str("pitch: %f, yaw: %f, roll: %f, fovy: %f", pitch, yaw, roll, fovy)>;
+
+typedef struct {
+    u32 type;
+    s32 freeSize;
+    s32 camIdxNum;
+    u32 pCamIdx;
+    u32 pCamCurve;
+    u32 pTgtCurve;
+    float delayTime;
+    u8 rotInterpType;
+    u8 padding[3];
+    fldPCDTgtOfs_t tgtOfs;
+}fldPCDHandleBin_t;
+
+typedef struct
+{
+	local int endian = ReadInt(8);
+	
+	if (endian != 1)
+		LittleEndian();
+		
+	fldPCDHeader_tag header;
+	fldPCDHandleBin_t handle;
+	
+	if (header.version == 16777221)
+	{
+		f32 RoyalOnlyValue;
+	}
+	else if (header.version == 16777222)
+	{
+		f32 RoyalOnlyValues[3];
+	}
+	
+	local int i;
+	
+	struct 
+	{
+		for (i = 0; i < handle.camIdxNum; i++)
+		{
+			fldPCDCtrlPnt_t point;
+		}
+	}Points;
+	
+	struct 
+	{
+		for (i = 0; i < handle.camIdxNum; i++)
+		{
+			fldPCDCtrlPnt_t point;
+		}
+	}Targets;
+	
+	struct 
+	{
+		for (i = 0; i < handle.camIdxNum; i++)
+		{
+			fldPCDIdxDat_t rotate;
+		}
+	}Rotates;
+}fldPCDFile<optimize=false>;
+
+BigEndian();
+fldPCDFile file;

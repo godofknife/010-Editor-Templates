@@ -1,0 +1,39 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Touhou Sky Arena Matsuri Climax Archives
+//   Authors: Pioziomgames
+//   Version: 1.0
+//   Purpose: 
+//  Category: Archives
+// File Mask: *.gpk
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct(uint size)
+{
+    byte file[size];
+} file <optimize = false>;
+
+typedef struct
+{
+    char Name[260] <bgcolor=cBlue>;
+    uint FileSize <bgcolor=cRed>;
+    uint OffsetOfTheFile <bgcolor=cYellow>;
+} FileName <optimize = false>;
+
+typedef struct
+{
+    uint FileCount <bgcolor=cGreen>;
+    FileName FileNames[FileCount];
+    local int i =0;
+    while (i< FileCount)
+    {
+        file File(FileNames[i].FileSize);
+        i++;
+    }
+    
+} GPKFile <optimize = false>;
+
+GPKFile File;

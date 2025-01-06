@@ -1,0 +1,319 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: Persona 5
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "common/include.h"
+
+local int index = -1;
+local int allIndex = -1;
+
+typedef struct
+{
+	SetRandomBackColor();
+	s16 fldMajor <name = "Field Major ID">;
+	s8 fldMinor <name = "Field Minor ID">;
+	s8 fldSub <name = "Field Sub ID">;
+	s16 Field04 <name = "Default Player Cursor X Position">;
+	s16 Field06 <name = "Default Player Cursor Y Position">;
+	s16 TexpackId <name = "Texpack entry ID">;
+	s16 Field0a;
+	enum<u32>
+	{
+		No_Minimap = 0,
+		R1_Menu_Only = 2,
+		R1_Menu_and_Overworld = 3,
+	} MinimapMode<name = "Minimap Mode">;
+	
+}roadmap <read=Str("Field: %03d_%03d_%d || Texpack ID: %03d || Display: %s", fldMajor, fldMinor, fldSub, TexpackId, EnumToString(MinimapMode)), name="roadmap entry">;
+
+typedef struct
+{
+	allIndex++;
+	SetRandomBackColor();
+    s16 fldMajor <name = "Field Major ID">;
+	s8 fldMinor <name = "Field Minor ID">;
+	s8 fldSub <name = "Field Sub ID">;
+    if (fldMajor != -1)
+    {
+        local int myIndex = index + 1;
+        index = index + 1;
+    }
+    else
+    {
+        local int myIndex = -1;
+    }
+	s32 LayerCount;
+	f32 Field3c;
+	Bitflag a_Flag_Thing;
+	f32 Field00;
+	f32 Field04;
+	f32 Field08;
+	f32 Field0c;
+	f32 Field10;
+	f32 Field14;
+	f32 Field18;
+	f32 Field1c;
+	Bitflag Field20<name = "Show Red Unexplored Areas Enabling Bitflag">;
+	s16 texpack_title_ftd_entry;
+    s16 Field26;
+	s16 Field28;
+	s16 Field2a;
+	s16 Field2c;
+	s16 Field2e;
+	s16 Field30;
+	s16 Field32;
+	
+	local string s;
+	if (fldMajor != -1)
+	{
+		s = Str( "Field: %03d_%03d_%d || Layers: %d || ID: %03d", fldMajor, fldMinor, fldSub, LayerCount, allIndex - myIndex );
+	}
+	else
+	{
+		s = Str( "Null Entry" );
+	}
+  
+}texpack<read=s, name="texpack entry">;
+
+typedef struct
+{
+	SetRandomBackColor();
+	s16 Field00;
+	s16 Field02;
+	s16 Field04;
+	s16 Field06;
+	s8 Field08;
+	s8 Field09;
+	s8 Field0a;
+	s8 Field0b;
+	s8 Field0c;
+	s8 Field0d;
+	s8 Field0e;
+	s8 Field0f;
+}texelem;
+
+local int field00 = 0;
+local int ddsIndex;
+
+typedef struct {
+	SetRandomBackColor();
+	local string EntryName = "Parts Bin Entry";
+	local string structRead;
+	
+	enum<u32> flagEffect
+	{
+		Hide = 0,
+		Show = 1
+	};
+	
+	enum<u32> 
+	{
+		Texture_Params = 0,
+		Area_Displacement = 1,
+		Nothing = 2,
+		White_Arrow_Down = 3,
+		Safe_Room = 4,
+		Persistent_Red_Exclamation_Mark = 5,
+		Big_Chest = 7,
+		Red_Exclamation_Mark = 8,
+		Green_Lock = 10,
+		Red_Lock = 11,
+		Red_X = 12,
+		Gray_Arrow_Up = 13,
+		Gray_Arrow_Right = 14,
+		Gray_Arrow_Down = 15,
+		Gray_Arrow_Left = 16,
+		Chest = 17,
+		Area_Mask1 = 18,
+		Red_Destination_Marker = 19,
+		Velvet = 20,
+		Red_Butterfly = 21,
+		Opened_Chest = 22,
+		Big_Sparkle = 23,
+		Exit_Pointing_Up = 24,
+		Exit_Pointing_Down = 25,
+		Sparkling_Chest = 26,
+		Area_Mask2 = 27,
+		Player_Indicator = 28,
+		Elevator_Arrow_Up = 29,
+		Elevator_Arrow_Down = 30,
+		White_Circle = 31,
+		Down_Indicator_Pointing_Up = 32,
+		Down_Indicator_Pointing_Down = 33,
+		Up_Indicator_Pointing_Up = 34,
+		Up_Indicator_Pointing_Down = 35,
+		Gray_Arrow_Up_Left = 36,
+		Gray_Arrow_Up_Right = 37,
+		Gray_Arrow_Down_Left = 38,
+		Gray_Arrow_Down_Right = 39,
+		Palace_Ruler_Treasure = 40,
+		Yellow_Check_Mark = 43,
+		Will_Seed = 97,
+	}MapIcon <name = "Map Mode/Icon ID">;
+	
+	
+	local string IconId = EnumToString( MapIcon );
+	field00 = MapIcon;
+	
+	if (MapIcon == 0)
+	{
+		f32 mapPartX <hidden=true>;
+		f32 mapPartY <hidden=true>;
+		f32 mapPartSizeX <name = "Map Part X Size">;
+		f32 mapPartSizeY <name = "Map Part Y Size">;
+		f32 mapPartNewX <hidden=true>;
+		f32 mapPartNewY <hidden=true>;
+		Bitflag reqFlag <name="Bitflag Requirement">;
+		flagEffect effect <name = "Flag Enable Effect">;
+		s32 Unused[9]<hidden = true>;
+		
+		structRead = Str("%s || Flag %05d", IconId, FlagConvert( reqFlag ));
+	}
+	else if (MapIcon == 1)
+	{
+		f32 mapPartX <name = "Map Part X">;
+		f32 mapPartY <name = "Map Part Y">;
+		f32 mapPartSizeX <name = "Map Part X Size">;
+		f32 mapPartSizeY <name = "Map Part Y Size">;
+		f32 mapPartNewX <name = "Map Part New X Pos">;
+		f32 mapPartNewY <name = "Map Part New Y Pos">;
+		Bitflag reqFlag <name = "Bitflag Requirement">;
+		flagEffect effect <name = "Flag Enable Effect">;
+		struct{
+			f32 TopLeftX;
+			f32 TopLeftY;
+		}TopLeftMaskCorner<read=Str("X: %f, Y: %f", TopLeftX, TopLeftY)>;
+		
+		struct{
+			f32 TopRightX;
+			f32 TopRightY;
+		}TopRightMaskCorner<read=Str("X: %f, Y: %f", TopRightX, TopRightY)>;
+		
+		struct{
+			f32 BottomLeftX;
+			f32 BottomLeftY;
+		}BottomLeftMaskCorner<read=Str("X: %f, Y: %f", BottomLeftX, BottomLeftY)>;
+		
+		struct{
+			f32 BottomRightX;
+			f32 BottomRightY;
+		}BottomRightMaskCorner<read=Str("X: %f, Y: %f", BottomRightX, BottomRightY)>;
+		
+		s32 Field44;
+		
+		structRead = Str("%s || Flag %05d", IconId, FlagConvert( reqFlag ));
+	}
+	else if (MapIcon == 27 || MapIcon == 18)
+	{
+		f32 mapPartX <name = "Map Part X">;
+		f32 mapPartY <name = "Map Part Y">;
+		f32 mapPartSizeX <name = "Map Part X Size">;
+		f32 mapPartSizeY <name = "Map Part Y Size">;
+		f32 mapPartNewX <name = "Map Part New X Pos">;
+		f32 mapPartNewY <name = "Map Part New Y Pos">;
+		Bitflag reqFlag <name = "Bitflag Requirement">;
+		flagEffect effect <name = "Flag Enable Effect">;
+		struct{
+			f32 TopLeftX;
+			f32 TopLeftY;
+		}TopLeftMaskCorner<read=Str("X: %f, Y: %f", TopLeftX, TopLeftY)>;
+		
+		struct{
+			f32 TopRightX;
+			f32 TopRightY;
+		}TopRightMaskCorner<read=Str("X: %f, Y: %f", TopRightX, TopRightY)>;
+		
+		struct{
+			f32 BottomLeftX;
+			f32 BottomLeftY;
+		}BottomLeftMaskCorner<read=Str("X: %f, Y: %f", BottomLeftX, BottomLeftY)>;
+		
+		struct{
+			f32 BottomRightX;
+			f32 BottomRightY;
+		}BottomRightMaskCorner<read=Str("X: %f, Y: %f", BottomRightX, BottomRightY)>;
+		
+		s32 Field44;
+		
+		structRead = Str("%s || Flag %05d", IconId, FlagConvert( reqFlag ));
+	}
+	else if ( MapIcon == 2 )
+	{
+		EntryName = Str("End of Map Layer %d", ddsIndex);
+		byte nolmao[68]<hidden=true>;
+		structRead = Str("End of Map Layer %d", ddsIndex);
+	}
+	else
+	{
+		EntryName = "Icon Bin Entry";
+		f32 mapPartX <hidden=true>;
+		f32 mapPartY <hidden=true>;
+		f32 mapPartSizeX <hidden=true>;
+		f32 mapPartSizeY <hidden=true>;
+		f32 IconX <name = "Icon X Pos">;
+		f32 IconY <name = "Icon Y Pos">;
+		Bitflag reqFlag <name = "Bitflag Requirement">;
+		flagEffect effect <name = "Flag Enable Effect">;
+		int dummyStuff[9]<hidden=true>;
+		
+		structRead = Str("%s || Flag %05d", IconId, FlagConvert( reqFlag ));
+	}
+	place++;
+	
+}partSegment<name = EntryName, read = structRead>;
+
+local int64 fileSize = FileSize();
+local string filePath = GetFileName();
+local string fileName = FileNameGetBase( filePath, false );
+local string fileExt = FileNameGetExtension( filePath );
+
+LittleEndian();
+
+struct
+{
+		switch ( fileName )
+		{
+			case "roadmap":
+			roadmap data[fileSize / 16] <optimize = false>;
+			break;
+			
+			case "texelem":
+			texelem data[fileSize / 16] <optimize = false>;
+			break;
+			
+			case "texlist":
+			SetRandomBackColor();
+			u16 unk0[fileSize / 2] <optimize = false>;
+			break;
+			
+			case "texpack":
+            texpack data[fileSize / 68] <optimize = false>;
+			break;
+			
+			default:
+			local int place = 0;
+			while (place < fileSize / 72)
+			{
+				struct
+				{
+					while (field00 != 2 )
+					{
+						partSegment data <optimize=false>;
+					}
+					
+					field00 = 0;
+					ddsIndex++;
+					local string s = Str("Minimap Layer Index %d", ddsIndex - 1);
+				}MapDDSIndex<name = s, optimize=false>;
+			}
+			break;
+		}
+}roadmapstruct;

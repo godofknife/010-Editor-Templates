@@ -1,0 +1,1611 @@
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+//
+//      File: AtlusTable_P5R.bt
+//   Authors: TGE, Scarltz, Lipsum, DeathChaos, Sierra
+//   Version: 2.0
+//   Purpose: Parse Persona 5 Royal Table files.
+//  Category: Persona 5 Royal
+// File Mask: *.tbl, *.pac
+//  ID Bytes:
+//   History:
+//   1.0 - Initial release
+//------------------------------------------------
+
+
+//---------------------------------------------
+// Type definition
+//---------------------------------------------
+typedef ubyte u8;
+typedef short s16;
+typedef ushort u16;
+typedef uint u32;
+typedef float f32;
+
+enum<byte>bool
+{
+    False = 0,
+    True = 1,
+};
+
+typedef struct
+{
+    u8 bit0 : 1;
+    u8 bit1 : 1;
+    u8 bit2 : 1;
+    u8 bit3 : 1;
+    u8 bit4 : 1;
+    u8 bit5 : 1;
+    u8 bit6 : 1;
+    u8 bit7 : 1;
+} b8;
+
+typedef struct
+{
+    u8 nonbegging : 1 <name = "No Begging Shadows", comment = "Enemies will never beg regardless of their personality (Meaning, it is as if it's always irritable)">;
+    u8 hidingstatus : 1 <name = "Hiding the status", comment = "Enemies status can be hidden similar to boss">;
+    u8 bit2 : 1;
+    u8 bit3 : 1;
+    u8 GuaranteePersonaMask : 1 <name = "Guarantee Persona Mask", comment = "For some reason, turning this on will make the shadow has drop coin effect and shadow visual appearance. It will also no longer return to battle after obtaining Persona.">;
+    u8 nonnegotiable : 1 <name = "Not negotiable", comment = "Enemies will never be able to negotiate">;
+    u8 bit6 : 1;
+    u8 bit7 : 1;
+    u8 bit8 : 1;
+    u8 bit9 : 1;
+    u8 bit10 : 1;
+    u8 bit11 : 1;
+    u8 bit12 : 1;
+    u8 hidingstatus2 : 1 <name = "Hiding the status", comment = "Enemies status can be hidden similar to boss. This is used on Boss">;
+    u8 infiniteSP : 1 <name = "Infinite SP", comment = "Enemies will be able to use any skill regardless of SP pool">;
+    u8 bit13 : 1;
+} b16;
+
+typedef struct
+{
+    u8 customnamedds : 1 <name = "Custom Name DDS", comment = "This needs CBT to work. Enemies will use DDS Font name like Major Bosses.">;
+    u8 Useplayeranimationcode : 1 <name = "Use Player Animation Code", comment = "This needs CBT to work. Enemies will use similar as Player Animation GAP.">;
+    u8 UseIdleAnimFunction : 1 <name = "Use Idle Animation Function", comment = "This needs CBT to work. Enemies will use Idle animation assigned in GAP with the flow function you set in AI.">;
+    u8 bit3 : 1;
+    u8 bit4 : 1;
+    u8 bit5 : 1;
+    u8 bit6 : 1;
+    u8 bit7 : 1;
+    u8 bit8 : 1;
+    u8 bit9 : 1;
+    u8 bit10 : 1;
+    u8 bit11 : 1;
+    u8 bit12 : 1;
+    u8 bit13 : 1;
+    u8 SavageEnemies : 1 <name="Savage Enemies">;
+    u8 bit15 : 1;
+    u8 nonbegging : 1 <name = "No Begging Shadows", comment = "Enemies will never beg regardless of their personality (Meaning, it is as if it's always irritable)">;
+    u8 hidingstatus : 1 <name = "Hiding the status", comment = "Enemies status can be hidden similar to boss">;
+    u8 bit18 : 1;
+    u8 bit19 : 1;
+    u8 IsTreasureDemon : 1 <name = "Is it Treasure Demon?", comment = "For some reason, turning this on will make the shadow has drop coin effect and shadow visual appearance. It will also no longer return to battle after obtaining Persona.">;
+    u8 nonnegotiable : 1 <name = "Not negotiable", comment = "Enemies will never be able to negotiate">;
+    u8 CriticalNotPossible : 1 <name="Prevent Critical">;
+    u8 bit23 : 1;
+    u8 DownInefective : 1 <name="Prevent Down for some cases">;
+    u8 bit25 : 1;
+    u8 bit26 : 1;
+    u8 bit27 : 1;
+    u8 bit28 : 1;
+    u8 hidingstatus2 : 1 <name = "Hiding the status", comment = "Enemies status can be hidden similar to boss. This is used on Boss">;
+    u8 infiniteSP : 1 <name = "Infinite SP", comment = "Enemies will be able to use any skill regardless of SP pool">;
+    u8 bit31 : 1;
+} b32_unit;
+
+typedef struct
+{
+    u8 bit0 : 1;
+    u8 bit1 : 1;
+    u8 bit2 : 1;
+    u8 bit3 : 1;
+    u8 bit4 : 1;
+    u8 bit5 : 1;
+    u8 bit6 : 1;
+    u8 bit7 : 1;
+    u8 bit8 : 1;
+    u8 bit9 : 1;
+    u8 bit10 : 1;
+    u8 bit11 : 1;
+    u8 NonNegotiable : 1 <name = "No Negotiation", comment = "If this turns on, every enemy in that battle can't be negotiated">;
+    u8 bit13 : 1;
+    u8 bit14 : 1;
+    u8 bit15 : 1;
+    u8 PreventKnockdown : 1 <name = "Prevent Knockdown", comment = "Enemy can never get knockdown 100% by Critical but not WEAK">;
+    u8 PositionHack : 1 <name = "Position Hack", comment = "Triggers Position Hack when you enter the battle">;
+    u8 NoHoldUp : 1 <name = "No Hold Up", comment = "Hold up after downing all enemies will not trigger">;
+    u8 shadownotdisappearinbattle : 1 <name = "Not Disappear in Battle", comment = "When the shadow HP reaches 0, it will not disperse if this is turned ON in ENCOUNT.TBL Flag">;
+    u8 BulletHailonstart : 1 <name = "Bullet Hail on Start", comment = "When you start the battle, you will always start with Bullet Hail">;
+    u8 NoNavigator : 1 <name = "No Navigator in Battle", comment = "This disables Navigator in battle">;
+    u8 bit22 : 1;
+    u8 loadbattlescript : 1 <name = "Battle script load", comment = "This will load the battle script for this particular battle (CAUTION: Will cause freeze if the battle script file is not exist)">;
+    u8 bit24 : 1;
+    u8 bit25 : 1;
+    u8 loadbattlescript2 : 1 <name = "BFL Battle script load", comment = "This will load the battle script including Battle Formation for this particular battle (CAUTION: Will cause freeze if the battle script file is not exist)">;
+    u8 EnemyFirstAct : 1 <name = "Enemy First Act", comment = "This will cause all enemies to act first turn as if party got ambushed. (Whether it must be scripted or random encounter is still unknown.">;
+    u8 NoCritical : 1 <name = "No Critical", comment = "Even if you have a skill with 100% Critical, it will never trigger critical if this is ON">;
+    u8 bit29 : 1;
+    u8 bit30 : 1;
+    u8 NoEscape : 1 <name = "No Escape", comment = "This will make your battle unescapable if it is ON">;
+} b32;
+
+typedef struct
+{
+    bool Unknown : 1 <name = "Unknown">;
+    bool Unknown : 1 <name = "Unknown">;
+    bool Gift : 1 <name = "Gift">;
+    bool CraftingMaterial : 1 <name = "Crafting Material">;
+    bool DungeonItem : 1 <name = "Dungeon Item">;
+    bool Outfit : 1 <name = "Outfit">;
+    bool SkillCard : 1 <name = "Skill Card">;
+    bool Treasure : 1 <name = "Treasure">;
+    bool KeyItem : 1 <name = "Key Item">;
+    bool Consumable : 1 <name = "Consumable">;
+    bool Accessory : 1 <name = "Accessory">;
+    bool Armor : 1 <name = "Armor">;
+    bool Unknown : 1 <name = "Unknown">;
+    bool LAR : 1 <name = "Lever-Action Rifle (Kasumi)">;
+    bool ToyGun : 1 <name = "Toy Gun (Akechi)">;
+    bool GL : 1 <name = "Grenade Launcher (Haru)">;
+    bool Revolver : 1 <name = "Revolver (Makoto)">;
+    bool AR : 1 <name = "Assault Rifle (Yusuke)">;
+    bool Slingshot : 1 <name = "Slingshot (Morgana)">;
+    bool SMG : 1 <name = "SMG (Ann)">;
+    bool Shotgun : 1 <name = "Shotgun (Ryuji)">;
+    bool Handgun : 1 <name = "Handgun (Joker)">;
+    bool Unknown : 1 <name = "Unknown">;
+    bool Rapier : 1 <name = "Rapier (Kasumi)">;
+    bool BeamSword : 1 <name = "Beam Sword (Goro)">;
+    bool Axe : 1 <name = "Axe (Haru)">;
+    bool FistWeapons : 1 <name = "Fist Weapons (Makoto)">;
+    bool Katana : 1 <name = "Katana (Yusuke)">;
+    bool BanditSword : 1 <name = "Bandit Sword (Morgana)">;
+    bool Whip : 1 <name = "Whip (Ann)">;
+    bool Crowbar : 1 <name = "Crowbar (Ryuji)">;
+    bool Dagger : 1 <name = "Dagger (Joker)">;
+} ItemType <name = "Icon">;
+
+
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "p5r_enums.bt"
+#include "p5r_structs.bt"
+//---------------------------------------------
+// Helper functions
+//---------------------------------------------
+local uint __RandomSeed = 0xDEADBABE;
+local uint __RandomBit = 0;
+local uint __RandomCount = 0;
+
+uint MyRandom( uint to )
+{
+    ++__RandomCount;
+    __RandomBit  = ( (__RandomSeed >> 0 ) ^ ( __RandomSeed >> 2 ) ^ ( __RandomSeed >> 3 ) ^ ( __RandomSeed >> 5 ) ) & 1;
+    __RandomSeed = ( ( ( ( __RandomBit << 15 ) | ( __RandomSeed >> 1 ) ) + ( 0xBABE / __RandomCount ) ) % to );
+
+    while( __RandomSeed < 0 )
+        __RandomSeed += to;
+
+    return __RandomSeed;
+}
+
+void DetectEndianness()
+{
+    // Test endianness
+    LittleEndian();
+    local uint sizeTest = ReadUInt();
+    if ( sizeTest & 0xFF000000 )
+        BigEndian();
+}
+
+u32 Align( u32 value, u32 alignment )
+{
+  return (value + (alignment - 1)) & ~(alignment - 1);
+}
+
+void FAlign( u32 alignment )
+{
+  FSeek( Align( FTell(), alignment ) );
+}
+
+//---------------------------------------------
+// Define structures
+//---------------------------------------------
+
+// Persona
+typedef struct
+{
+    PersonaFlags Flags <name = "Bitflags">;
+    ArcanaID Arcana <name = "Arcana">;
+    u8 Level <name = "Base Level">;
+    PersonaStats Stats <name = "Base Stats">;
+    u8 : 1;
+    PersonaInherit Inherit <name = "Skill Inheritance">;
+    u16 Unknown <name = "Unknown">;
+} TPersonaStats <name = "Stats">;
+
+local u32 personaSkillsAndStatGrowth = 0;
+typedef struct
+{
+    PersonaStats wStatDist <name = "Weighted Stat Growth Distribution", comment = "Chance to gain +1 on level-up = (Stat Weight / Sum of Stat Weights). 3 chances per level.">; // chance to gain +1 on level-up ( weight / weightSum )
+                            // 3 total per level
+    u8 _;
+
+    struct
+    {
+        u8 levelsDelta <name = "Pending Levels">;
+        enum LearnableFlags flags <name = "Learnability">;
+
+        union
+        {
+          BattleSkill skills <name = "Skill ID">;
+          BattleTrait traits <name = "Trait ID">;
+        } data;
+    } PersonaSkill[ 16 ];
+
+} TPersonaSkillsAndStatGrowths <name = "Skills & Stat Growths">;
+
+typedef struct
+{
+    u32 Thresholds[98] <name = "EXP Threshold">;
+} TPersonaLevelUpThresholds <name = "Party Member Level Up Thresholds">;
+
+typedef struct
+{
+    PartyMember member <name = "Character">;
+    u8 levelCount <name = "Levels Available">;
+    u8 _;
+
+    struct
+    {
+        u8 level <name = "Level Learned">;
+        enum LearnableFlags flags <name = "Learnability">;
+        
+        union
+        {
+          BattleSkill skill <name = "Skill ID">;
+          BattleTrait trait <name = "Trait ID">;
+        } data;
+    } PersonaSkill[ 32 ];
+
+    PersonaStats statGain[ 98 ];
+} TPersonaPartyPersonas <name = "Party Member Personas">;
+
+// Player
+
+typedef u32 TPlayer_LevelUpThresholds <name = "Player Level-Up Thresholds">;
+
+typedef struct
+{
+        struct
+
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPNone <name = "N/A">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPJoker <name = "Joker">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPRyuji <name = "Ryuji">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPMorgana <name = "Morgana">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPAnn <name = "Ann">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPYusuke <name = "Yusuke">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPMakoto <name = "Makoto">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPHaru <name = "Haru">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPFutaba <name = "Futaba">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSPAkechi <name = "Akechi">;
+        struct
+            {
+            u16 HP <name = "HP Gain">;
+            u16 SP <name = "SP Gain">;
+            } HPSP_pad <name = "Kasumi">;
+
+} TPlayer_HPSPPerLevel <name = "HP/SP Per Level">;
+
+typedef struct
+{
+    u16 UnknownR;
+    u16 UnknownR;
+} TPlayer_PlayerSegment3 <name = "Unknown Player Segment 3">;
+
+typedef struct
+{
+    u32 UnknownR;
+    u32 UnknownR;
+    u32 UnknownR;
+    u32 UnknownR;
+    u32 UnknownR;
+} TPlayer_PlayerSegment4 <name = "Unknown Player Segment 4">;
+
+// Exist
+
+typedef struct
+{
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+} TExist_Segment1;
+
+typedef struct
+{
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+} TExist_Segment2;
+
+// Elsai
+
+typedef struct
+{
+    u32 chara<name="chara",format=hex>;
+    u32 conditional<name="conditional",format=hex>;
+    u8 logical<name="logical",format=hex>;
+    u8 RESERVE_09<name="RESERVE">;
+    u8 RESERVE_0A<name="RESERVE">;
+    u8 RESERVE_0B<name="RESERVE">;
+    u32 chara2<name="chara2">;
+    u32 conditional2<name="conditional2",format=hex>;
+    u32 action<name="action",format=hex>;
+    u32 target<name="target",format=hex>;
+    u8 probability<name="probability">;
+    u8 RESERVE_1D<name="RESERVE">;
+    u8 RESERVE_1E<name="RESERVE">;
+    u8 RESERVE_1F<name="RESERVE">;
+} datAIXls_Check;
+
+typedef struct
+{
+    u16 Flags;
+    u16 ScripID<name="AI BF Script ID">;
+    u32 AiXLCheckIDs[10]<name="AI XL IDs">;
+} TElsaiSegment1Entry<name="ElsAI Data", read=Str("BF ID - %03d", this.ScripID)>;
+
+typedef struct
+{
+    datAIXls_Check Data[ 10 ]<name="AI XL Data">;
+} TElsaiSegment2Entry<name="AI XL">;
+
+// AICalc tables
+// Segment1 probably has bigger chunks than u32
+typedef struct
+{
+    u32 Unknown[41];
+} TAICalc_Segment1;
+
+typedef struct
+{
+    u32 Unknown;
+} TAICalc_Segment2;
+
+typedef struct
+{
+    u32 Unknown;
+} TAICalc_Segment3;
+
+typedef struct
+{
+    u32 Unknown;
+} TAICalc_Segment4;
+
+typedef struct
+{
+    u32 Unknown;
+} TAICalc_Segment5;
+
+typedef struct
+{
+    u8 Unknown;
+    u8 Unknown;
+    u8 Unknown;
+} TAICalc_Segment6;
+
+typedef struct
+{
+    u32 Unknown;
+} TAICalc_Segment7;
+
+typedef struct
+{
+    u16 ReplacementEnemyID;
+    u8 Overall_Replacement_Chance<comment="if flag 0x2000005d is on, chance is increased by 30%">;
+    u8 Slot_1_Chance<comment="Random chance is same for shared enemy IDs.  If one enemy ID fails, then even if in another slot, that same enemy ID will still fail.">;
+    u8 Slot_2_Chance;
+    u8 Slot_3_Chance;
+    u8 Slot_4_Chance;
+    u8 Slot_5_Chance;
+} TRoyalEnemyReplace <name = "Enemy Replacement Data">;
+
+typedef struct
+{
+    u8 Overall_Disaster_Chance;
+    u8 Slot_1_Chance;
+    u8 Slot_2_Chance;
+    u8 Slot_3_Chance;
+    u8 Slot_4_Chance;
+    u8 Slot_5_Chance;
+    u8 Max_Disaster_Shadows;
+} TRoyalDisasterReplace <name = "Disaster Shadow Data">;
+
+typedef struct
+{
+    TRoyalEnemyReplace EnemyReplacementData;
+    TRoyalDisasterReplace DisasterData;
+    u8 Field0f<comment="Sorta like a difficulty modifier?  3 and 4 can cause disasters to spawn with sleep and rage.">;
+    u8 Field10<comment="Related to how likely it is for normal enemies to attack their disaster allies.">;
+    u8 Field11;
+    u8 Field12;
+    u8 Field13;
+} TRoyalncounter <name = "P5R Data">;
+
+// Encounter
+typedef struct
+{
+    b32 Flags <name = "Flags">;
+    u16 Field04;
+    u16 Field06;
+    BattleUnit Units[5] <name = "Battle Units">;
+    u16 FieldId <name = "Field Major ID">;
+    u16 RoomId <name = "Field Minor ID">;
+    MusicID MusicId <name = "Music">;
+	TRoyalncounter ExtraData <name = "Extra Data">;
+} TEncounter_Segment1 <name = "Enemy Encounters",read=Str("Enemies - %03d - %03d - %03d - %03d - %03d - f%03d_%03d", this.Units[0], this.Units[1], this.Units[2], this.Units[3], this.Units[4], this.FieldId, this.RoomId)>;
+
+typedef struct
+{
+    PartyMember PlayerID[4];
+} TEncounter_ForcedPartyData <name = "Forced Party Data", read=Str("%s - %s - %s - %s", EnumToString(this.PlayerID[0]), EnumToString(this.PlayerID[1]), EnumToString(this.PlayerID[2]), EnumToString(this.PlayerID[3]))>;
+
+typedef struct
+{
+  u16 Category; // trial, chain, ...
+  u16 CategoryIdx;
+  u32 _1 <hidden=true>; Assert( _1 == 0 );
+  u32 Flag <format=hex>;
+
+  u16 TurnBonusCount;
+  u16 _2 <hidden=true>; Assert( _2 == 0 );
+  u32 TurnBonus;
+
+  struct
+  {
+    u32 Target;
+    u32 Type;
+    f32 Mult;
+  } Bonus[ 5 ] <optimize=false>;
+
+  u32 WaveEncounter[ 5 ] <optimize=false>;
+  u32 _3[ 5 ] <hidden=true, optimize=false>;
+
+  //local int i;
+  //for ( i = 0; i < 5; i++ ) Assert( _3[ i ] == 0 );
+
+  u32 Level;
+  u32 IconCount;
+
+  struct
+  {
+    u32 RequiredScore;
+
+    u16 _4 <hidden=true>; Assert( _4 == 0 );
+    u16 _5 <hidden=true>; Assert( _5 == 0 );
+    u16 _6 <hidden=true>; Assert( _6 == 0 );
+
+    u16 ItemId; 
+  } Award[ 3 ] <optimize=false>;
+} TEncount_Challenge <optimize=false, name = "Challenge Battle Data">;
+
+typedef struct
+{
+    u16 ItemId<name="Item ID">;
+    u16 DropProbability<name="Drop Probability %">;
+} datEnemyItemTable;
+
+typedef struct
+{
+    u16 EventID<name="Event ID">;
+    u16 ItemId<name="Item ID">;
+    u16 DropProbability<name="Drop Probability %">;
+} datEnemyEventItemTable;
+
+typedef struct
+{
+    ElementalType Attribute<name="Elemental Attribute">;
+    u8 Accuracy<name="Attack Accuracy">;
+    u16 Damage<name="Attack Damage">;
+} datEnemyAttackTable;
+
+// Unit table
+typedef struct
+{
+	b32_unit Flags <name = "Flags">;
+    ArcanaID Arcana <name = "Arcana">;
+    u8 RESERVE_05<name="RESERVE">;
+    u16 Level <name = "Level">;
+    u32 Hp <name = "HP">;
+    u32 Sp <name = "SP">;
+    PersonaStats Stats<name="Enemy Stats">;
+    u8 RESERVE_STAT<name="RESERVE">;
+    BattleSkill SkillIds[ 8 ] <name = "Battle Skills">;
+    u16 ExpReward <name = "EXP Reward">;
+    u16 MoneyReward <name = "Money Reward">;
+    datEnemyItemTable DropTables[4]<name="Item Drop List">;
+    datEnemyEventItemTable EventDrop<name="Event Item Drop">;;
+    datEnemyAttackTable AttackDamage <name = "Attack Attributes">;
+} TEnemyUnitStats <name = "Enemy Unit Stats">;
+
+typedef struct
+{
+    u8 VoiceID <comment = "Subtract 1 from the id i.e. 9 to load voicepack 10">;
+    u8 TALK_PERSON;
+    u8 VoiceABCValue;
+    u8 padding;
+    u16 TALK_MONEYMIN;
+    u16 TALK_MONEYMAX;
+    u16 TALK_ITEM[4]<format=hex>;
+    u16 TALK_ITEM_RARE[4]<format=hex>;
+} TUnitVoiceIndex <name = "Voice Index">;
+
+typedef struct
+{
+    u16 PersonaIndex <name = "Persona Index", comment = "Persona ID when captured">;
+    u16 ModelIndex <name = "Model Index", comment = "Model ID">;
+    u16 UnknownR;
+} TUnitVisualIndex <name = "Visual Index">;
+
+typedef struct
+{
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+} TUnitUnknown <name = "Unknown">;
+
+
+// Skill
+typedef struct
+{
+    ElementalType Element <name = "Elemental Type">;
+    Skill_PassiveOrActive PassiveOrActive <name = "Passive or Active?", comment = "Must be set correctly for the element icon to appear properly, even though it's otherwise redundant">;
+    u8 InheritableSkill <name = "Inheritable", comment = "Put 1 until 8 for Inheritable skill. 0 if you don't want to">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u32 Unknown <name = "Unknown", comment = "Unused in code">;
+} TSkill_Elements <name = "Skill Elements">;
+
+typedef struct()
+{
+    //u8 Unknown <name = "Unknown", comment = "Technically part of flags as it's a uint, but this byte is unused">;
+    //Skill_Condition Condition <name = "Condition Usage", comment = "Must be accompanied with Value 8 in Caster Effect 2">;
+    //Skill_CasterEffect1 CasterEffect1 <name = "Caster Effect", comment = "Needs more testing">;
+    //Skill_CasterEffect2 CasterEffect2 <name = "Caster Effect", comment = "Needs more testing">;
+    struct
+        {
+            u8 Unknown <name = "Unknown", comment = "Technically part of flags as it's a uint, but this byte is unused">;
+
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool UsableOnlyInAmbsuh : 1 <name = "Usable only in ambush">;
+            bool UnknownItemAndInstantKillEffectsRelated : 1;
+            bool UnknownForNormalAction : 1;
+            bool UnknownForExplosionSkill : 1;
+            bool UnknownShowtimeRelated : 1;
+
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool UnknownStealInfoRelated : 1;
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool ReduceOwnHPToOne : 1 <name = "Reduce caster's HP to 1", comment = "Might depend on other flags and other things">;
+            bool UseRangedWeapon : 1 <name = "Modified by ranged weapon", comment = "If Modified by weapon is set, this changes the weapon modifying the skill to ranged weapon">;
+            bool UnknownSpecialMoveRelated : 1;
+
+            bool UnknownSaeRouletteRelated : 1;
+            bool UnknownFollowUpRelated : 1;
+            bool UnknownSaeRouletteRelated2 : 1;
+            bool UsePercentSPCost : 1 <name = "Percent SP cost">;
+            bool UnknownSupportRelated : 1;
+            bool UnknownSummonRelated : 1;
+            bool UseWeapon : 1 <name = "Modified by weapon", comment = "The skill's element and other values are modified by equipped melee weapon">;
+            bool KillCasterAfterUse : 1 <name = "Kill caster after use">;
+        } Flags <name = "Flags">;
+
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    Skill_AreaType PlaceUsage <name = "Area Type", comment = "Determine if it is usable in battle, field, or both">;
+    Skill_DamageStat DamageStat <name = "Damage Stat", comment = "Determines which stat is used to determine damage">;
+    Skill_CostType CostType <name = "Cost Type">;
+    u16 SkillCost <name = "Skill Cost", comment = "% of max HP or fixed amount of SP">;
+    u8 Add2 <name = "Add 256 SP Cost for every 1 value">;
+    Skill_PhysicalOrMagicSkill PhysicalOrMagic <name = "Physical or Magic?", comment = "determines what's affected by either Charge or Concentrate, but doesn't seem to change what's reflected by Tetrakarn or Makarakarn. Needs more testing">;
+    Skill_NumberOfTargets NumberOfTargets <name = "Number of Targets">;
+
+    struct
+        {
+            byte : 6;
+            bool Enemies : 1 <name = "Enemies">;
+            bool Allies : 1 <name = "Allies">;
+        } ValidTargets <name = "Valid Targets">;
+    
+    Skill_TargetRestrictions TargetRestrictions <name = "Additional Target Restrictions">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u32 Unknown <name = "Unknown", comment = "Used but I don't know what for">;
+    u8 Accuracy <name = "Accuracy">;
+    u8 MinHits <name = "Minimum Number of Hits">;
+    u8 MaxHits <name = "Maximum Number of Hits">;
+    Skill_HPEffect HPEffect <name = "Damage/Healing Type for HP">;
+    u16 BaseDamage <name = "Base Damage to HP">;
+
+    //Skill_SPEffect SPEffect <name = "Damage/Healing Type for SP">;
+    enum<ubyte>
+        {
+            NoDamageOrHealingToSP = 0,
+            DamageSP = 1,
+            HealSP = 2,
+            SetSP = 3,
+            DamageExactSP = 4,
+            HealExactSP = 5,
+            DamageSPWith50BaseDamage = 6,
+            HealSPWith50BaseHealing = 7,
+            DamagePercentCurrentSP = 8,
+            HealPercentCurrentSP = 9,
+            DamagePercentMaxSP = 10,
+            HealPercentMaxSP = 11,
+            DrainSP = 12,
+            DrainExactSP = 13,
+            UnusedDefaultsToDamageSP = 14,
+            HealUpToSPAmountBasedOnChance = 15,
+            DamageSPBasedOnHealthyPartyMembers = 16
+        } SPEffect <name = "Damage/Healing Type for SP">;
+
+
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u16 SPAmount <name = "SP amount">;
+    Skill_ApplyOrCureEffect ApplyOrCureEffect <name = "Apply or Cure Effect?", comment = "Ignore resistance works 100% for Physical. Magic including Light, Dark, Almighty can only Semi Pierce (NULL, DRAIN, REPEL can't be pierced)">;
+    u8 SecondaryEffectChance <name = "Effect Chance">;
+
+    u8 Unknown <name = "Unknown", comment = "Technically part of ailment list as it's a uint, but this byte is unused">;
+    struct
+        {
+            bool Counter : 1 <name = "Counter?", comment = "it may be possibly counter mode exclusive to Yaldabaoth">;
+            bool Mouse : 1 <name = "Mouse", comment = "Only affects the Phantom Thieves">;
+            bool Gluttony : 1 <name = "Gluttony?", comment = "it may be possibly Gluttony ailment exclusive to Yaldabaoth">;
+            bool KnockDown : 1 <name = "Knock Down">;
+            bool Unconscious : 1 <name = "Unconscious">;
+            bool WeakToAllElements : 1 <name = "Weak to all Elements", comment = "Shock,Knockdown,Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Jealousy : 1 <name = "Jealousy">;
+            bool Wrath : 1 <name = "Wrath">;
+        } Effect1 <name = "Ailment List 1">;
+
+    struct
+        {
+            bool Lust : 1 <name = "Lust", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
+            bool Panic : 1 <name = "Panic", comment = "Will cause Shadows to run away">;
+            bool Berserk : 1 <name = "Berserk", comment = "Visual effect only. Also, Lust, Rage, Berserk can be combined into 1 single ailment">;
+            bool Desparation : 1 <name = "Desparation", comment = "Attack up, Defense down; not affected by other buffs/debuffs">;
+            bool Brainwash : 1 <name = "Brainwash">;
+            bool Despair : 1 <name = "Despair", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Rage : 1 <name = "Rage", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
+            bool Sleep : 1 <name = "Sleep", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+        } Effect2 <name = "Ailment List 2">;
+
+    struct
+        {
+            bool Hunger : 1 <name = "Hunger", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Forget : 1 <name = "Forget", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Fear : 1 <name = "Fear", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Confuse : 1 <name = "Confuse", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Dizzy : 1 <name = "Dizzy", comment = "Dizzy, Weakness and Knockdown can be combined into 1 single ailment">;
+            bool Shock : 1 <name = "Shock", comment = "Shock, Weakness and Knockdown can be combined into 1 single ailment">;
+            bool Freeze : 1 <name = "Freeze", comment = "Burn and Freeze can be combined into 1 single ailment">;
+            bool Burn : 1 <name = "Burn", comment = "Burn and Freeze can be combined into 1 single ailment">;
+        } Effect3 <name = "Ailment List 3">;
+
+    struct
+        {
+            bool CoverPsy : 1 <name = "Cover Psy Weakness", comment = "Changes innate Psy weakness to neutral">;
+            bool CoverNuke : 1 <name = "Cover Nuke Weakness", comment = "Changes innate Nuke weakness to neutral">;
+            bool CoverWind : 1 <name = "Cover Wind Weakness", comment = "Changes innate Wind weakness to neutral">;
+            bool CoverElec : 1 <name = "Cover Electric Weakness", comment = "Changes innate Electric weakness to neutral">;
+            bool CoverIce : 1 <name = "Cover Ice Weakness", comment = "Changes innate Ice weakness to neutral">;
+            bool CoverFire : 1 <name = "Cover Fire Weakness", comment = "Changes innate Fire weakness to neutral">;
+            bool InstakillShield : 1 <name = "Instakill Shield", comment = "Blocks one instakill attack">;
+            bool BreakMagicShield : 1 <name = "Break Magic Shield", comment = "Breaks magic-reflecting shields like Makarakarn">;
+        } Effect4 <name = "Effect List 1">;
+
+    struct
+        {
+            bool BreakPhysicalShield : 1 <name = "Break Physical Shield", comment = "Breaks physical-reflecting shields like Tetrakarn">;
+            bool AilmentSusceptibility : 1 <name = "Ailment Susceptibility", comment = "increases the likelihood of recieving effects from Effect Lists 2 and 3">;
+            bool NegatePsyResist : 1 <name = "Negate Psy Resistance", comment = "Changes innate Psy resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateNukeResist : 1 <name = "Negate Nuke Resistance", comment = "Changes innate Nuke resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateWindResist : 1 <name = "Negate Wind Resistance", comment = "Changes innate Wind resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateElecResist : 1 <name = "Negate Electric Resistance", comment = "Changes innate Electric resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateIceResist : 1 <name = "Negate Ice Resistance", comment = "Changes innate Ice resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateFireResist : 1 <name = "Negate Fire Resistance", comment = "Changes innate Fire resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+        } Effect5 <name = "Effect List 2">;
+
+    struct
+        {
+            bool MagicShield : 1 <name = "Magic Shield", comment = "Reflects the next magic attack received">;
+            bool PhysicalShield : 1 <name = "Physical Shield", comment = "Reflects the next physical attack received">;
+            bool CritWayUp : 1 <name = "Critical Chance Way Up">;
+            bool CritUp : 1 <name = "Critical Chance Up">;
+            bool RemoveDebuffs : 1 <name = "Remove Debuffs", comment = "Removes stat-lowering debuffs from the Buff/Debuff List">;
+            bool RemoveBuffs : 1 <name = "Remove Buffs", comment = "Removes stat-raising buffs from the Buff/Debuff List">;
+            bool Concentrate : 1 <name = "Concentrate", comment = "Next Magic-based attack deals 2.5x damage">;
+            bool Charge : 1 <name = "Charge", comment = "Next Strength-based attack deals 2.5x damage">;
+        } Effect6 <name = "Effect List 3">;
+
+    struct
+        {
+            bool AccuracyDown : 1 <name = "Accuracy Down">;
+            bool AccuracyUp : 1 <name = "Accuracy Up">;
+            bool DefenseDown : 1 <name = "Defense Down">;
+            bool DefenseUp : 1 <name = "Defense Up">;
+            bool EvasionDown : 1 <name = "Evasion Down">;
+            bool EvasionUp : 1 <name = "Evasion Up">;
+            bool AttackDown : 1 <name = "Attack Down">;
+            bool AttackUp : 1 <name = "Attack Up">;
+        } BuffDebuff <name = "Buffs and Debuffs">;
+
+    u8 Unknown <name = "Unknown", comment = "Technically part of other buffs as it's a uint, but this byte is unused">;
+    u16 Unknown <name = "Unknown", comment = "Technically part of other buffs as it's a uint, but this ushort is unused">;
+    Skill_OtherEffect OtherBuff <name = "Other Buffs", comment = "Put 2 to make All Barriers that Drains">;
+    Skill_ExtraEffect ExtraEffect <name = "Extra Effects", comment = "Ignore resistance works 100% for Physical. Magic including Light, Dark, Almighty can only Semi Pierce (NULL, DRAIN, REPEL can't be pierced).">;
+    u8 CritChance <name = "Crit Chance", comment = "Only works for Physical or Gun skills">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+} TSkill_ActiveSkillData <name="Active Skill Data">;
+
+typedef struct
+{
+    AilmentStatus ApplicableAilments<name = "Applicable Ailments", comment = "If the target has any of these ailments, the affinities in the TechnicalAffinities fields will deal Technical damage.">;
+    uint AllAffinitiesAreTechnical<name = "All Affinities are Technical", comment = "If set to 1, the TechnicalAffinities array is ignored; instead, ALL damaging skills inflict Technical damage agaisnt these ailments.">;
+    Tech_TechnicalSkillAffinity TechnicalAffinities[5]<name = "Technical Affinities", comment = "Skills of these affinities are Technical against foes with the above ailments.">;
+    float damageMultiplier <name = "Damage Multiplier", comment = "Technicals of this type will multiply damage by this amount, plus up to 0.3 for party's Techncial Rank.">;
+    u32 UnknownR;
+    Tech_RequiresKnowingTheHeart RequiresKnowingTheHeart<name = "Requires Knowing the Heart", comment = "If set to Yes, this entry of the map only applies if you've read the book \"Knowing the Heart\" for extra Tech combos.">;
+} TSkill_Skill_TechnicalMap <name = "Technical Combo Map">;
+
+typedef int s32;
+
+typedef struct
+{
+  u16 ord <name = "Effect", comment = "Selects the effect of the trait from a preprogrammed list.">;
+  u16 field_2;
+  s32 effect_rate <name = "Effect Rate", comment = "Percent chance that the trait triggers.">;
+  
+  s32 union_effect <name = "Sub Trait", comment = "Adds effect of trait with given ID to this trait. Requires 'Use Sub Trait'=1.">;
+
+  f32 effect_size <name = "Effect Size", comment = "Strength of effect. Usually a multiplier for damage, healing, skill costs, ailment chance, etc.">;
+  s32 trait_ex[ 10 ] <name = "Substitute Traits", comment = "Alternate inheritable traits during fusion if this one is a duplicate or a Treasure Demon trait.">;
+
+  struct
+  {
+	s32 UnknownBitfield : 29;
+	s32 UseSubTrait : 1 <name = "Use Sub Trait", comment = "If set to 1, this trait will also include effects of trait with ID in the 'Sub Trait' field.">;
+	s32 IsTreasure : 1 <name = "Is Treasure", comment = "If 1, indicates that this is from a Treasure Demon and a substitute trait should be inherited instead.">;
+    s32 IsUnique : 1 <name = "Is Unique", comment = "Put 0 for inheritable trait. Put 1 if you don't want to">;
+  } trait_flags;
+} TSkill_TraitData;
+
+
+// Item
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u16 WeaponFieldMenuSorting <name = "Accessories Field Menu Sorting", comment = "Higher Value will put it on top.">;
+    u16 WeaponShopMenuSorting <name = "Accessories Shop Menu Sorting", comment = "Lower Value will put it on top.">;
+    EquippableUsers Users;
+    AccessoriesShop isitavailable4 <name = "Show in Shop?", comment = "Put 1 to make it not shown. Put 0 to make it shown in Iwai Shop.">;
+    PersonaStats Stats<name="Stat Boosts">;
+    u8 RESERVE_STAT<name="RESERVE">;
+    GearEffect Effect[3] <name = "Effect">;
+    u16 level<name="Level">;
+    u16 value<name="Value">;
+    u16 RESERVE_1E<name="RESERVE">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase">;
+    u8 DayAvailable <name = "Day Available for Purchase">;
+    u16 RESERVE_2A<name="RESERVE">;
+    u32 material[5]<name="Materials",format=hex>;
+} TItem_Accessories <name ="Accessories">;
+
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u16 WeaponFieldMenuSorting <name = "Armor Field Menu Sorting", comment = "Higher Value will put it on top.">;
+    u16 WeaponShopMenuSorting <name = "Armor Shop Menu Sorting", comment = "Lower Value will put it on top.">;
+    EquippableUsers Users;
+    ArmorWeaponShop isitavailable3 <name = "Show in Shop?", comment = "Put 1 to make it not shown. Put 0 to make it shown in Iwai Shop.">;
+    u16 ArmorDefense <name = "Defense">;
+    u16 ArmorEvasion <name = "Evasion">;
+    PersonaStats Stats<name="Stat Boosts">;
+    u8 RESERVE_STAT<name="RESERVE">;
+    GearEffect Effect[3] <name = "Effect">;
+    u16 level<name="Level">;
+    u16 value<name="Value">;
+    u16 RESERVE_1E<name="RESERVE">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase">;
+    u8 DayAvailable <name = "Day Available for Purchase">;
+    u16 Unknown;
+} TItem_Armor <name ="Armor">;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u32 MenuSorting<name="Menu Sorting">;
+    u16 flag<name="Flags",format=hex>;
+    Usability Availability <name = "Availability", comment = "Set if it is able to use in battle or field or none">;
+    BattleSkill Skill <name = "Battle Skill", comment = "Set the item to use the skill">;
+    u16 RESERVE_0E<name="RESERVE">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase">;
+    u8 DayAvailable <name = "Day Available for Purchase">;
+    u16 RESERVE_1A<name="RESERVE">;
+    u32 Material[5]<name="Materials",format=hex>;
+} TItem_Consumables <name ="Consumables">;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u32 MenuSorting<name="Menu Sorting">;
+    u16 flag<name="Flags",format=hex>;
+    u16 RESERVE_1A<name="RESERVE">;
+} TItem_KeyItems <name ="Key Items">;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u32 MenuSorting<name="Menu Sorting">;
+    u16 flag<name="Flags",format=hex>;
+    u16 value<name="Value">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase">;
+    u8 DayAvailable <name = "Day Available for Purchase">;
+    u16 RESERVE_16<name="RESERVE">;
+    u32 Material[5]<name="Materials",format=hex>;
+} TItem_Materials <name ="Materials">;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u16 WeaponFieldMenuSorting <name = "Melee Weapon Field Menu Sorting", comment = "Higher Value will put it on top.">;
+    u16 WeaponShopMenuSorting <name = "Melee Weapon Shop Menu Sorting", comment = "Lower Value will put it on top.">;
+    EquippableUsers Users;
+    MeleeWeaponShop isitavailable <name = "Show in Shop?", comment = "Put 1 to make it not shown. Put 0 to make it shown in Iwai Shop.">;
+    u16 RESERVE;
+    u16 Attack <name = "Attack">;
+    u16 Accuracy <name = "Accuracy">;
+    PersonaStats Stats<name="Stat Boosts">;
+    u8 RESERVE_STAT<name="RESERVE">;
+    GearEffect Effect[3] <name = "Effect">;
+    u16 level<name="Level">;
+    u16 value<name="Value">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase", comment = "Put 3/31 if you don't want it to be shown in the shop.">;
+    u8 DayAvailable <name = "Day Available for Purchase", comment = "Put 3/31 if you don't want it to be shown in the shop.">;
+    u16 UNKNOWN_2E;
+} TItem_MeleeWeapons <name ="Melee Weapons">;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u16 FieldMenuSorting;
+    u16 ShopMenuSorting;
+    EquippableUsers Users;
+    GearEffect Effect[3] <name = "Effect">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase", comment = "Put 3/31 if you don't want it to be shown in the shop.">;
+    u8 DayAvailable <name = "Day Available for Purchase", comment = "Put 3/31 if you don't want it to be shown in the shop.">;
+    u16 RESERVE;
+    u16 RESERVE;
+} TItem_Outfits <name ="Outfits">;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u32 MenuSorting<name="Menu Sorting">;
+    u16 flag<name="Flags",format=hex>;
+    BattleSkill Skill<name="Skill ID">;
+    u16 level<name="Level">;
+    u16 value<name="Value">;
+    u32 PurchasePrice;
+    u32 SellPrice;
+} TItem_SkillCards <name ="Skill Cards">;
+
+typedef struct {
+	
+	RangedItemUpgradable RangedItemUpgradable2 <name = "Ranged Item Upgradable", comment = "If 0, this enhancement will not show in Iwai. 1 if you want to upgrade this specific enhancement">;
+	u16 Attack1 <name = "Attack">;
+	u16 Accuracy1 <name = "Accuracy">;
+	u16 Rounds1 <name = "Rounds">;
+	GearEffect Effect <name = "Effect">;
+} GunEnhancement;
+
+typedef struct
+{
+    ItemType itemkind<name="Item Type">;
+    u16 WeaponFieldMenuSorting <name = "Ranged Weapon Field Menu Sorting", comment = "Higher Value will put it on top.">;
+    u16 WeaponShopMenuSorting <name = "Ranged Weapon Shop Menu Sorting", comment = "Lower Value will put it on top.">;
+    EquippableUsers Users;
+    RangedWeaponShop isitavailable2 <name = "Show in Shop?", comment = "Put 1 to make it not shown. Put 0 to make it shown in Iwai Shop.">;
+    ElementalType Attribute<name="Elemental Attribute">;
+    u8 RESERVE_0F<name="RESERVE">;
+    u16 Attack <name = "Attack">;
+    u16 Accuracy <name = "Accuracy">;
+    u16 Rounds <name = "Rounds">;
+    PersonaStats Stats<name="Gun Stats">;
+    u8 RESERVE_STAT<name="RESERVE">;
+    GearEffect Effect[3] <name = "Effect">;
+    u16 FIELD_22;
+    u16 IwaisUpgradeRank <name= "Iwai's Upgrade Rank", comment= "This weapon will be available in accordance with Iwai's Upgrade rank confidant. 1 is Starter Weapons, 2 is Medium Weapons, and 3 is High Grade Weapons">;
+    u16 RESERVE_26<name="RESERVE">;
+    u32 PurchasePrice <name = "Purchase Price">;
+    u32 SellPrice <name = "Sell Price">;
+    Month MonthAvailable <name = "Month Available for Purchase">;
+    u8 DayAvailable <name = "Day Available for Purchase">;
+    GunEnhancement LongBarrelEnhancement <name = "Long Barrel Enhancement", comment = "This is the Long Barrel Enhancement that increases Accuracy from Iwai Upgrade Ranged"> ;
+	GunEnhancement GigaBarrelEnhancement <name = "Giga Barrel Enhancement", comment = "This is the Giga Barrel Enhancement that increases a lot of Accuracy but decreases Power from Iwai Upgrade Ranged"> ;
+	GunEnhancement PowerReceiver <name = "Power Receiver Enhancement", comment = "This is the Power Receiver Enhancement that increases Attack from Iwai Upgrade Ranged"> ;
+    GunEnhancement HighPowerReceiver <name = "High Power Receiver Enhancement", comment = "This is the High Power Receiver Enhancement that increases a lot of Attack but decreases Accuracy from Iwai Upgrade Ranged"> ;
+	GunEnhancement MegaPowerReceiver <name = "Mega Power Receiver Enhancement", comment = "This is the Mega Power Receiver Enhancement that increases tons of Attack but decreases Accuracy from Iwai Upgrade Ranged"> ;
+	GunEnhancement FireCamo <name = "Fire Camo Enhancement", comment = "This is the Fire Camo that decreases Attack and bullet but gives Ailment attack from Iwai Upgrade Ranged"> ;
+	GunEnhancement ElectricCamo <name = "Electric Camo Enhancement", comment = "This is the Electric Camo that decreases Attack and bullet but gives Ailment attack from Iwai Upgrade Ranged"> ;
+	GunEnhancement IceCamo <name = "Ice Camo Enhancement", comment = "This is the Ice Camo that decreases Attack and bullet but gives Ailment attack from Iwai Upgrade Ranged"> ;
+    u16 RESERVE_82<name="RESERVE">;
+} TItem_RangedWeapons <name ="Ranged Weapons">;
+
+typedef struct
+{
+    u8 Unknown;
+} TItem_Footer <name ="Footer">;
+
+typedef struct
+{
+	s16 AttackHitRegFrames [ 8 ]<name="Hit Register Frames">;
+	s16 AttackAnimationSpeed<name="Animation Speed">;
+	s16 DistanceFromTarget<name="Collision Distance">;
+    s16 stop<name="Stop Frames">;
+    s16 blend<name="Interpolation Frames">;;
+}TVisual_AttackFrameData_Struct <name = "Attack Frame Data">;
+
+typedef struct
+{
+	TVisual_AttackFrameData_Struct PlayerNormalAttack<name="Normal Attack">;
+    TVisual_AttackFrameData_Struct PlayerCritAttack<name="Critical Attack">;
+    TVisual_AttackFrameData_Struct PlayerMissedAttack<name="Missed Attack">;
+    TVisual_AttackFrameData_Struct PlayerItemUse<name="Item Use">;
+    TVisual_AttackFrameData_Struct PlayerMagicCast<name="Magic Cast">;
+}TVisual_AttackFrameData <name = "Attack Frame Data">;
+
+typedef struct
+{
+	TVisual_AttackFrameData_Struct EnemyNormalAttack<name="Normal Attack">;
+    TVisual_AttackFrameData_Struct EnemyMagicCast<name="Magic Cast">;
+    TVisual_AttackFrameData_Struct EnemyUnkAttack<name="Unknown Attack">;
+}TVisual_AttackFrameDataEnemy <name = "Attack Frame Data">;
+
+typedef struct
+{
+	TVisual_AttackFrameData_Struct PersonaNormalAttack<name="Normal Attack">;
+    TVisual_AttackFrameData_Struct PersonaMagicAttack<name="Magic Cast">;
+}TVisual_AttackFrameDataPersona <name = "Attack Frame Data">;
+
+// VISUAL.TBL
+
+typedef struct
+{
+    f32 X<name="X Offset">;
+    f32 Y<name="Y Offset">;
+    f32 Z<name="Z Offset">;
+} CameraCenter<name="Camera Center">;
+
+typedef struct
+{
+    CameraCenter Center;
+    f32 VirtualHeight<name="Unit Height">;
+    f32 VirtualRadius<name="Unit Radius">;
+} datCollisionTable<name="Collision Table">;
+
+typedef struct
+{
+    u32 Flags;
+    f32 Speed;
+} datMoveTable<name="Move Table">;
+
+typedef struct
+{
+    u32 Flags;
+    datCollisionTable NormalCylinder<name="Normal Camera">;
+    datCollisionTable DyingCylinder<name="Dying Camera">;
+    datCollisionTable DownCylinder<name="Downed Camera">;
+    datCollisionTable Skill1Cylinder<name="Skill Use 1 Camera">;
+    datCollisionTable Skill2Cylinder<name="Skill Use 2 Camera">;
+    u16 ModelScale<name="Model Scale %">;
+    u16 AilmentIndicatorSize <name="Ailment VFX Scale %", comment = "It is the size of the ailment when inflicted to enemy. Higher value will make it larger">;
+    u16 EffectScale<name="Effect Scale %">;
+    u16 UnkScale<name="Unknown Scale %">;
+    datMoveTable ForwardMove<name="Forward Movement">;
+    datMoveTable BackwardMove<name="Backward Movement">;
+    TVisual_AttackFrameDataEnemy FrameData;
+} TVisual_EnemyVisualVariablesA <name = "Enemy Visual Variables A">;
+
+typedef struct
+{
+    datCollisionTable CollisionTable[13]<name="Camera Data">;
+	u16 ModelScale<name="Model Scale %">;
+    u16 AilmentIndicatorSize <name="Ailment VFX Scale %", comment = "It is the size of the ailment when inflicted to enemy. Higher value will make it larger">;
+    u16 EffectScale<name="Effect Scale %">;
+    u16 UnkScale<name="Unknown Scale %">;
+    datMoveTable ForwardMove<name="Forward Movement">;
+    datMoveTable BackwardMove<name="Backward Movement">;
+    TVisual_AttackFrameData FrameData;
+} TVisual_PlayerVisualVariablesA <name = "Player Visual Variables A">;
+
+typedef struct
+{
+    s16 X<name="X">;
+    s16 Y<name="Y">;
+    s16 Z<name="Z">;
+} OffsetPosition;
+
+typedef struct
+{
+    u32 Flags;
+    datCollisionTable NormalCylinder<name="Normal Camera">;
+    datCollisionTable ButuriCylinder<name="Phys Attack Camera">;
+    datCollisionTable SkillCCylinder<name="Skill Camera 1">;
+    datCollisionTable SkillSCylinder<name="Skill Camera 2">;
+    OffsetPosition ButuriPosition<name="Attack Position Offset">;
+    OffsetPosition MagicPosition<name="Magic Cast Offset">;
+    short BattleModelScale <name="Model Scale % (Battle)">;
+    TVisual_AttackFrameDataPersona FrameData;
+	u8 Alpha<name="Model Alpha">;
+	u8 AlignmentReserve;
+} TVisual_PersonaVisualVariablesA <name = "Persona Visual Variables A">;
+
+typedef struct
+{
+    u8 Unknown[ 648 ];
+} TVisual_PlayerVisualVariablesB <name = "Player Visual Variables B">;
+
+typedef struct
+{
+    struct
+    {
+        u32 Field00;
+        u32 Field04;
+        f32 Field08[16];
+    } Entries[5];
+} TVisual_EnemyVisualVariablesB <name = "Enemy Visual Variables B">;
+
+typedef struct
+{
+    u8 Unknown[ 576 ];
+} TVisual_PersonaVisualVariablesB <name = "Persona Visual Variables B">;
+
+//---------------------------------------------
+// Parse file structure
+//---------------------------------------------
+enum TableSegmentType
+{
+    TableSegmentType_Unknown,
+    TableSegmentType_Persona_Stats,
+    TableSegmentType_Persona_SkillsAndStatGrowths,
+    TableSegmentType_Persona_PartyLevelUpThresholds,
+    TableSegmentType_Persona_PartyPersonas,
+    TableSegmentType_Player_LevelUpThresholds,
+    TableSegmentType_Player_HPSPPerLevel,
+    TableSegmentType_Player_PlayerSegment3,
+    TableSegmentType_Player_PlayerSegment4,
+    TableSegmentType_Exist_Segment1,
+    TableSegmentType_Exist_Segment2,
+    TableSegmentType_Elsai_Segment0,
+    TableSegmentType_Elsai_Segment1,
+    TableSegmentType_AICalc_Segment1,
+    TableSegmentType_AICalc_Segment2,
+    TableSegmentType_AICalc_Segment3,
+    TableSegmentType_AICalc_Segment4,
+    TableSegmentType_AICalc_Segment5,
+    TableSegmentType_AICalc_Segment6,
+    TableSegmentType_AICalc_Segment7,
+    TableSegmentType_Encounter_Segment1,
+    TableSegmentType_Encounter_Segment2,
+    TableSegmentType_Encounter_Segment3,
+    TableSegmentType_Skill_Elements,
+    TableSegmentType_Skill_ActiveSkillData,
+    TableSegmentType_Skill_TechnicalMap,
+    TableSegmentType_Skill_TraitData,
+    TableSegmentType_Item_Accessories,
+    TableSegmentType_Item_Armor,
+    TableSegmentType_Item_Consumables,
+    TableSegmentType_Item_KeyItems,
+    TableSegmentType_Item_Materials,
+    TableSegmentType_Item_MeleeWeapons,
+    TableSegmentType_Item_Outfits,
+    TableSegmentType_Item_SkillCards,
+    TableSegmentType_Item_RangedWeapons,
+    TableSegmentType_Item_Footer,
+    TableSegmentType_Unit_EnemyUnitStats,
+    TableSegmentType_Unit_EnemyElementalAffinities,
+    TableSegmentType_Unit_PersonaElementalAffinities,
+    TableSegmentType_Unit_VoiceIndex,
+    TableSegmentType_Unit_VisualIndex,
+    TableSegmentType_Unit_Unknown,
+    TableSegmentType_Visual_EnemyVisualVariablesA,
+    TableSegmentType_Visual_PlayerVisualVariablesA,
+    TableSegmentType_Visual_PersonaVisualVariablesA,
+    TableSegmentType_Visual_PlayerVisualVariablesB,
+    TableSegmentType_Visual_EnemyVisualVariablesB,
+    TableSegmentType_Visual_PersonaVisualVariablesB,
+    TableSegmentType_ExpandedTable_Version
+};
+
+typedef struct( TableSegmentType _type )
+{
+    if (_type != TableSegmentType_ExpandedTable_Version) {
+        uint Size;
+    }
+    else {
+        uint Version;
+    }
+    
+    local TableSegmentType type = _type; // for debugging
+
+    switch ( type )
+    {
+        case TableSegmentType_Persona_Stats:
+            TPersonaStats Stats[ Size / sizeof( TPersonaStats ) ];
+            break;
+
+        case TableSegmentType_Persona_SkillsAndStatGrowths:
+            TPersonaSkillsAndStatGrowths SkillsAndStatGrowths[ Size / sizeof( TPersonaSkillsAndStatGrowths ) ];
+            break;
+
+        case TableSegmentType_Persona_PartyLevelUpThresholds:
+            TPersonaLevelUpThresholds PartyLevelUpThresholds[ Size / sizeof( TPersonaLevelUpThresholds ) ];
+            break;
+
+        case TableSegmentType_Persona_PartyPersonas:
+            TPersonaPartyPersonas PartyPersonas[ Size / sizeof( TPersonaPartyPersonas ) ];
+            break;
+
+        case TableSegmentType_Player_LevelUpThresholds:
+            TPlayer_LevelUpThresholds LevelUpThresholds[ Size / sizeof( TPlayer_LevelUpThresholds ) ];
+            break;
+
+        case TableSegmentType_Player_HPSPPerLevel:
+            TPlayer_HPSPPerLevel HPSPPerLevel[ Size / sizeof( TPlayer_HPSPPerLevel ) ];
+            break;
+
+        case TableSegmentType_Player_PlayerSegment3:
+            TPlayer_PlayerSegment3 PlayerSegment3[ Size / sizeof( TPlayer_PlayerSegment3 ) ];
+            break;
+
+        case TableSegmentType_Player_PlayerSegment4:
+            TPlayer_PlayerSegment4 PlayerSegment4[ Size / sizeof( TPlayer_PlayerSegment4 ) ];
+            break;
+
+        case TableSegmentType_Exist_Segment1:
+            TExist_Segment1 Entries[ Size / sizeof( TExist_Segment1 ) ];
+            break;
+
+        case TableSegmentType_Exist_Segment2:
+            TExist_Segment2 Entries[ Size / sizeof( TExist_Segment2 ) ];
+            break;
+
+        case TableSegmentType_Elsai_Segment0:
+            TElsaiSegment1Entry Entries[ Size / sizeof( TElsaiSegment1Entry ) ];
+            break;
+
+        case TableSegmentType_Elsai_Segment1:
+            TElsaiSegment2Entry Entries[ Size / sizeof( TElsaiSegment2Entry ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment1:
+            TAICalc_Segment1 Entries[ Size / sizeof( TAICalc_Segment1 ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment2:
+            TAICalc_Segment2 Entries[ Size / sizeof( TAICalc_Segment2 ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment3:
+            TAICalc_Segment3 Entries[ Size / sizeof( TAICalc_Segment3 ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment4:
+            TAICalc_Segment4 Entries[ Size / sizeof( TAICalc_Segment4 ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment5:
+            TAICalc_Segment5 Entries[ Size / sizeof( TAICalc_Segment5 ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment6:
+            TAICalc_Segment6 Entries[ Size / sizeof( TAICalc_Segment6 ) ];
+            break;
+
+        case TableSegmentType_AICalc_Segment7:
+            TAICalc_Segment7 Entries[ Size / sizeof( TAICalc_Segment7 ) ];
+            break;
+
+        case TableSegmentType_Encounter_Segment1:
+            TEncounter_Segment1 TEncounters[ Size / sizeof( TEncounter_Segment1 ) ];
+            break;
+
+        case TableSegmentType_Encounter_Segment2:
+            TEncounter_ForcedPartyData TEncounters[ Size / sizeof( TEncounter_ForcedPartyData ) ];
+            break;
+
+        case TableSegmentType_Encounter_Segment3:
+            TEncount_Challenge TEncounters[ Size / 0xA4 ];
+            break;
+
+        case TableSegmentType_Skill_Elements:
+            TSkill_Elements Skill[ Size / sizeof( TSkill_Elements ) ];
+            break;
+
+        case TableSegmentType_Skill_ActiveSkillData:
+            TSkill_ActiveSkillData Skill[ Size / sizeof( TSkill_ActiveSkillData ) ];
+            break;
+
+        case TableSegmentType_Skill_TechnicalMap:
+            TSkill_Skill_TechnicalMap Skill[ Size / sizeof( TSkill_Skill_TechnicalMap ) ];
+            break;
+
+        case TableSegmentType_Skill_TraitData:
+            TSkill_TraitData Trait[ Size / 0x3C ];
+            break;
+
+        case TableSegmentType_Item_Accessories:
+            TItem_Accessories Accessories[ Size / sizeof( TItem_Accessories ) ];
+            break;
+
+        case TableSegmentType_Item_Armor:
+            TItem_Armor Armor[ Size / sizeof( TItem_Armor ) ];
+            break;
+
+        case TableSegmentType_Item_Consumables:
+            TItem_Consumables Consumables[ Size / sizeof( TItem_Consumables ) ];
+            break;
+
+        case TableSegmentType_Item_KeyItems:
+            TItem_KeyItems KeyItems[ Size / sizeof( TItem_KeyItems ) ];
+            break;
+
+        case TableSegmentType_Item_Materials:
+            TItem_Materials Materials[ Size / sizeof( TItem_Materials ) ];
+            break;
+
+
+        case TableSegmentType_Item_MeleeWeapons:
+            TItem_MeleeWeapons MeleeWeapons[ Size / sizeof( TItem_MeleeWeapons ) ];
+            break;
+
+
+        case TableSegmentType_Item_Outfits:
+            TItem_Outfits Outfits[ Size / sizeof( TItem_Outfits ) ];
+            break;
+
+
+        case TableSegmentType_Item_SkillCards:
+            TItem_SkillCards SkillCards[ Size / sizeof( TItem_SkillCards ) ];
+            break;
+
+
+        case TableSegmentType_Item_RangedWeapons:
+            TItem_RangedWeapons RangedWeapons[ Size / sizeof( TItem_RangedWeapons ) ];
+            break;
+
+
+        case TableSegmentType_Item_Footer:
+            TItem_Footer Footer[ Size / sizeof( TItem_Footer ) ];
+            break;
+
+
+        case TableSegmentType_Unit_EnemyUnitStats:
+            TEnemyUnitStats Stats[ Size / sizeof( TEnemyUnitStats ) ];
+            break;
+
+        case TableSegmentType_Unit_EnemyElementalAffinities:
+            ElementalAffinities Affinities[ Size / sizeof( ElementalAffinities ) ];
+            break;
+
+        case TableSegmentType_Unit_PersonaElementalAffinities:
+            ElementalAffinities Affinities[ Size / sizeof( ElementalAffinities ) ];
+            break;
+
+        case TableSegmentType_Unit_VoiceIndex:
+            TUnitVoiceIndex Entries[ Size / sizeof( TUnitVoiceIndex ) ];
+            break;
+
+        case TableSegmentType_Unit_VisualIndex:
+            TUnitVisualIndex VisualIndices[ Size / sizeof( TUnitVisualIndex ) ];
+            break;
+
+        case TableSegmentType_Unit_Unknown:
+            TUnitUnknown VisualIndices[ Size / sizeof( TUnitUnknown ) ];
+            break;
+
+        case TableSegmentType_Visual_EnemyVisualVariablesA:
+            TVisual_EnemyVisualVariablesA Data[ Size / sizeof( TVisual_EnemyVisualVariablesA ) ];
+            break;
+
+        case TableSegmentType_Visual_PlayerVisualVariablesA:
+            TVisual_PlayerVisualVariablesA Data[ Size / sizeof( TVisual_PlayerVisualVariablesA ) ];
+            break;
+
+        case TableSegmentType_Visual_PersonaVisualVariablesA:
+            TVisual_PersonaVisualVariablesA Data[ Size / sizeof( TVisual_PersonaVisualVariablesA ) ];
+            break;
+
+        case TableSegmentType_Visual_PlayerVisualVariablesB:
+            TVisual_PlayerVisualVariablesB Data[ Size / sizeof( TVisual_PlayerVisualVariablesB ) ];
+            break;
+
+        case TableSegmentType_Visual_EnemyVisualVariablesB:
+            TVisual_EnemyVisualVariablesB Data[ Size / sizeof( TVisual_EnemyVisualVariablesB ) ];
+            break;
+
+        case TableSegmentType_Visual_PersonaVisualVariablesB:
+            TVisual_PersonaVisualVariablesB Data[ Size / sizeof( TVisual_PersonaVisualVariablesB ) ];
+            break;
+
+        case TableSegmentType_ExpandedTable_Version:
+            break;
+
+        default:
+            byte Data[ Size ];
+    }
+
+    FAlign( 16 );
+} TTableSegment <read=TableSegmentToString>;
+
+string TableSegmentToString( TTableSegment& segment )
+{
+    return EnumToString( segment.type );
+}
+
+typedef struct( string tableName, u32 endOffset )
+{
+    local int segmentIndex = 0;
+    local TableSegmentType segmentType;
+
+    while ( FTell() < endOffset )
+    {
+        segmentType = TableSegmentType_Unknown;
+        if ( !Stricmp( tableName, "persona" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Persona_Stats; break;
+                case 1: segmentType = TableSegmentType_Persona_SkillsAndStatGrowths; break;
+                case 2: segmentType = TableSegmentType_Persona_PartyLevelUpThresholds; break;
+                case 3: segmentType = TableSegmentType_Persona_PartyPersonas; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "player" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Player_LevelUpThresholds; break;
+                case 1: segmentType = TableSegmentType_Player_HPSPPerLevel; break;
+                case 2: segmentType = TableSegmentType_Player_PlayerSegment3; break;
+                case 3: segmentType = TableSegmentType_Player_PlayerSegment4; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "exist" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Exist_Segment1; break;  // why tf isn't this working, arggghh
+                case 1: segmentType = TableSegmentType_Exist_Segment2; break;  // why tf isn't this working, arggghh
+            }
+        }
+        else if ( !Stricmp( tableName, "elsai" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Elsai_Segment0; break;
+                case 1: segmentType = TableSegmentType_Elsai_Segment1; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "aicalc" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_AICalc_Segment1; break;
+                case 1: segmentType = TableSegmentType_AICalc_Segment2; break;
+                case 2: segmentType = TableSegmentType_AICalc_Segment3; break;
+                case 3: segmentType = TableSegmentType_AICalc_Segment4; break;
+                case 4: segmentType = TableSegmentType_AICalc_Segment5; break;
+                case 5: segmentType = TableSegmentType_AICalc_Segment6; break;
+                case 6: segmentType = TableSegmentType_AICalc_Segment7; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "encount" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Encounter_Segment1; break;
+                case 1: segmentType = TableSegmentType_Encounter_Segment2; break;
+                case 2: segmentType = TableSegmentType_Encounter_Segment3; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "skill" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Skill_Elements; break;
+                case 1: segmentType = TableSegmentType_Skill_ActiveSkillData; break;
+                case 2: segmentType = TableSegmentType_Skill_TechnicalMap; break;
+                case 3: segmentType = TableSegmentType_Skill_TraitData; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "skill_expanded" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_ExpandedTable_Version; break;
+                case 1: segmentType = TableSegmentType_Skill_Elements; break;
+                case 2: segmentType = TableSegmentType_Skill_ActiveSkillData; break;
+                case 3: segmentType = TableSegmentType_Skill_TechnicalMap; break;
+                case 4: segmentType = TableSegmentType_Skill_TraitData; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "item" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Item_Accessories; break;
+                case 1: segmentType = TableSegmentType_Item_Armor; break;
+                case 2: segmentType = TableSegmentType_Item_Consumables; break;
+                case 3: segmentType = TableSegmentType_Item_KeyItems; break;
+                case 4: segmentType = TableSegmentType_Item_Materials; break;
+                case 5: segmentType = TableSegmentType_Item_MeleeWeapons; break;
+                case 6: segmentType = TableSegmentType_Item_Outfits; break;
+                case 7: segmentType = TableSegmentType_Item_SkillCards; break;
+                case 8: segmentType = TableSegmentType_Item_RangedWeapons; break;
+                case 9: segmentType = TableSegmentType_Item_Footer; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "unit" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Unit_EnemyUnitStats; break;
+                case 1: segmentType = TableSegmentType_Unit_EnemyElementalAffinities; break;
+                case 2: segmentType = TableSegmentType_Unit_PersonaElementalAffinities; break;
+                case 3: segmentType = TableSegmentType_Unit_VoiceIndex; break;
+                case 4: segmentType = TableSegmentType_Unit_VisualIndex; break;
+                case 5: segmentType = TableSegmentType_Unit_Unknown; break;
+            }
+        }
+        else if ( !Stricmp( tableName, "visual" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_Visual_EnemyVisualVariablesA; break;
+                case 1: segmentType = TableSegmentType_Visual_PlayerVisualVariablesA; break;
+                case 2: segmentType = TableSegmentType_Visual_PersonaVisualVariablesA; break;
+                case 3: segmentType = TableSegmentType_Visual_PlayerVisualVariablesB; break;
+                case 4: segmentType = TableSegmentType_Visual_EnemyVisualVariablesB; break;
+                case 5: segmentType = TableSegmentType_Visual_PersonaVisualVariablesB; break;
+            }
+        }
+
+        Printf( "%s\n", EnumToString( segmentType ) );
+        SetBackColor( MyRandom( 0xFFFFFFFF ) );
+        TTableSegment Segment( segmentType );
+
+        ++segmentIndex;
+    }
+
+} TTable;
+
+typedef struct
+{
+    LittleEndian();
+    char FileName[ 252 ];
+    u32 FileSize;
+
+    if ( Stricmp( FileNameGetExtension( FileName ), ".tbl" ) == 0 )
+    {
+        BigEndian();
+        TTable Table( FileNameGetBase( FileName, false ), FTell() + FileSize );
+    }
+    else
+    {
+        u8 Data[ FileSize ];
+    }
+
+    FAlign( 64 );
+} TFile <read=FileToString>;
+
+string FileToString( struct TFile& file )
+{
+    return file.FileName;
+}
+
+
+// Read table
+local string filePath = GetFileName();
+local string fileName = FileNameGetBase( filePath, false );
+local string fileExt = FileNameGetExtension( filePath );
+
+if ( Stricmp( fileExt, ".pac" ) == 0 )
+{
+    // table.pac
+    while ( !FEof() )
+    {
+        TFile File;
+    }
+}
+else if ( Stricmp( fileExt, ".tbl" ) == 0 )
+{
+    // tbl file
+    BigEndian();
+    TTable Table( fileName, FileSize() );
+}

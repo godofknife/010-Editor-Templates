@@ -1,0 +1,52 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File:
+//   Authors: SecreC.
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: .uad
+//   History: 
+//------------------------------------------------
+#include "common/include.h"
+
+LittleEndian();
+local int DataSize;
+
+typedef struct
+{
+	char magic[4];
+	s16 field04;
+	s8 field06;
+	s8 field07;
+	int field08;
+	u32 dataSize;
+	DataSize = dataSize;
+}header <name = "uad header">;
+
+typedef struct
+{
+	s16 field00;
+	s16 field02;
+	s16 field04 <name = "Animation Duration">;
+	s16 field06;
+	s16 animID <name = "Animation ID">;
+	s16 field0a;
+	s32 field0c <name = "X Pos">;
+	s32 field10 <name = "Y Pos">;
+	s32 field14 <name = "Z Pos">;
+	s32 field18 <name = "X Rot?">;
+	s32 field1c <name = "Y Rot?">;
+	s32 field20 <name = "Z Rot?">;
+	s32 field24;
+	s32 field28;
+	s32 field2c;
+	s32 field30;
+	s32 field34;
+	s32 field38;
+}entry <name = "uad entry">;
+
+header data;
+entry data[DataSize / 60] <optimize = false>;

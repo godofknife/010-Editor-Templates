@@ -1,0 +1,63 @@
+//------------------------------------------------
+//--- 010 Editor v14.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "common/include.h"
+#include "p5_enums_ftd.bt"
+
+BigEndian();
+
+typedef struct
+{
+	ItemizationType Category : 4;
+    ItemID ID : 12;
+} Item<name="Item", optimize=false>;
+
+typedef struct
+{
+	local byte nextone = ReadByte();
+    while (nextone != 0x0){
+        Item entry;
+        nextone = ReadByte();
+    }
+    FSeek(FTell() + 2);
+} ItemSection<optimize=false>;
+
+typedef struct
+{
+	SetRandomBackColor();
+	uint32 Header_Size<name="Header_Size">;
+    uint32 unk_0x4<name="Unknown (0x4)">;
+    uint32 unk_0x8<name="Unknown (0x8)">;
+    uint32 unk_0xC<name="Unknown (0xC)">;
+    uint32 unk_0x10<name="Unknown (0x10)">;
+    uint32 Data_Size<name="Data_Size">;
+    uint32 Entries<name="Entries">;
+    uint32 unk_0x1C<name="Unknown (0x1C)">;
+    ItemSection Rank0;
+    ItemSection Rank1;
+    ItemSection Rank3;
+    ItemSection Rank5;
+    ItemSection Rank7;
+    ItemSection Rank10;
+} Table_Header<name="Table_Header", optimize=false>;
+
+typedef struct
+{
+	uint32 unk_0x0<name="Unknown (0x0)">;
+	char magic[4]<name="FTD0">;
+	uint32 fileSize<name="File Size">;
+	uint32 unk_0xC<name="Num of Table Entries">;
+} Header<name="Header", optimize=false>;
+
+Header header;
+Table_Header Table;
+

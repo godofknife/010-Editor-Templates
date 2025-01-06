@@ -1,0 +1,145 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: ps2 textures
+//   Authors: Pioziomgames
+//   Version: 1.0
+//   Purpose: Parsing ps2 tm2 textures
+//  Category: Textures
+// File Mask: tm2
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/common.bt"
+
+typedef enum<ubyte>
+{
+    Align16    = 0x01,
+    Align128   = 0x02,
+} TM2Align;
+
+typedef enum<ubyte>
+{
+    RGBA5551 = 1,
+    RGBA8880 = 2,
+    RGBA8888 = 3,
+    INDEX4   = 4,
+    INDEX8   = 5,
+} TM2Bpp;
+
+typedef struct
+{
+    ubyte R : 5;
+    ubyte G : 5;
+    ubyte B : 5;
+    ubyte A : 1;
+} Pixel5551;
+
+typedef struct {
+    ubyte R;
+    ubyte G;
+    ubyte B;
+} Pixel8880;
+
+typedef struct {
+    ubyte R;
+    ubyte G;
+    ubyte B;
+    ubyte A;
+} Pixel8888;
+
+typedef struct
+{
+    ubyte Index : 4;
+    ubyte Index2 : 4;
+} Index4TwoPixels;
+
+typedef struct {
+    int MAGIC;
+    Assert(MAGIC == 843925844);
+    ubyte Version;
+    TM2Align Alignment;
+    short PictureCount;
+    if (Alignment == Align16)
+        ubyte padding[8];
+    else
+        ubyte padding[120];
+} TM2Header <bgcolor=cRed>;
+
+typedef struct (uint Size, TM2Bpp Format) {
+    
+    if (Format == RGBA5551)
+        Pixel5551 RGBA[Size];
+    else if (Format == RGBA8880)
+        Pixel8880 RGB[Size];
+    else if (Format == RGBA8888)
+        Pixel8888 RGBA[Size];
+    else if (Format == INDEX4)
+        Index4TwoPixels Index[Size / 2];
+    else if (Format == INDEX8)
+        ubyte Index[Size];
+
+} ImageData <bgcolor=cGreen>;
+
+typedef struct (ubyte Type, uint Size)
+{
+    local ubyte CType = 7 & Type;
+    
+    if (CType == 1)
+        Pixel5551 RGBA[Size];
+    else if (CType == 2)
+        Pixel8880 RGB[Size];
+    else if (CType == 3)
+        Pixel8888 RGBA[Size];
+
+} paletteData <bgcolor=cYellow>;
+
+typedef struct {
+    local int HeaderStart = FTell();
+    uint TotalSize;
+    uint PaletteSize;
+    uint ImageSize;
+    ushort HeaderSize;
+    ushort PaletteColorsCount;
+    ubyte PictureFormat;
+    ubyte MipMapCount;
+    ubyte PaletteType;
+    TM2Bpp PixelFormat;
+    ushort Width;
+    ushort Height;
+    ubyte GsTex0[8];
+    ubyte GsTex1[8];
+    int GsRegs;
+    int GsTexPalette;
+    
+    if (HeaderStart+HeaderSize > FTell())
+        ubyte UserData[HeaderStart+HeaderSize - FTell()];
+    
+    FAlign(128);
+
+    ImageData Image((uint)Width * Height, PixelFormat);
+    
+    if (MipMapCount > 1)
+    {
+        Assert(false, "MipMaps not supported");
+        int GsMiptbp1[2];
+        int GsMiptbp2[2];
+        int Sizes[8];
+    }
+
+    FAlign(128);
+
+
+    if (PaletteSize > 0)
+        paletteData palette(PaletteType, PaletteColorsCount);
+} Picture <bgcolor=cBlue, optimize=false>;
+
+
+
+struct
+{
+    TM2Header Header;
+    FSkip(112);
+    Picture Pictures[Header.PictureCount];
+    
+} TM2File;

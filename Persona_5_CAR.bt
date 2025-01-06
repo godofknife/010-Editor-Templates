@@ -1,0 +1,34 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+// File Mask: *.car
+//------------------------------------------------
+
+#include "common\include.h"
+BigEndian();
+
+void CherryRandomColor() {
+	SetBackColor( 518630000 + Random( 69420 ) );
+}
+
+typedef struct { f32 X; f32 Z; f32 Y; } CARPathNode <optimize=false,read=(Str("Position:    [ %g ]  [ %g ]  [ %g ]",X,Y,Z))>;
+
+typedef struct {
+    u32 EntryCount;
+    struct CAREntry Entry[EntryCount];
+} CARFile<optimize=false,read=(EntryCount)>;
+
+typedef struct {
+    CherryRandomColor();
+    char EntryTitle[32];
+    u32 PathNodeSize; //NO BUT FR WHY DOES THIS EXIST?
+    u32 PathNodeCount;
+    CARPathNode PathNode[PathNodeCount];
+    Printf( "Entry %s Asserted Entry Size: %i - Real Entry Size: %i\n", EntryTitle, PathNodeSize, ( PathNodeCount * 12 + 4) );
+
+    if ( ( PathNodeCount * 12 + 4) != PathNodeSize ) {
+        SetBackColor( cGray );
+        u8 Dummy0[ PathNodeSize - ( PathNodeCount * 12 + 4)];
+    }
+} CAREntry<optimize=false,read=(EntryTitle)>;
+
+CARFile CAR<name=".CAR File">;

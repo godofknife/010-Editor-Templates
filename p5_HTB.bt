@@ -1,0 +1,89 @@
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+// File Mask: *.htb
+//------------------------------------------------
+
+#include "common/include.h"
+
+typedef struct
+{   
+    BigEndian();    
+
+    s32 Magic<name = "FBN Block Type">;
+    s32 Version<name = "FBN Version">;
+    s32 Size<name = "FBN File Size">;
+    s32 ListOffset<name = "FBN List Offset">;
+    int EntryCount<name = "FBN Entry Count">;      
+    byte Padding[ 12 ]<hidden=true>;
+
+} Header;
+
+typedef struct
+{
+    u32 TrueFlag<name="Enabling Bitflag ",format=hex>;
+    u32 TrueFlag<name="Enabling Bitflag ",format=hex>;
+    u32 TrueFlag<name="Enabling Bitflag ",format=hex>;
+    u32 FalseFlag<name="Disabling Bitflag ",format=hex>;
+    u32 FalseFlag<name="Disabling Bitflag ",format=hex>;
+    u32 FalseFlag<name="Disabling Bitflag ",format=hex>;
+} Bitflags;
+
+enum<short> PromptTypeList
+{
+    EXAMINE_fldCheckName0 = 0,
+    GO_Blank = 1,
+    EXAMINE_fldCheckName1 = 2,
+    EXAMINE_fldCheckName2 = 3,
+    EXAMINE_fldCheckName3 = 4,    
+    EXAMINE_fldCheckName4 = 5,
+    STEAL_fldCheckName = 6,
+    ACTION_fldActionName0 = 7,
+    ACTION_fldActionName1 = 8,
+    ACTION_fldActionName2 = 9,
+    TALK_fldNPCName = 10,
+    GO_fldPlaceName = 11,
+    SHOP_fldCheckName = 12,
+    EXAMINE_fldKFECheckName = 13,    
+};
+
+typedef struct
+{
+    u8 hitIndex;
+    u8 overrideType;
+    u16 overrideNameid;
+    u32 reserve[6];
+} maybeunused;
+
+typedef struct
+{   
+    LittleEndian();
+    SetBackColor( ( color+= color ) * 0x0000FF );
+
+    Bitflags bitflags<name="Entry Flags">; 
+    byte result;
+    byte HitType<name="Trigger Type">;
+    short NameID<name="Text ID">;
+    short ProcedureIndex<name="Script Procedure Index">;
+    PromptTypeList PromptType<name="Prompt Table">;
+    maybeunused potentiallyunused<name="Potentially Unused">;
+    
+    Printf("\nBF Index: %hu\nOverride: %hu\n", ProcedureIndex, PromptType);
+} Entries;
+
+//=======================================================================
+//File Start
+
+Header header<name = "Hit Table Header">;
+
+//Entries entries[header.EntryCount]<name = "Hit Table Entry ">;
+
+local uint i = 0;
+local uint color = 10;
+for ( i = 0; i < header.EntryCount; i++ )
+{
+    Printf("\nEntry %d", i);
+    Entries entries<name = "Hit Table Entry ">;
+}
+
+//File End?
+//=====================================================================

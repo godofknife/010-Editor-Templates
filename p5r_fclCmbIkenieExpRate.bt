@@ -1,0 +1,37 @@
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "common/include.h"
+#include "p5_enums_ftd.bt"
+
+BigEndian();
+FSeek(0x20);
+typedef struct
+{
+  SetRandomBackColor();
+  uint field00;
+  u16 field04;
+  u16 DataSize <name="Data Size">;
+  u16 field08;
+  u16 EntryCount <name="Entry Count">;
+  FtdListType EntryType <name = "Entry Type">;
+  u16 Field0E <name = "Field 0E">;
+} FileInfo <size=0x10, optimize=false>;
+
+typedef struct
+{
+    u16 PointUp <name = "Multiplication Burst Point">;
+} Table_fclCmbBurstLvUp <name = "% Multiplied", size=0x2, comment = "Each 10 entries signifies the rank of the confidant. Repeat after 10">;
+
+SetBackColor( 0x880000 );
+
+typedef struct {
+	FileInfo Segmentinfo;
+} Initialinfo <optimize=false>;
+Initialinfo Initialinfo1;
+
+typedef struct {
+    Table_fclCmbBurstLvUp EXPMultiplier[(FileSize() - 62 )/ 2 ];
+} Multiplier <optimize=false>;
+Multiplier MultiplierList;
+
