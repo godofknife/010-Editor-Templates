@@ -1,0 +1,37 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: ChatBgColors.bt
+//   Authors: SecreC.
+//   Version: 1.0
+//   Purpose: to edit chat icon background colors
+//  Category: 
+// File Mask: ChatBgColors.bt
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+typedef struct
+{
+	local string s;
+	short Original_ArcanaId;
+	short New_ArcanaId;
+}cmmFriend<read=(SPrintf(s, "%02d -> %02d", Original_ArcanaId, New_ArcanaId)), optimize=false>;
+
+local int64 fileSize = FileSize();
+local string filePath = GetFileName();
+local string fileName = FileNameGetBase( filePath, false );
+
+typedef struct( string fileName, int64 fileSize )
+{
+		switch ( fileName )
+		{
+			case "cmmFriendTable":
+				cmmFriend data[fileSize / 4];
+				break;
+		}
+}CmmStructs;
+
+CmmStructs data ( fileName, fileSize );

@@ -1,0 +1,105 @@
+//Functions
+
+
+void FAlign( uint value )
+{
+	FSeek((FTell() + (value - 1)) & ~(value - 1) );
+}
+
+uint Align( uint value, uint alignvalue )
+{
+	return (value + (alignvalue - 1)) & ~(alignvalue - 1);
+}
+local uint RandomBit = 0;
+local uint RandomCount = 0;
+local uint RandomSeed = 0x1337C0DE;
+ 
+void SetRandomBackColor()
+{
+    
+    ++RandomCount;
+    RandomBit  = ( (RandomSeed >> 0 ) ^ ( RandomSeed >> 2 ) ^ ( RandomSeed >> 3 ) ^ ( RandomSeed >> 5 ) ) & 1;
+    RandomSeed = ( ( ( ( RandomBit << 15 ) | ( RandomSeed >> 1 ) ) + ( 0xC0DE / RandomCount ) ) % 0xFFFFFFFF );
+
+    while( RandomSeed < 0 )
+        RandomSeed += 0xFFFFFFFF;
+
+     SetBackColor( RandomSeed);
+}
+
+
+//Types
+
+enum<byte>Bool
+{
+    False = 0,
+    True = 1
+};
+
+typedef struct
+{
+    float U;
+    float V;
+    local string ToString;
+    SPrintf(ToString, "(%f,%f)", U, V);
+} Vector2 <read=Vector2_String, optimize=false>;
+
+string Vector2_String(Vector2& input)
+{
+    return input.ToString;
+}
+
+typedef struct
+{
+    float X;
+    float Y;
+    float Z;
+    local string ToString;
+    SPrintf(ToString, "(%f,%f,%f)", X, Y, Z);
+} Vector3 <read=Vector3_String, optimize=false>;
+
+string Vector3_String(Vector3& input)
+{
+    return input.ToString;
+}
+
+typedef struct
+{
+    float X;
+    float Y;
+    float Z;
+    float W;
+    local string ToString;
+    SPrintf(ToString, "(%f,%f,%f,%f)", X, Y, Z, W);
+} Vector4 <read=Vector4_String, optimize=false>;
+
+string Vector4_String(Vector4& input)
+{
+    return input.ToString;
+}
+
+typedef struct {
+    Vector3 row1;
+    Vector3 row2;
+    Vector3 row3;
+} Matrix3x3;
+
+typedef struct {
+    Vector4 row1;
+    Vector4 row2;
+    Vector4 row3;
+} Matrix3x4;
+
+typedef struct {
+    Vector3 row1;
+    Vector3 row2;
+    Vector3 row3;
+    Vector3 row4;
+} Matrix4x3;
+
+typedef struct {
+    Vector4 row1;
+    Vector4 row2;
+    Vector4 row3;
+    Vector4 row4;
+} Matrix4x4;

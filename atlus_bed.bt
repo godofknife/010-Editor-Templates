@@ -1,0 +1,47 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Atlus battle effect files
+//   Authors: Pioziomgames
+//   Version: 2.1
+//   Purpose: Parsing atlus bed files
+//  Category: Other
+// File Mask: *.bed
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/eplinclude.bt"
+
+LittleEndian();
+
+
+
+struct
+{
+    SetRandomBackColor();
+    char MAGIC[3];
+    ubyte version[5] <name = "BedVersion">;
+    ubyte same[792] <name = "UnkBedData",bgcolor=cBlack>;
+    int Value1;
+    int Value2;
+    int Value3;
+    int Value4;
+    ubyte same2[768] <name = "UnkBedData",bgcolor=cBlack>;
+    local int64 check = 0;
+    while (!FEof())
+    {
+        Epl EmbeddedEpl;
+        if (FileSize() - FTell() > 3)
+        {
+            check = ReadInt64();
+            if (check == 52983593452866)
+            {
+                ubyte BedPadding[16] <bgcolor=cBlack>;
+                break;
+            }
+        }
+            
+    }
+
+
+} Bed <optimize=false>;

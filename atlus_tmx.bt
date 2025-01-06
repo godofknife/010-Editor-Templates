@@ -1,0 +1,139 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: Atlus tmx textures
+//   Authors: Pioziomgames
+//   Version: 1.1
+//   Purpose: 
+//  Category: Textures
+// File Mask: *.tmx
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef enum<ubyte>
+{
+    PSMTC32  = 0x00, 
+    PSMTC24  = 0x01,
+    PSMTC16  = 0x02,
+    PSMTC16S = 0x0A,
+    PSMT8    = 0x13, 
+    PSMT4    = 0x14,
+    PSMT8H   = 0x1B,
+    PSMT4HL  = 0x24,
+    PSMT4HH  = 0x2C,
+} TmxPixelFormat;
+
+typedef enum<ubyte>
+{
+    URepeatVRepeat = 0x0,
+    UClampVRepeat  = 0x1,
+    URepeatVClamp  = 0x4,
+    UClampVClamp   = 0x5,
+    Off            = 0xFF,
+} TmxWrapMode;
+
+typedef struct {
+    ubyte R;
+    ubyte G;
+    ubyte B;
+    ubyte A;
+} PixelPSMTC32;
+
+typedef struct {
+    ubyte R;
+    ubyte G;
+    ubyte B;
+} PixelPSMTC24;
+
+typedef struct
+{
+    ubyte R : 4;
+    ubyte G : 4;
+    ubyte B : 4;
+    ubyte A : 4;
+} PixelPSMTC16;
+
+typedef struct
+{
+    ubyte Index;
+} PixelPSMT8;
+
+typedef struct
+{
+    ubyte Index;
+} TwoPixelsPSMT4;
+
+typedef struct
+{
+    short Flag;
+    short UserId;
+    int FileSize;
+    int TAG;
+    Assert(TAG == 0x30584D54);
+    int Reserved;
+} TmxHeader <bgcolor=cBlue>;
+
+typedef struct
+{
+    ubyte PaletteCount;
+    TmxPixelFormat PaletteFormat;
+    ushort Width;
+    ushort Height;
+    TmxPixelFormat PixelFormat;
+    ubyte MipmapCount;
+    ubyte MipK;
+    ubyte MipL;
+    ubyte Reserved;
+    TmxWrapMode mWrapModes;
+    int UserTextureId;
+    int UserClutId;
+    char UserComment[28];
+    local int Size = (int)Width * (int)Height;
+} TmxPictureHeader <bgcolor=cGreen>;
+
+typedef struct (TmxPixelFormat PaletteFormat, TmxPixelFormat PixelFormat)
+{
+    local int Size = 16;
+    if (PixelFormat == PSMT8 || PixelFormat == PSMT8H)
+        Size = 256;
+
+    if (PaletteFormat == PSMTC32)
+        PixelPSMTC32 Colors[Size];
+    else if (PaletteFormat == PSMTC24)
+        PixelPSMTC24 Colors[Size];
+    else if (PaletteFormat == PSMTC16 || PixelFormat == PSMTC16S)
+        PixelPSMTC16 Colors[Size];
+
+} TmxPaletteData <bgcolor=cYellow, optimize=false>;
+
+typedef struct (TmxPixelFormat PixelFormat, int Size)
+{
+    if (PixelFormat == PSMTC32)
+        PixelPSMTC32 Pixels[Size];
+    else if (PixelFormat == PSMTC24)
+        PixelPSMTC24 Pixels[Size];
+    else if (PixelFormat == PSMTC16 || PixelFormat == PSMTC16S)
+        PixelPSMTC16 Pixels[Size];
+    else if (PixelFormat == PSMT8 || PixelFormat == PSMT8H)
+        PixelPSMT8 Pixels[Size];
+    else if (PixelFormat == PSMT4 || PixelFormat == PSMT4HL || PixelFormat == PSMT4HH)
+        TwoPixelsPSMT4 Pixels[Size / 2];
+} TmxImageData <bgcolor=cRed, optimize=false>;
+
+struct
+{
+    TmxHeader Header;
+    TmxPictureHeader PictureHeader;
+
+    if (PictureHeader.PaletteCount > 0)
+    {
+        TmxPaletteData Palette(PictureHeader.PaletteFormat, PictureHeader.PixelFormat);
+    }
+
+    if (PictureHeader.MipmapCount > 0)
+    {
+        Assert(false, "MipMaps are not supported");
+    }
+    
+    TmxImageData Image(PictureHeader.PixelFormat, PictureHeader.Size);
+} TMXFile;

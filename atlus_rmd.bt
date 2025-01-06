@@ -1,0 +1,886 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: Atlus rmd models (modified RenderWare)
+//   Authors: Pioziomgames
+//   Version: 1.4
+//   Purpose: 
+//  Category: Models
+// File Mask: *.rmd
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "include/common.bt"
+
+typedef enum<uint> 
+    {
+        //Renderware:
+        RwStruct                          = 0x00000001, //SubNode for storing data
+        RwString                          = 0x00000002, //StringNode
+        RwExtension                       = 0x00000003, //Node storing other Nodes
+        RwMaterial                        = 0x00000007, //Material data
+        RwMaterialList                    = 0x00000008, //Material list
+        RwAtomicSector                    = 0x00000009, //
+        RwPlaneSector                     = 0x0000000A, //
+        RwWorld                           = 0x0000000B, //Scene data usually used for floors of battle fields
+        RwFrameList                       = 0x0000000E, //List of bones
+        RwGeometry                        = 0x0000000F, //Geometry data
+        RwClump                           = 0x00000010, //Model data
+        RwAtomic                          = 0x00000014, //Draw bone
+        RwTextureNative                   = 0x00000015, //Texture data
+        RwGeometryList                    = 0x0000001A, //Geometry list
+        RwAnimation                       = 0x0000001B, //Animation data
+        RwTextureDictionary               = 0x00000016, //Texture list
+        RwUVAnimationDictionary           = 0x0000002B, //UV animation list
+        RwSkin                            = 0x00000116, //Weight data
+        RwCollisionData                   = 0x0000011D, //(Unimplemented)
+        RwHAnimFrameExtension             = 0x0000011E, //Bone Ids used for animation
+        RwUserData                        = 0x0000011F, //Custom data added by developers
+        RwMaterialEffects                 = 0x00000120, //(Unimplemented)
+        RwMeshList                        = 0x0000050E, //Mesh data in RwWorlds
+        //Atlus:
+        RmdAnimationPlaceholder           = 0xF0F00001, //Empty node used to keep the animation order in tact
+        RmdAnimationInstance              = 0xF0F00003, //Node redirecting to a different animation
+        RmdAnimationTerminator            = 0xF0F00004, //Node marking the end of the current animation
+        RmdTransformOverride              = 0xF0F00005, //?? apears in every animation but the animations seems to work without
+        RmdNodeLinkList                   = 0xF0F00006, //Node used for attaching objects and effects to bone ids
+        RmdVisibilityAnim                 = 0xF0F00080, //Visibility animation
+        RmdAnimationCount                 = 0xF0F000F0, //Node containing the amount of animations, always found at the beginning of a file
+        RmdParticle                       = 0xF0F000E0, //Node containing an EPL file attached to nodelink Ids (for some reason the file is always aligned to 16 bytes after this chunk and ChunkSize doesn't reflect that)
+        RmdParticleAnimation              = 0xF0F000E1, //(Unimplemented)
+        //Amicitia:
+        AmicitiaAnimation                 = 0x47495201, //Node used to store animation nodes as one node (not actually present in rmd files)
+        AmicitiaWaterMark                 = 0x47495252, //Amicitia watermark
+    } RwNodeId <read=RwNodeId_ToString>;
+
+
+string RwNodeId_ToString(RwNodeId& val)
+{
+    local RwNodeId temp = val;
+    local string str = EnumToString(temp);
+    return str;
+}
+
+typedef enum<ushort>
+{
+    Default = 0x0,
+    D3D8 = 0x1,
+    D3D9 = 0x2,
+    PS2 = 0x6,
+    Xbox = 0x8
+} RwDeviceId;
+
+
+typedef enum<ulong>
+{
+    CSM1 = 0x00,
+    CSM2 = 0x01
+} PS2ClutStorageMode;
+
+typedef enum<ulong>
+{
+    RGB  = 0x00,
+    RGBA = 0x01
+} PS2ColorComponent;
+
+typedef enum<ulong>
+{
+    Modulate    = 0x00,
+    Decal       = 0x01,
+    Highlight   = 0x02,
+    Highlight2  = 0x03
+} PS2TextureFunction;
+
+typedef enum<ulong>
+{
+    TempBufferNotChanged = 0,
+    Load = 1,
+    LoadCopyCbp0 = 2,
+    LoadCopyCbp1 = 3,
+    LoadCopyCbp0Neq = 4,
+    LoadCopyCbp1Neq = 5
+} Tex0ClutBufferLoadControl;
+
+typedef enum<ulong>
+{
+    PSMTC32  = 0x00,
+    PSMTC24  = 0x01,
+    PSMTC16  = 0x02,
+    PSMTC16S = 0x0A,
+    PSMT8    = 0x13,
+    PSMT4    = 0x14,
+    PSMT8H   = 0x1B,
+    PSMT4HL  = 0x24,
+    PSMT4HH  = 0x2C,
+    PSMZ32   = 0x30,
+    PSMZ24   = 0x31,
+    PSMZ16   = 0x32,
+    PSMZ16S  = 0x3A
+} PS2PixelFormat;
+
+typedef enum<uint>
+{
+    Unknown = 0x00004, // game will hang if not set
+    Format1555 = 0x00100,
+    Format565 = 0x00200, // 5 bit R, 4 bit G, 5 bit B
+    Format4444 = 0x00300, // 4 bit RGBA
+    FormatLum8 = 0x00400, // 8 bit greyscale
+    Format8888 = 0x00500, // 8 bit RGBA
+    Format888 = 0x00600, // 8 bit RGB + 1 byte padding
+    Format555 = 0x00A00, // 5 bit RGB
+    AutoMipMap = 0x01000, // auto generate mipmaps (not supported by ps2)
+    Pal8 = 0x02000, // 256 colors
+    Pal4 = 0x04000, // 16 colors
+    MipMap = 0x08000, // has mip maps
+    Swizzled = 0x10000, // the images are "swizzled"
+    HasHeaders = 0x20000  // the image data is preceeded by headers
+} RwRasterFormat <read=RwRasterFormat_ToString>;
+
+typedef enum<uint>
+{
+    Uncompressed = 0x01,
+    Compressed   = 0x02,
+    UV           = 0x1C1
+} RwKeyFrameType;
+
+typedef enum<int>
+{
+    UsesTriStrip          = 0x01,
+    HasPositions          = 0x02,
+    HasUVs                = 0x04,
+    HasNormals            = 0x10,
+    UsesLighting          = 0x20,
+    ModulateMaterialColor = 0x40,
+    HasUVs2               = 0x80,
+} RwWorldFormat;
+
+typedef enum<int>
+{
+    NoEffect = 0,
+    BumpMap = 1,
+    EnvironmentMap = 2,
+    BumpEnvironmentMap = 3,
+    DualTextures = 4,
+    UvTransformation = 5,
+    DualTexturesUvTransformation = 6
+} RwMaterialEffectType;
+
+typedef enum<int>
+{
+    Triangles = 0,
+    TriangleStrip = 1,
+    TriangleFan = 2,
+} RwPrimitiveType;
+
+string RwRasterFormat_ToString(RwRasterFormat& val)
+{
+    local string str = "";
+
+    if ((val & Unknown) == Unknown)
+        str += "Unknown ";
+
+    if ((val & Format555) == Format555)
+        str += "Format555 ";
+    else if ((val & Format888) == Format888)
+        str += "Format888 ";
+    else if ((val & Format8888) == Format8888)
+        str += "Format8888 ";
+    else if ((val & FormatLum8) == FormatLum8)
+        str += "FormatLum8 ";
+    else if ((val & Format4444) == Format4444)
+        str += "Format4444 ";
+    else if ((val & Format565) == Format565)
+        str += "Format565 ";
+    else if ((val & Format1555) == Format1555)
+        str += "Format1555 ";
+
+    if ((val & MipMap) == MipMap)
+        str += "MipMap ";
+    else if ((val & AutoMipMap) == AutoMipMap)
+        str += "AutoMipMap ";
+
+    if ((val & Pal4) == Pal4)
+        str += "Pal4 ";
+    else if ((val & Pal8) == Pal8)
+        str += "Pal8 ";
+
+
+    if ((val & Swizzled) == Swizzled)
+        str += "Swizzled ";
+
+    if ((val & HasHeaders) == HasHeaders)
+        str += "HasHeaders ";
+    return str;
+}
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float w;
+} Quat;
+
+
+typedef struct {
+    ushort x;
+    ushort y;
+    ushort z;
+    ushort w;
+} QuatShort;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+} Vec3;
+
+typedef struct {
+    ushort x;
+    ushort y;
+    ushort z;
+} Vec3Short;
+
+typedef struct {
+    byte x;
+    byte y;
+    byte z;
+    FSkip(1);
+} Vec3Byte;
+
+typedef struct {
+    ubyte R;
+    ubyte G;
+    ubyte B;
+    ubyte A;
+} RGBA;
+
+typedef struct {
+    float U;
+    float V;
+} UV;
+
+typedef struct {
+    ushort Vertex3;
+    ushort Vertex2;
+    ushort MaterialId;
+    ushort Vertex1;
+} Face;
+
+typedef struct {
+    ushort Vertex1;
+    ushort Vertex2;
+    ushort Vertex3;
+    ushort MaterialId;
+} Face2;
+
+typedef struct  {
+    Matrix4x3 Transform;
+    int ParentIndex;
+    int UserFlags;
+} RwFrame;
+
+typedef struct {
+    Vec3 Center;
+    float radius;
+    int PositionFlag;
+    int NormalFlag; 
+
+} RwBoundingSphere;
+
+
+typedef struct ( int FrameCount){
+
+    struct RmdChunk FrameExtensionNodes[FrameCount];
+
+} FrameExtensions;
+
+
+
+
+typedef struct{
+    uint Version;
+    RwKeyFrameType KeyFrameType;
+    uint FrameCount;
+    uint Flags;
+    float Duration;
+    if (KeyFrameType ==  0x1C1)
+    {
+        int Unk;
+        char MaterialName[32];
+        float NodeToUvChannel[8];
+    }
+} AnimationHeader<optimize=false>;
+
+typedef struct{
+    SetRandomBackColor();
+    float Time;
+    Quat Rotation;
+    Vec3 Translation;
+    int PreviousFrameOffset;
+
+} RwUncompressedKeyFrame<optimize=false>;
+
+typedef struct{
+    SetRandomBackColor();
+    float Time;
+    Vec3 Scale;
+    Vec3 Translation;
+    int PreviousFrameIndex;
+
+} RwUVKeyFrame<optimize=false>;
+
+typedef struct{
+    SetRandomBackColor();
+    float Time;
+    float Value;
+} RMDTransparencyKeyFrame<optimize=false>;
+
+
+typedef struct{
+    SetRandomBackColor();
+    float Time;
+    QuatShort Rotation;
+    Vec3Short Translation;
+    int PreviousFrameOffset;
+
+} RwCompressedKeyFrame<optimize=false>;
+
+typedef struct{
+    SetRandomBackColor();
+    Vec3 Offset;
+    Vec3 Scalar;
+} RwCompressedKeyFrameCustomData<optimize=false>;
+
+
+typedef struct{
+    SetRandomBackColor();
+    uint SourceId;
+    uint TargetId;
+    Matrix4x4 Offset;
+} RmdNodeLink <optimize=false>;
+
+typedef struct {
+    uint64 GifTag0;
+    uint64 GifTag1;
+    uint64 trxPosRegister;
+    uint64 trxPosAddress;
+    uint64 trxRegRegister;
+    uint64 trxRegAddress;
+    uint64 trxDirRegister;
+    uint64 trxDirAddress;
+    uint64 GifTag2;
+    uint64 GifTag3;
+} Ps2ImageHeader;
+
+
+typedef struct {
+    BitfieldDisablePadding();
+    ulong BasePointer : 14;
+    ulong BufferWidth : 6;
+    PS2PixelFormat PixelFormat : 6;
+    ulong Width : 4 <comment=" power of 2">;
+    ulong Height : 4 <comment=" power of 2">;
+    PS2ColorComponent ColorComponent : 1;
+    PS2TextureFunction Function : 2;
+
+    ulong ClutBufferBasePointer : 14;
+    PS2PixelFormat ClutPixelFormat : 4;
+    PS2ClutStorageMode ClutStorageMode : 1;
+    ulong ClutEntryOffset : 5;
+    Tex0ClutBufferLoadControl ClutBufferLoadControl : 3;
+} Tex0Register;
+
+typedef struct {
+    struct RwChunkHeader header;
+    int Width;
+    int Height;
+    int Depth;
+    RwRasterFormat Format;
+    Tex0Register Tex0Reg;
+    uint64 Tex1Reg;
+    uint64 MipTBP1Reg;
+    uint64 MipTBP2Reg;
+    uint TexelDataLength;
+    uint PaletteDataLength;
+    uint GpuAlignedLength;
+    uint SkyMipMapValue;
+} RwRasterInfoStruct;
+
+typedef struct (RwRasterInfoStruct &Info) {
+    struct RwChunkHeader header;
+    if ((HasHeaders & Info.Format ) == HasHeaders)
+    {
+        Ps2ImageHeader ImageHeader;
+        byte ImageData[Info.TexelDataLength - 80];
+    }
+    else
+    {
+        byte ImageData[Info.TexelDataLength];
+    }
+
+
+    switch (Info.Tex0Reg.PixelFormat)
+    {
+        case PSMT8:
+        case PSMT4:
+        case PSMT8H:
+        case PSMT4HL: 
+        case PSMT4HH:
+            if ((HasHeaders & Info.Format ) == HasHeaders)
+            {
+                Ps2ImageHeader PaletteHeader;
+                byte PaletteData[Info.PaletteDataLength  - 80];
+            }
+            else
+                byte PaletteData[Info.PaletteDataLength];
+            
+            break;
+        default:
+            byte ImageData[Info.TexelDataLength];
+            break;
+    }
+    //byte ImageData[header.startPos + header.ChunkSize - FTell()];
+    
+} RwRasterDataStruct;
+
+
+typedef struct {
+    struct RwChunkHeader header;
+    RwRasterInfoStruct RasterInfo;
+    RwRasterDataStruct RasterData(RasterInfo);
+} RwRasterStruct;
+
+typedef struct {
+    local int startPos = FTell() + 12;
+    SetRandomBackColor();
+    RwNodeId ChunkId;
+    uint ChunkSize;
+    uint ChunkVersion;
+} RwChunkHeader;
+
+typedef struct {
+    int NodeId;
+    int Index;
+    int Flags;
+} RwHAnimNodeInfo;
+
+typedef struct {
+    ubyte Ind1;
+    ubyte Ind2;
+    ubyte Ind3;
+    ubyte Ind4;
+} RwVertexBoneIndices;
+
+typedef struct {
+    float Weight1;
+    float Weight2;
+    float Weight3;
+    float Weight4;
+} RwVertexBoneWeights;
+
+typedef struct {
+    ubyte BoneIndex;
+    ubyte SkinBoneIndexCount;
+} SkinSplitMeshBoneRle;
+
+typedef struct {
+    int IndicesCount;
+    int MatIndex;
+    int Indices[IndicesCount];
+} RwMesh<optimize=false>;
+
+typedef struct (int VertexCount){
+    local int startPos = FTell() + 12;
+    SetRandomBackColor();
+    RwNodeId ChunkId;
+    uint ChunkSize;
+    uint ChunkVersion;
+    switch( ChunkId )
+    {
+    case RwExtension:
+        while (FTell() != ChunkSize + startPos)
+        {
+           struct RwGeometryExtension Chunk(VertexCount);
+        }
+        break;
+    
+    case RwSkin:
+        ubyte BoneCount;
+        ubyte UsedBoneCount;
+        ubyte MaxWeightPerVertex;
+        FSkip(1);
+        
+        ubyte UsedBoneIndices[UsedBoneCount];
+        RwVertexBoneIndices BoneInd[VertexCount];
+        RwVertexBoneWeights BoneWeights[VertexCount];
+        
+        Matrix4x4 SkinToBoneMatrices[BoneCount] <optimize=true>;
+
+        int BoneLimit;
+        int MeshCount;
+        int RleCount;
+        
+        if (MeshCount > 0)
+        {
+            ubyte MeshBoneRemapIndices[BoneCount];
+            
+            SkinSplitMeshBoneRle MeshRle[MeshCount];
+            SkinSplitMeshBoneRle MeshBoneRle[RleCount];
+        }
+        break;
+    case RwMeshList:
+        RwPrimitiveType PrimitiveType;
+        int MeshCount;
+        int PrimitiveCount;
+        RwMesh Meshes[MeshCount];
+        break;
+    default:
+        if (ChunkSize > 0) // Gets rid of array not generated warnings
+            byte Data[ChunkSize];
+    }
+
+} RwGeometryExtension;
+
+typedef struct (RwWorldFormat FormatFlags){
+    FSkip(24);
+    int MaterialIdBase;
+    int FaceCount;
+    int VertexCount;
+    Vec3 Min;
+    Vec3 Max;
+    int64 Unused;
+
+    if (VertexCount > 0)
+    {
+        Vec3 Vertex[VertexCount];
+    
+        if ((FormatFlags & HasNormals) == HasNormals)
+            Vec3Byte Normals[VertexCount];
+        if ((FormatFlags & UsesLighting) == UsesLighting)
+            RGBA Colors[VertexCount];
+        if ((FormatFlags & HasUVs2) == HasUVs2)
+        {
+            UV TexCoords[VertexCount];
+            UV TexCoords2[VertexCount];
+        }
+        else if ((FormatFlags & HasUVs) == HasUVs)
+            UV TexCoords[VertexCount];
+    }
+    if (FaceCount > 0)
+    {
+        Face2 Faces[FaceCount];
+    }
+    struct RmdChunk Extension <name="Extension">;
+} RwAtomicSectorNode;
+
+typedef struct (RwWorldFormat FormatFlags) {
+    FSkip(24);
+    int SectorType;
+    float Value;
+    int LeftIsAtomic;
+    int RightIsAtomic;
+    float LeftValue;
+    float RightValue;
+    
+    if (LeftIsAtomic == 1)
+        RwAtomicSectorNode LeftSection(FormatFlags) <name="LeftSection">;
+    else
+        struct RwPlaneSectorNode LeftSection(FormatFlags) <name="LeftSection">;
+
+    if (RightIsAtomic == 1)
+        RwAtomicSectorNode RightSection(FormatFlags) <name="RightSection">;
+    else
+        struct RwPlaneSectorNode RightSection(FormatFlags) <name="RightSection">;
+
+} RwPlaneSectorNode <optimize=false>;
+
+typedef struct {
+    local int startPos = FTell() + 12;
+    SetRandomBackColor();
+    RwNodeId ChunkId;
+    uint ChunkSize;
+    uint ChunkVersion;
+    switch( ChunkId )
+    {
+
+    case RwExtension:
+        while (FTell() != ChunkSize + startPos)
+        {
+           struct RmdChunk Chunk;
+        }
+        break;
+    case RwString:
+        string value;
+        FSeek(startPos+ChunkSize);
+        break;
+
+    case RwClump:
+        FSkip(12);
+        int AtomicCount;
+        int LightCount;
+        int CameraCount;
+        
+        struct RmdChunk FrameListNode <name="FrameList">;
+        
+        FrameExtensions FExtensions(FrameListNode.FrameCount);
+        
+        struct RmdChunk GeometryListNode <name="GeometryList">;
+
+        struct RmdChunk AtomicNodes[AtomicCount] <name="Atomics">;
+
+        struct RmdChunk Extension <name="ExtensionNode">;
+        break;
+
+    case RwFrameList:
+        FSkip(12);
+        int FrameCount;
+        RwFrame Frames[FrameCount] <optimize=false>;
+        break;
+
+    case RwGeometryList:
+        FSkip(12);
+        int GeometryCount;
+        struct RmdChunk Geom[GeometryCount] <name="GeometryNode">;
+        break;
+
+    case RwGeometry:
+        SetRandomBackColor();
+        FSkip(12);
+        ushort Flags;
+        ubyte NumTexCoord;
+        ubyte NativeFlag;
+        int numTris;
+        int numVerts;
+        int MorphTargets;
+    
+        SetRandomBackColor();
+        if ((Flags & 0x8) == 0x8)
+            RGBA Color[numVerts];
+    
+        SetRandomBackColor();
+        if (((Flags & 0x4) == 0x4) || ((Flags & 0x80) == 0x80))
+            UV TexCoords[numVerts];
+        if (NumTexCoord>1)
+            UV TexCoords2[numVerts];
+    
+        SetRandomBackColor();
+        Face Faces[numTris];
+        
+        SetRandomBackColor();
+        RwBoundingSphere BoundingSphere;
+    
+        SetRandomBackColor();
+        if ((Flags & 0x2) == 0x2)
+            Vec3 Vertex[numVerts];
+        
+        SetRandomBackColor();
+        if ((Flags & 0x10) == 0x10)
+            Vec3 Normal[numVerts];
+    
+        struct RmdChunk MaterialList <name="MaterialList">;
+    
+        struct RwGeometryExtension GeomExtension(numVerts) <name="GeometryExtension">;
+        break;
+
+    case RwMaterialList:
+        FSkip(12);
+
+        int MaterialCount;
+        if (MaterialCount != -1)
+        {
+            int MaterialReference[MaterialCount];
+            struct RmdChunk Material[MaterialCount] <name="Material">;
+        }
+        break;
+
+    case RwMaterial:
+        FSkip(12);
+
+        int Field00;
+        int Color;
+        int Field08;
+    
+        int IsTextured;
+        float Ambient;
+        float Specular;
+        float Diffuse;
+        
+        if (IsTextured == 1)
+        {
+            FSkip(12);
+            FSkip(12);
+            int TextureFlags;
+    
+            int Unk1;
+            int NameSize;
+            int Unk3;
+            char TexName[NameSize];
+    
+            int Unk4;
+            int MaskNameSize;
+            int Unk6;
+            char TexMaskName[MaskNameSize];
+            
+            struct RmdChunk TexExtension <name="TextureExtension">;
+        }
+        struct RmdChunk MatExtension <name="MaterialExtension">;
+        break;
+
+    case RwAnimation:
+        AnimationHeader Header;
+
+        if (Header.KeyFrameType == 2)
+        {
+            RwCompressedKeyFrame CompressedKeyFrame[Header.FrameCount];
+        }
+        else if (Header.KeyFrameType == 1)
+        {
+            RwUncompressedKeyFrame UncompressedKeyFrame[Header.FrameCount];
+        }
+        else  if (Header.KeyFrameType == 0x1C1)
+        {
+            RwUVKeyFrame UvKeyFrame[Header.FrameCount];
+        }
+        
+        if (Header.KeyFrameType == 2)
+        {
+            RwCompressedKeyFrameCustomData CompressedKeyFrameCustomData;
+        }
+        break;
+
+    case RmdAnimationCount:
+        ushort AnimationCount;
+        break;
+
+    case RmdParticle:
+        ushort Id[2] <comment="Ids used by Node Links">;
+        uint EplSize;
+
+        uint Unk;
+        FAlign(16);
+        SetRandomBackColor();
+        byte EplFile[EplSize];
+        FAlign(16);
+    
+        break;
+
+    case RmdNodeLinkList:
+        ushort NodeLinkCount;
+        RmdNodeLink NodeLinks[NodeLinkCount];
+        break;
+
+    case RwTextureDictionary:
+        FSkip(12);
+        ushort TextureCount;
+        RwDeviceId DeviceId;
+        SetRandomBackColor();
+        struct RmdChunk TextureNodes[TextureCount];
+        struct RmdChunk ExtensionNode <name="Extension">;
+        break;
+
+    case RwTextureNative:
+        struct RmdChunk StructNode <name="Struct">;
+        struct RmdChunk NameNode <name="Name">;
+        struct RmdChunk MaskNameNode <name="MaskName">;
+        RwRasterStruct RasterStructNode <name="RasterStruct">;
+        struct RmdChunk ExtensionNode <name="Extension">;
+        break;
+
+    case RwAtomic:
+        FSkip(12);
+        uint FrameIndex;
+        uint GeometryIndex;
+        uint Flag1;
+        uint Flag2;
+        struct RmdChunk ExtensionNode <name="Extension">;
+        break;
+
+    case RmdVisibilityAnim:
+        uint KeyFrameCount;
+        float Duration;
+        uint MaybeKeyFrameSize;
+        uint NameSize;
+        uint MaybeVersion;
+        char MaterialName[NameSize];
+
+        RMDTransparencyKeyFrame KeyFrames[KeyFrameCount];
+        break;
+    case RwHAnimFrameExtension:
+
+        int version;
+        int NameId;
+        int NodeCount;
+        if (NodeCount != 0)
+        {
+            uint flags;
+            int keyFrameSize;
+        
+            RwHAnimNodeInfo NodeInfo[NodeCount];
+        }
+        break;
+    case RwUVAnimationDictionary:
+        FSkip(12);
+        int UvAnimationCount;
+        struct RmdChunk UvAnimations[UvAnimationCount] <name="UV Animations">;
+        break;
+    case RmdAnimationInstance:
+        short RedirectAnimationIndex;
+        break;
+    case AmicitiaAnimation:
+        while (FTell() < startPos+ChunkSize)
+        {
+            struct RmdChunk Chunk;
+        }
+        break;
+    case AmicitiaWaterMark:
+        char WaterMark[ChunkSize];
+        break;
+    case RwWorld:
+        FSkip(12);
+        int RootIsWorldSector;
+        Vector3 InverseOrigin;
+        int TriangleCount;
+        int VertexCount;
+        int PlaneSectorCount;
+        int AtomicSectorCount;
+        int ColSectorSize;
+        RwWorldFormat FormatFlags;
+        Vector3 Min;
+        Vector3 Max;
+        struct RmdChunk MaterialList <name="MaterialList">;
+        if (RootIsWorldSector == 1)
+            RwAtomicSectorNode AtomicSector(FormatFlags);
+        else
+            RwPlaneSectorNode PlaneSector(FormatFlags);
+        struct RmdChunk Extension <name="Extension">;
+        break;
+
+    case RwMeshList:
+        RwPrimitiveType PrimitiveType;
+        int MeshCount;
+        int PrimitiveCount;
+        RwMesh Meshes[MeshCount];
+        break;
+    default:
+        if (ChunkSize > 0) // Gets rid of array not generated warnings
+            byte Data[ChunkSize];
+    }
+    
+	
+} RmdChunk<optimize=false, name = "RmdChunk",read=readChunk>;
+
+string readChunk(local RmdChunk &c) {
+    local RwNodeId temp = c.ChunkId;
+    local string s;
+    SPrintf(s,"Type: %s, Size: %i",EnumToString( temp ), c.ChunkSize);
+    return s; 
+}
+
+struct
+{
+    while(!FEof())
+    {
+        RmdChunk Chunk;
+    }
+} RmdFile;

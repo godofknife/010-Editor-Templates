@@ -1,0 +1,98 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Atlus environment files
+//   Authors: Pioziomgames
+//   Version: 1.2
+//   Purpose: Editing fog and lighting
+//  Category: Other
+// File Mask: *.env
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct 
+{
+    ubyte R <bgcolor=cRed>;
+    ubyte G <bgcolor=cGreen>;
+    ubyte B <bgcolor=cBlue>;
+} RGB;
+
+typedef struct 
+{
+    ubyte R <bgcolor=cRed>;
+    ubyte G <bgcolor=cGreen>;
+    ubyte B <bgcolor=cBlue>;
+    ubyte A <bgcolor=cGray>;
+
+} RGBA;
+
+typedef struct 
+{
+    float R <bgcolor=cRed>;
+    float G <bgcolor=cGreen>;
+    float B <bgcolor=cBlue>;
+    float A <bgcolor=cGray>;
+
+} FloatRGBA;
+
+typedef struct 
+{
+
+    RGB FogRGB <name="Fog RGB">;
+    byte EnableFog <bgcolor=cYellow>;
+    float FN <bgcolor=cBlue>;
+    float CF <bgcolor=cRed>;
+    float Unk <bgcolor=cBlack>;
+} fog;
+
+typedef struct 
+{
+
+    FloatRGBA Ambient <name="MC Ambient">;
+    FloatRGBA CharacterLight <name="MC Light">;
+    byte unk[64] <bgcolor=cBlack>;
+} Char;
+
+typedef struct 
+{
+
+    FloatRGBA Ambient <name="NPC Ambient">;
+    FloatRGBA CharacterLight <name="NPC Light">;
+    byte unk[64] <bgcolor=cBlack>;
+} NPC;
+
+typedef struct 
+{
+    byte unk[100] <bgcolor=cBlack>;
+} SEPNPC;
+
+typedef struct 
+{
+    byte unk[92] <bgcolor=cBlack>;
+} SEPMC;
+
+typedef struct 
+{
+    fog Fog <name="Fog">;
+    FloatRGBA Ambient <name="Field Ambient">;
+    FloatRGBA Light <name="Field Light">;
+    byte unk[68] <bgcolor=cBlack>;
+
+} field;
+
+
+typedef struct 
+{
+    int Magic <bgcolor=cGreen>;
+    byte Unk1[8] <bgcolor=cBlack>;
+    field Field <name = "Field">;
+    Char EnvChar <name="MC">;
+    SEPMC SepMc <name = "SEP MC">;
+    NPC npc <name="NPC">;
+    SEPNPC SepNPC <name="SEP NPC">;
+} EnvFile;
+
+
+
+EnvFile File;

@@ -1,0 +1,165 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: BP_BtlCalc.uasset
+//   Authors: Nrub'yodryth
+//   Version: 1.0
+//------------------------------------------------
+LittleEndian();
+#include "ue4_iopackage.bt"
+
+typedef struct
+{
+    byte unk[87722] <name="Unknown">;
+}unk;
+
+typedef struct
+{
+    int DamageMax <name="DamageMax">;
+    byte padding1[25] <hidden=true>;
+    int CriticalMax <name="CriticalMax">;
+    byte padding2[25] <hidden=true>;
+    float CriticalPlayerDamageRate <name="CriticalPlayerDamageRate">;
+    byte padding3[25] <hidden=true>;
+    float CriticalEnemyDamageRate <name="CriticalEnemyDamageRate">;
+    byte padding4[25] <hidden=true>;
+    float KnockdownRateAttackingDownCharacter <name="KnockdownRateAttackingDownCharacter">;
+    byte padding5[25] <hidden=true>;
+    int AccuracyMin <name="AccuracyMin">;
+    byte padding6[25] <hidden=true>;
+    int AccuracyMax <name="AccuracyMax">;
+    byte padding7[25] <hidden=true>;
+    int BadStatusAccuracyMax <name="BadStatusAccuracyMax">;
+    byte padding8[25] <hidden=true>;
+    int EscapeSuccessRateMin <name="EscapeSuccessRateMin">;
+    byte padding9[25] <hidden=true>;
+    int EscapeSuccessRateMax <name="EscapeSuccessRateMax">;
+    byte padding10[25] <hidden=true>;
+    int DyingHPRatio <name="DyingHPRatio">;
+    byte padding11[25] <hidden=true>;
+    float PhysicsChargePowerRate <name="PhysicsChargePowerRate">;
+    byte padding12[25] <hidden=true>;
+    float MagicChargePowerRate <name="MagicChargePowerRate">;
+    byte padding13[25] <hidden=true>;
+    int BadStatusRecoveryPlayerRate <name="BadStatusRecoveryPlayerRate">;
+    byte padding14[25] <hidden=true>;
+    int BadStatusRecoveryEnemyRate <name="BadStatusRecoveryEnemyRate">;
+    byte padding15[25] <hidden=true>;
+    float GuardProtectRatio <name="GuardProtectRatio">;
+    byte padding16[25] <hidden=true>;
+    float DamageRatioToDown <name="DamageRatioToDown">;
+    byte padding17[25] <hidden=true>;
+    float SupportTurnMax <name="SupportTurnMax">;
+    byte padding18[25] <hidden=true>;
+    float SkillDamageBonusToDown <name="SkillDamageBonusToDown">;
+    byte padding19[25] <hidden=true>;
+    float BadHitRatioBonus <name="BadHitRatioBonus">;
+    byte padding20[25] <hidden=true>;
+    float AutoMikiri <name="AutoMikiri">;
+    byte padding21[25] <hidden=true>;
+    float AutoShinMikiri <name="AutoShinMikiri">;
+    byte padding22[25] <hidden=true>;
+    float AutoBooster <name="AutoBooster">;
+    byte padding23[25] <hidden=true>;
+    float AutoHighBooster <name="AutoHighBooster">;
+    byte padding24[25] <hidden=true>;
+    float AutoBoosterMax <name="AutoBoosterMax">;
+    byte padding25[25] <hidden=true>;
+    float AutoBadStatusBooster <name="AutoBadStatusBooster">;
+    byte padding26[25] <hidden=true>;
+    int AutoCounterOccur <name="AutoCounterOccur">;
+    byte padding27[25] <hidden=true>;
+    int AutoHeavyCounterOccur <name="AutoHeavyCounterOccur">;
+    byte padding28[25] <hidden=true>;
+    int AutoHyperCounterOccur <name="AutoHyperCounterOccur">;
+    byte padding29[25] <hidden=true>;
+    float AutoGrowthLowExpRatio <name="AutoGrowthLowExpRatio">;
+    byte padding30[25] <hidden=true>;
+    float AutoGrowthMiddleExpRatio <name="AutoGrowthMiddleExpRatio">;
+    byte padding31[25] <hidden=true>;
+    float AutoGrowthhightExpRatio <name="AutoGrowthhightExpRatio">;
+    byte padding310[25] <hidden=true>;
+    int AutoAddCritical <name="AutoAddCritical">;
+    byte padding32[25] <hidden=true>;
+    int AutoAddCriticalHigh <name="AutoAddCriticalHigh">;
+    byte padding33[25] <hidden=true>;
+    float AutoTGRWeakBooster <name="AutoTGRWeakBooster">;
+    byte padding34[25] <hidden=true>;
+    float AutoTGRWeakHighBooster <name="AutoTGRWeakHighBooster">;
+    byte padding35[25] <hidden=true>;
+    float AutoTGRCriticalBooster <name="AutoTGRCriticalBooster">;
+    byte padding36[25] <hidden=true>;
+    float AutoTGRCriticalHighBooster <name="AutoTGRCriticalHighBooster">;
+    byte padding37[25] <hidden=true>;
+    int AutoTGRAddCritical <name="AutoTGRAddCritical">;
+    byte padding38[25] <hidden=true>;
+    int AutoTGRAddCriticalHigh <name="AutoTGRAddCriticalHigh">;
+    byte padding39[25] <hidden=true>;
+    float AutoTGRPowerBoostAmplify <name="AutoTGRPowerBoostAmplify">;
+    byte padding40[25] <hidden=true>;
+    float AutoTGRPowerBoostHighAmplify <name="AutoTGRPowerBoostHighAmplify">;
+    byte padding41[25] <hidden=true>;
+    float AutoTGRAddCriticalToBadStatus <name="AutoTGRAddCriticalToBadStatus">;
+    byte padding410[25] <hidden=true>;
+    float AutoTGRAddCriticalHighToBadStatus <name="AutoTGRAddCriticalHighToBadStatus">;
+    byte padding42[25] <hidden=true>;
+    float AutoTGRWeakProtecter <name="AutoTGRWeakProtecter">;
+    byte padding43[25] <hidden=true>;
+    float AutoTGRWeakHighProtecter <name="AutoTGRWeakHighProtecter">;
+    byte padding44[25] <hidden=true>;
+    float AutoTGRPhisicsBooster <name="AutoTGRPhisicsBooster">;
+    byte padding440[25] <hidden=true>;
+    float AutoTGRPhisicsHighBooster <name="AutoTGRPhisicsHighBooster">;
+    byte padding45[25] <hidden=true>;
+    float TGRExpBonusRatio <name="TGRExpBonusRatio">;
+    byte padding46[25] <hidden=true>;
+    float TGRGaugeBonusHighRatio <name="TGRGaugeBonusHighRatio">;
+    byte padding47[25] <hidden=true>;
+    int MinTurnCHARM <name="MinTurnCHARM">;
+    byte padding48[25] <hidden=true>;
+    int DefaultTurnOVERHEAT <name="DefaultTurnOVERHEAT">;
+    byte padding49[25] <hidden=true>;
+    int AddCriticalByUPSET <name="AddCriticalByUPSET">;
+    byte padding50[25] <hidden=true>;
+    int AddCriticalByPANIC <name="AddCriticalByPANIC">;
+    byte padding51[25] <hidden=true>;
+    int AddCriticalByFEAR <name="AddCriticalByFEAR">;
+    byte padding52[25] <hidden=true>;
+    int AddCriticalBySHOCK <name="AddCriticalBySHOCK">;
+    byte padding53[25] <hidden=true>;
+    int AddCriticalBySWOON <name="AddCriticalBySWOON">;
+    byte padding54[25] <hidden=true>;
+    int PoisonMaxDamage <name="PoisonMaxDamage">;
+    byte padding55[25] <hidden=true>;
+    float PoisonDamageRatio <name="PoisonDamageRatio">;
+    byte padding56[25] <hidden=true>;
+    float AccuracyRatioByANGER <name="AccuracyRatioByANGER">;
+    byte padding57[25] <hidden=true>;
+    int AttackSwoonDownRatio <name="AttackSwoonDownRatio">;
+    byte padding570[25] <hidden=true>;
+    int PhysicalSkillSwoonDownRatio <name="PhysicalSkillSwoonDownRatio">;
+    byte padding58[25] <hidden=true>;
+    int MagicalSkillSwoonDownRatio <name="MagicalSkillSwoonDownRatio">;
+    byte padding59[25] <hidden=true>;
+    int TheurgiaSkillSwoonDownRatio <name="TheurgiaSkillSwoonDownRatio">;
+    byte padding60[25] <hidden=true>;
+    float MajorArcanaRationByStrong <name="MajorArcanaRationByStrong">;
+    byte padding61[25] <hidden=true>;
+    float MajorArcanaRationByRare <name="MajorArcanaRationByRare">;
+    byte padding62[25] <hidden=true>;
+    int MustAppearMajorEncount <name="MustAppearMajorEncount">;
+    byte padding63[25] <hidden=true>;
+    float ShufflePersonaBonusExpRation <name="ShufflePersonaBonusExpRation">;
+    byte padding64[25] <hidden=true>;
+    float MajorArcanaBasicRation <name="MajorArcanaBasicRation">;
+    byte padding65[25] <hidden=true>;
+    int MinorArcanaBasicRation <name="MinorArcanaBasicRation">;
+    byte padding66[25] <hidden=true>;
+    int PersonaArcanaBasicRation <name="PersonaArcanaBasicRation">;
+}btlCalc;
+
+struct
+{
+    unk unknown <name="Unknown">;
+    btlCalc BtlCalc <name="BtlCalc">;
+}fileData <name="BP_BtlCalc.uasset">;

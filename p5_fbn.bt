@@ -1,0 +1,366 @@
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+//
+//      File: p5_fbn.bt
+//   Authors: TGE, Cherry
+//   Version: 1.0
+//   Purpose: Parse Persona 5 FBN files
+//  Category: 
+// File Mask: *.fbn
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+//---------------------------------------------
+// Primitive types
+//---------------------------------------------
+typedef char bool;
+typedef char s8;
+typedef uchar u8;
+typedef int16 s16;
+typedef uint16 u16;
+typedef int16 s16;
+typedef int32 s32;
+typedef uint32 u32;
+typedef int64 s64;
+typedef uint64 u64;
+typedef float f32;
+typedef double f64;
+
+//---------------------------------------------
+// Random color
+//---------------------------------------------
+local uint __RandomSeed = 0xDEADBABE;
+local uint __RandomBit = 0;
+local uint __RandomCount = 0;
+ 
+uint MyRandom( uint to )
+{
+    ++__RandomCount;
+    __RandomBit  = ( (__RandomSeed >> 0 ) ^ ( __RandomSeed >> 2 ) ^ ( __RandomSeed >> 3 ) ^ ( __RandomSeed >> 5 ) ) & 1;
+    __RandomSeed = ( ( ( ( __RandomBit << 15 ) | ( __RandomSeed >> 1 ) ) + ( 0xBABE / __RandomCount ) ) % to );
+
+    while( __RandomSeed < 0 )
+        __RandomSeed += to;
+
+    return __RandomSeed;
+}
+
+uint RandomColor()
+{
+    return MyRandom( 0xFFFFFFFF );
+}
+
+void SetRandomBackColor()
+{
+    SetBackColor( RandomColor() );
+}
+
+// Generate s32 from FourCC in string format
+s32 FourCC( string str )
+{
+    return (s32)str[0] << 24 | (s32)str[1] << 16 | (s32)str[2] << 8 | (s32)str[3];
+}
+
+typedef struct
+{
+    f32 X;
+    f32 Y;
+    f32 Z;
+} Vector3;
+
+typedef struct
+{
+    f32 X;
+    f32 Y;
+    f32 Z;
+    f32 W;
+} Quaternion;
+
+typedef union
+{
+    s32 Int;
+    f32 Float;
+} IntFloat <read=IntFloatRead>;
+
+string IntFloatRead( IntFloat& value )
+{
+    char buffer[32];
+    s32 highBits = ( value.Int & 0xFF000000 );
+    bool isFloat = highBits >= 0x30000000 && highBits <= 0xD0000000;
+    if ( isFloat )
+    {
+        SPrintf( buffer, "%f", value.Float );
+    }
+    else
+    {
+        SPrintf( buffer, "%d", value.Int );
+    }
+
+    //SPrintf( buffer, "%d (%f)", value.Int, value.Float );
+    return buffer;
+}
+
+struct FbnBlock;
+struct FbnList;
+
+typedef enum<s32>
+{
+    FbnListType_Trigger = 1,
+    FbnListType_Entrance = 4,
+    FbnListType_Hit = 5,
+    FbnListType_Npc = 14,
+    FbnListType_Trigger2 = 19,
+    FbnListType_Trigger3 = 22
+} FbnListType;
+
+typedef struct
+{
+    SetRandomBackColor();
+    local s32 startOffset = FTell();
+
+	FbnListType Type;   // 'FBN0', 4, 1
+	s32 Version;       
+	s32 Size;           // Size of the block including this header
+	s32 ListOffset;     // Always 0x10 if not main header block
+
+    Assert( ListOffset == 0 || ListOffset == 0x10 );
+
+    if ( ListOffset != 0 ) 
+    {
+        FbnList List( Type );
+    }
+
+    local s32 endOffset = startOffset + Size ;
+    if ( FTell() < endOffset )
+    {
+        Printf( "[FbnBlock] Reading %d left over bytes\n", endOffset - FTell() );
+        s8 RawData[ endOffset - FTell() ];
+    }
+
+    FSeek( endOffset );
+
+} FbnBlock <read=FbnBlockRead>;
+
+string FbnBlockRead( FbnBlock& block )
+{
+    char buffer[32];
+    SPrintf( buffer, "Type %02d, Version 0x%08X", block.Type, block.Version );
+    return buffer;
+}
+
+typedef struct( s32 type )
+{
+    SetRandomBackColor();
+
+	s32 EntryCount;
+	s32 Padding[3];
+
+    Assert( Padding[0] == 0 );
+    Assert( Padding[1] == 0 );
+    Assert( Padding[2] == 0 );
+
+    switch ( type )
+    {
+        case FbnListType_Trigger: struct FbnTriggerVolume Entry[ EntryCount ]; break;
+        case FbnListType_Entrance: struct FbnEntrance Entry[ EntryCount ]; break;
+        case FbnListType_Hit: struct FbnHitDefinition Entry[ EntryCount ]; break;
+        case 8: struct FbnBlock8Entry Entry[ EntryCount ]; break;
+        case 9: struct FbnBlock9Entry Entry[ EntryCount ]; break;
+        case 10: struct FbnBlock10Entry Entry[ EntryCount ]; break;
+        case 11: struct FbnBlock11Entry Entry[ EntryCount ]; break;
+        case FbnListType_Npc: struct FbnNpc Entry[ EntryCount ]; break;
+        case 18: struct FbnBlock18Entry Entry[ EntryCount ]; break;
+        case FbnListType_Trigger2: struct FbnTriggerVolume Entry[ EntryCount ]; break;
+        case FbnListType_Trigger3: struct FbnTriggerVolume Entry[ EntryCount ]; break;
+        case 21: struct FbnBlock21Entry Entry[ EntryCount ]; break;
+
+        default:
+            Printf( "[FbnList] Unhandled block entry type: %d\n", type );
+            break;
+    }
+} FbnList;
+
+// Defines a volume for a trigger
+typedef struct
+{
+    SetRandomBackColor();
+
+    s16 Field00; // 0
+    s16 Field02; // 1
+    s16 Field04;
+    s16 Field06;
+    Vector3 Center;
+    f32 Field14;
+    f32 Field18;
+    f32 Field1C;
+    f32 Field20;
+    f32 Field24; // was 0, might be s32
+    f32 Field28; // was 0, might be s32
+    Vector3 BottomRight;
+    Vector3 TopRight;
+    Vector3 BottomLeft;
+    Vector3 TopLeft;
+    f32 Field5C; // was 0, might be s32
+    f32 Field60; // was 0, might be s32
+
+    Printf( "Field60=%d\n", Field60 );
+
+} FbnTriggerVolume <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    
+    s32 Field00;
+    s32 Field04;
+    Vector3 Position;
+    Vector3 Rotation;
+    s16 Id;
+    s16 Field22;
+
+} FbnEntrance <optimize=false>;
+
+typedef struct
+{
+    s16 TitleTextId : 8;
+    s16 SubTitleTextId : 8;
+} FbnHitDefinitionTextIds;
+
+// Defines the hit/interaction info for a trigger volume
+// Each hit definition corresponds to an FBN trigger
+typedef struct
+{
+    LittleEndian();
+    s32 BitFlags[6] <comment="If bit flag is set, then hit is disabled">;
+    s8 Field18;
+    s8 PromptType <comment="Display prompt type (GO, Examine, Action, auto)">;
+    s16 TextId <comment="FTD text ID to display">;
+    s16 ProcedureId;
+    BigEndian();
+    s8 PromptSubType <comment="Used to display prompts like Shop">;
+    s8 Unused[29];
+} FbnHitDefinition <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    
+    s32 Field00;
+    s16 Field04;
+    s16 Field06;
+    Vector3 Position;
+    f32 Field08[5];
+
+} FbnBlock8Entry <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+    
+    s32 Field00;
+    Vector3 Position;
+    f32 Field10[4]; // box coordinates maybe?
+    s16 Field20;
+    s16 Field22;
+    s16 Field24;
+    s16 Field26;
+
+} FbnBlock9Entry <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+
+    s32 Field00;
+    s32 Field04;
+    f32 Field08[24];
+    s32 Field68;
+    s32 Field6C;
+    s32 Field70;
+    s32 Field74;
+    s16 Field78;
+    s16 Field7A;
+    f32 Field7C[6];
+
+} FbnBlock10Entry <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+
+    s32 Field00;
+    f32 Field04;    
+    s32 Field08;
+    s32 Field0C;
+    s32 Field10;
+    s32 Field14;
+    s16 EntryCount;
+    s16 Field1A;
+    struct FbnBlock11SubEntry Entries[ EntryCount ];    
+
+} FbnBlock11Entry <optimize=false>;
+
+typedef struct
+{    
+    IntFloat Field00;
+    IntFloat Field04;
+    IntFloat Field08;
+    IntFloat Field0C;
+} FbnBlock11SubEntry;
+
+typedef struct
+{
+    SetRandomBackColor();
+
+	s32 Field00;        // always 1?
+	Vector3 Field04;     // 3F 80 00 00 BF 7F FF FF 00 00 00 00
+	Vector3 Field10;     // B2 59 FA A4 00 00 00 00 00 00 00 00
+	s16 Id;        // 0x6E, 0x2BE, 0x2BF, 0x2C0, 0x2C1, maybe object type?
+	s16 Field1E;        // always 0?
+	s32 Field20;        // always 1?
+    s32 Field24;
+	s32 Field28;        // 0xFFFFFFFF, 0
+	s16 PathNodeCount;  
+	s16 Field2E;        // always 0?
+	Vector3 PathNodes[ PathNodeCount ]; 
+} FbnNpc <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+
+    s32 Field00;
+    s16 Field04;
+    s16 Field06;
+    Vector3 Position;
+    Quaternion Rotation;
+    s16 Field24;
+    s16 Field26;
+    s16 Field28;
+    s16 Field2A;
+
+} FbnBlock18Entry <optimize=false>;
+
+typedef struct
+{
+    SetRandomBackColor();
+
+    s32 Field00;
+    Vector3 Position;
+    Quaternion Rotation;
+    s16 Field20;
+    s16 Field22;
+    s16 Field24;
+    s16 Field26;
+    s16 Field28;
+    s16 Field2A;
+    s32 Field2C;
+    f32 Field30;
+    f32 Field34;
+} FbnBlock21Entry <optimize=false>;
+
+BigEndian();
+while ( !FEof() )
+    FbnBlock Block;
+

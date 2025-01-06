@@ -1,0 +1,51 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.2 Binary Template
+//
+//      File: DatEncountTableDataAsset.uasset
+//   Authors: Tekka, Light8227
+//   Version: 1.1
+//------------------------------------------------
+#include "p3re_enums.bt"
+#include "ue4_iopackage.bt"
+
+LittleEndian();
+
+typedef struct
+{
+    ubyte unk[91] <name="Unknown">;
+}unk;
+
+typedef struct
+{
+    byte FProperty[20] <hidden=true>;
+    uint flags <name="Flags">;
+    ubyte FProperty2[25] <hidden=true>;
+    ushort party_item <name="Party_Item">;
+    ubyte FProperty3[25] <hidden=true>;
+    ushort party_item_num <name="Party_Item_Num">;
+    ubyte FProperty4[25] <hidden=true>;
+    EnemyID id <name="ID">;
+    ubyte FProperty5[25] <hidden=true>;
+    EnemyID id2 <name="ID">;
+    ubyte FProperty6[25] <hidden=true>;
+    EnemyID id3 <name="ID">;
+    ubyte FProperty7[25] <hidden=true>;
+    EnemyID id4 <name="ID">;
+    ubyte FProperty8[25] <hidden=true>;
+    EnemyID id5 <name="ID">;
+    ubyte FProperty9[25] <hidden=true>;
+    ushort major <name="Major">;
+    ubyte FProperty10[25] <hidden=true>;
+    ushort minor <name="Minor">;
+    ubyte FProperty11[25] <hidden=true>;
+    BGMID sound <name="Sound">;
+    ubyte FProperty12[25] <hidden=true>;
+    ushort shuffleLevel <name="ShuffleLevel">;
+    ubyte FProperty13[13] <hidden=true>;
+}encountData;
+
+struct
+{
+    unk unknown <name="Unknown">;
+    encountData encountdata[1201] <name="Encounter">;
+}fileData <name="DatEncountTableDataAsset.uasset">;

@@ -1,0 +1,594 @@
+
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+//
+//      File: atlus_pmd.bt
+//   Authors: Tupelov
+//   Version: 1.1
+//   Purpose: Parse Atlus Event Files
+//  Category: Persona 3 FES
+// File Mask: *.pm1 *.pm2 *.pm3 *.PM1 *.PM2 *.PM3
+//  ID Bytes:
+//   History:
+//   1.0 - Initial release
+//------------------------------------------------
+
+local long NameTableAdd = -1;
+
+void getName(int index) {
+	if ((NameTableAdd == -1) || (index == -1)) {
+		return;
+	}
+	local long currentpos = FTell();
+	FSeek(NameTableAdd + (index * 32));
+	char Name[32];
+	FSeek(currentpos);
+	return;
+}
+
+typedef struct (int size) {
+	byte Data[size]<optimize = false>;
+}unkData;
+
+void getData(int DataOffset, int DataSize) {
+	local long currentpos = FTell();
+	FSeek(DataOffset);
+	unkData Data(DataSize);
+	FSeek(currentpos);
+	return;
+}
+typedef enum<byte>
+{
+	BOOL_FALSE = 0,
+	BOOL_TRUE = 1
+}BOOLEAN;
+typedef struct {
+	float x;
+	float y;
+	float z;
+}vector3;
+
+typedef struct {
+	byte FileType;
+	byte FileFormat;
+	short UserID;
+	int FileSize;
+	char MagicCode[4];
+	int ExpandSize;
+	int TypeTableCount;
+	int Version;
+	int Reserve2;
+	int Reserve3;
+
+} pmdHeader_t;
+
+typedef enum<int>
+{
+	PMD_DATATYPE_CUTINFO = 0,
+	PMD_DATATYPE_NAME = 1,
+	PMD_DATATYPE_STAGE = 2,
+	PMD_DATATYPE_UNIT = 3,
+	PMD_DATATYPE_FRAME = 4,
+	PMD_DATATYPE_CAMERA = 5,
+	PMD_DATATYPE_MESSAGE = 6,
+	PMD_DATATYPE_EFFECT = 7,
+	PMD_DATATYPE_EFFECTDATA = 8,
+	PMD_DATATYPE_UNITDATA = 9,
+	PMD_DATATYPE_F1 = 10,
+	PMD_DATATYPE_F2 = 11,
+	PMD_DATATYPE_FTB = 12,
+	PMD_DATATYPE_SLIGHT = 13,
+	PMD_DATATYPE_SFOG = 14,
+	PMD_DATATYPE_BLUR2 = 15,
+	PMD_DATATYPE_MULTBLUR = 16,
+	PMD_DATATYPE_DISTBLUR = 17,
+	PMD_DATATYPE_FILTER = 18,
+	PMD_DATATYPE_MULTFILTER = 19,
+	PMD_DATATYPE_RIPBLUR = 20,
+
+	PMD_DATATYPE_OBJECT_TABLE=21,
+	PMD_DATATYPE_RAIN_DATA = 25,
+	PMD_DATATYPE_BEZIER_TABLE = 26,
+	PMD_DATATYPE_REF_TABLE=27,
+	PMD_DATATYPE_MAX=28
+}PMD_DATATYPE;
+
+typedef enum<ushort>
+{
+	PMD_OBJTYPE_STAGE = 0,
+	PMD_OBJTYPE_UNIT = 1,
+	PMD_OBJTYPE_CAMERA = 2,
+	PMD_OBJTYPE_EFFECT = 3,
+	PMD_OBJTYPE_MESSAGE = 4,
+	PMD_OBJTYPE_SE = 5,
+	PMD_OBJTYPE_FADE = 6,
+	PMD_OBJTYPE_QUAKE = 7,
+	PMD_OBJTYPE_BLUR = 8,
+	PMD_OBJTYPE_LIGHT = 9,
+	PMD_OBJTYPE_SLIGHT = 10,
+	PMD_OBJTYPE_SFOG = 11,
+	PMD_OBJTYPE_SKY = 12,
+	PMD_OBJTYPE_BLUR2 = 13,
+	PMD_OBJTYPE_MBLUR = 14,
+	PMD_OBJTYPE_DBLUR = 15,
+	PMD_OBJTYPE_FILTER = 16,
+	PMD_OBJTYPE_MFILTER = 17,
+	PMD_OBJTYPE_BED = 18,
+	PMD_OBJTYPE_BGM = 19,
+	PMD_OBJTYPE_MG1 = 20,
+	PMD_OBJTYPE_MG2 = 21,
+	PMD_OBJTYPE_FB = 22,
+	PMD_OBJTYPE_RBLUR = 23,
+
+	PMD_OBJTYPE_TMX = 24,
+
+	PMD_OBJTYPE_EPL = 26,
+	PMD_OBJTYPE_HBLUR = 27,
+	PMD_OBJTYPE_PADACT = 28,
+	PMD_OBJTYPE_MOVIE = 29,
+	PMD_OBJTYPE_TIMEI = 30,
+	PMD_OBJTYPE_RENDERTEX = 31,
+	PMD_OBJTYPE_BISTA = 32,
+	PMD_OBJTYPE_CTLCAM = 33,
+	PMD_OBJTYPE_WAIT = 34,
+	PMD_OBJTYPE_B_UP = 35,
+	PMD_OBJTYPE_CUTIN = 36,
+	PMD_OBJTYPE_EVENT_EFFECT = 37,
+	PMD_OBJTYPE_JUMP = 38,
+	PMD_OBJTYPE_KEYFREE = 39,
+	PMD_OBJTYPE_RANDOMJUMP = 40,
+	PMD_OBJTYPE_CUSTOMEVENT = 41,
+	PMD_OBJTYPE_CONDJUMP = 42,
+	PMD_OBJTYPE_COND_ON = 43,
+	PMD_OBJTYPE_COMULVJUMP = 44,
+	PMD_OBJTYPE_COUNTJUMP = 45,
+	PMD_OBJTYPE_HOLYJUMP = 46,
+	PMD_OBJTYPE_FIELDOBJ = 47,
+	PMD_OBJTYPE_PACKMODEL = 48,
+	PMD_OBJTYPE_FIELDEFF = 49,
+	PMD_OBJTYPE_SPUSE = 50,
+	PMD_OBJTYPE_SCRIPT = 51,
+	PMD_OBJTYPE_BLURFILTER = 52,
+	PMD_OBJTYPE_FOG = 53,
+	PMD_OBJTYPE_ENV = 54,
+	PMD_OBJTYPE_FLDSKY = 55,
+	PMD_OBJTYPE_FLDNOISE = 56,
+	PMD_OBJTYPE_CAMERA_STATE = 57
+}PMD_OBJTYPE;
+
+typedef enum<int>
+{
+	DISP = 0,
+	DIRECT_MOVE = 1,
+	MOTION_CHANGE = 2,
+	POS_CHANGE = 3,
+	ROT_CHANGE = 4,
+	ICON_DISP = 5,
+	KUBI = 6,
+	MODEL_ATTACH = 7,
+	ALPHA_CHANGE = 8,
+	SHADOW = 9,
+	SCALE_CHANGE = 10,
+
+}
+PMD_UNIT_CONTROLTYPE;
+
+typedef enum<short>
+{
+	DISP_ON = 0,
+	DISP_OFF = 1,
+}DISP_PARAM;
+
+typedef enum<short>
+{
+	DIRECT_POS = 0,
+	DIRECT_BEZIER = 1,
+	DIRECT_DIRECT = 2
+}DIRECT_MOVE_PARAM;
+
+typedef enum<short>
+{
+	MOTION_CHANGE_DIRECT = 0,
+	MOTION_CHANGE_REF = 1,
+}MOTION_CHANGE_PARAM;
+
+typedef enum<byte>
+{
+	MOTION_CHANGE_REPEAT = 0,
+	MOTION_CHANGE_END = 1,
+}MOTION_CHANGE_LOOP;
+
+typedef enum<byte>
+{
+	KUBI_MOVE_N = 0,
+	KUBI_RESET = 1,
+}KUBI_PARAM;
+
+typedef enum<int> 
+{
+	MODEL_ATTACH_ATTACH=0,
+	MODEL_ATTACH_DETACH = 1,
+}MODEL_ATTACH_PARAM;
+typedef enum<int>
+{
+	PMD_BGM_TYPE_PLAY = 0,
+	PMD_BGM_TYPE_FADEIN = 1,
+	PMD_BGM_TYPE_FADEOUT = 2,
+	PMD_BGM_TYPE_TRANS = 3,
+	PMD_BGM_TYPE_VOLDOWN = 4,
+	PMD_BGM_TYPE_VOLUP = 5,
+	PMD_BGM_TYPE_ALLSTOP = 6,
+}
+PMD_BGM;
+
+typedef struct {
+	int FirstFrame;
+	int LastFrame;
+	int TotalFrame;
+	int Reserve1;
+	int FieldMajorNo;
+	int FieldMinorNo;
+	short Unknown1;
+	short FieldFBN;
+	int FieldENV;
+	int Unknown3;
+}pmdCutInfo_t;
+
+
+typedef struct {
+	char Name[32];
+}pmdNameTable_t;
+
+typedef enum<int> {
+	OBJ_TYPE_ATTACH=1,
+	OBJ_TYPE_FIELD_OBJ=2,
+
+}UNIT_OBJ_TYPE;
+
+typedef struct {
+	int NameIndex;
+	int FileIndex;
+	int MajorNum;
+	int MinorNum;
+	int DataOffset;
+	int DataSize;
+	UNIT_OBJ_TYPE Type;
+	int Reserve1;
+	getName(NameIndex);
+	getData(DataOffset, DataSize);
+}pmdUnitTable_t;
+
+
+
+typedef union
+{
+	byte c[4];
+	short s[2];
+	int i;
+	float f;
+} pmdDataInfo_t;
+
+
+typedef struct {
+	BOOLEAN Enabled;
+	byte ChNo;
+	byte Kankaku;
+	byte Wait;
+}pmdAsioto_t;
+
+typedef struct {
+
+	DISP_PARAM Param;
+	short Unknown1;
+	byte padding[32];
+}pmdUnitControl_DISP_t;
+
+typedef struct {
+
+	DIRECT_MOVE_PARAM Param;
+	short Speed;
+	vector3 Pos;
+	pmdDataInfo_t Data[4];
+	pmdAsioto_t Asioto;
+}pmdUnitControl_DIRECT_MOVE_t;
+
+typedef struct {
+	//MOTION_CHANGE_PARAM Param;
+
+	byte Group1;
+	byte MotNo1;
+	MOTION_CHANGE_LOOP Loop1;
+	byte Hokan1;
+	byte UnknownBytes[8];
+	byte Unknown1;
+	byte Unknown2;
+	byte Unknown3;
+	BOOLEAN UseLoop2;
+	byte Group2;
+	byte MotNo2;
+	byte Hokan2;
+	MOTION_CHANGE_LOOP Loop2;
+	short Speed1;
+	short Speed2;
+	pmdDataInfo_t Data[3];
+}pmdUnitControl_MOTION_CHANGE_t;
+
+typedef struct {
+	float YRot;
+	pmdDataInfo_t Data[3];
+	int RotLength;
+	pmdAsioto_t Asioto;
+	pmdDataInfo_t Padding[3];
+}pmdUnitControl_ROT_CHANGE_t;
+
+typedef enum<byte>
+{
+	KUBI_SPEED_NORMAL = 0,
+	KUBI_SPEED_FAST = 1,
+}KUBI_SPEED;
+
+typedef struct {
+	KUBI_PARAM Param;
+
+	KUBI_SPEED Speed;
+	short Unknown1;
+	vector3 Rot;
+	pmdDataInfo_t Data[5];
+}pmdUnitControl_KUBI_t;
+
+
+typedef struct {
+	MODEL_ATTACH_PARAM Param;
+	int PosID;
+	pmdDataInfo_t Data[7];
+}pmdUnitControl_MODEL_ATTACH_t;
+
+typedef enum<short>
+{
+	UNIT_FLAG_DISABLE = 0,
+	UNIT_FLAG_LOCAL = 1,
+	UNIT_FLAG_GLOBAL = 2,
+}UNIT_FLAG_TYPE;
+
+typedef enum<short>
+{
+	UNIT_GFLAG_EVT = 0,
+	UNIT_FLAG_COMMU = 1,
+	UNIT_FLAG_SYS = 2,
+}UNIT_GFLAG_TYPE;
+
+typedef struct {
+	UNIT_FLAG_TYPE FlagType;
+	short FlagNo;
+	short CmpValue;
+	UNIT_GFLAG_TYPE GFlagType<comment="Only used when FlagType is Global">;
+}pmdUnitFlags;
+
+typedef struct {
+	ubyte UnitID;
+	ubyte Unknown1;
+	short PathNo;
+	pmdUnitFlags Flags;
+	PMD_UNIT_CONTROLTYPE ControlType;
+	switch (ControlType)
+	{
+	case DISP:
+		pmdUnitControl_DISP_t pmdUnitControl_DISP;
+		break;
+	case DIRECT_MOVE:
+		pmdUnitControl_DIRECT_MOVE_t pmdUnitControl_DIRECT_MOVE;
+		break;
+	case MOTION_CHANGE:
+		pmdUnitControl_MOTION_CHANGE_t UnitControl;
+		break;
+	case ROT_CHANGE:
+		pmdUnitControl_ROT_CHANGE_t UnitControl;
+		break;
+	case KUBI:
+		pmdUnitControl_KUBI_t pmdUnitControl_KUBI;
+		break;
+	case MODEL_ATTACH:
+		pmdUnitControl_MODEL_ATTACH_t pmdUnitControl_MODEL_ATTACH;
+		break;
+	default:
+		Printf("Ran into unknown controltype: %d", ControlType);
+		pmdDataInfo_t Data[9];
+		break;
+	}
+}pmdUnitObject_t;
+
+typedef struct {
+	byte Data[52];
+}pmdFadeObject_t;
+
+typedef enum<int>
+{
+	MESSAGE_MODE_STOP = 0,
+	MESSAGE_MODE_NOSTOP = 1,
+}MESSAGE_MODE;
+
+
+typedef struct {
+	pmdDataInfo_t Data1[3];
+	int MessageIndex;
+	MESSAGE_MODE messageMode;
+	pmdDataInfo_t Data2[8];
+}pmdMessageObject_t;
+
+typedef struct {
+	pmdDataInfo_t Data1[3];
+	int CueId;
+	pmdDataInfo_t Data2[9];
+}pmdSeObject_t<read=Str("Cue ID %05d", CueId + 1000)>;
+typedef struct {
+	PMD_OBJTYPE ObjectType;
+	ushort Frame;
+	ushort Length;
+	short NameIndex;
+	switch (ObjectType)
+	{
+	case PMD_OBJTYPE_UNIT:
+		pmdUnitObject_t pmdUnitObject;
+		break;
+	case PMD_OBJTYPE_FADE:
+		pmdFadeObject_t pmdFadeObject;
+		break;
+	case PMD_OBJTYPE_MESSAGE:
+		pmdMessageObject_t pmdMessageObject;
+		break;
+	case PMD_OBJTYPE_SE:
+		pmdSeObject_t pmdSeObject;
+		break;
+	default:
+		Printf("Ran into unknown objecttype: %d\n", ObjectType);
+		byte Data[52];
+		break;
+	}
+	getName(NameIndex);
+}pmdFrameTable_t<read=Str("Type: %s || Frame: %04d || Length %d", EnumToString(ObjectType), Frame, Length)>;
+
+typedef enum<int>
+{
+	PMD_EFFTYPE_D3P = 0,
+	PMD_EFFTYPE_BED = 1,
+	PMD_EFFTYPE_MG1 = 2,
+	PMD_EFFTYPE_MG2 = 3,
+	PMD_EFFTYPE_EPL = 4,
+}PMD_EFFTYPE;
+
+typedef struct {
+
+	int NameIndex;
+	int DataOffset;
+	PMD_EFFTYPE Type;
+	int Reserve2;
+	getName(NameIndex);
+}pmdEffectTable_t;
+
+typedef struct {
+	vector3 Pos1;
+	vector3 Pos2;
+	vector3 Pos3;
+	vector3 Pos4;
+}BezierCurve;
+
+typedef struct {
+	byte Unknown1;
+	byte Unknown2;
+	short Unknown3;
+	short Unknown4;
+	byte Unknown5;
+	byte Unknown6;
+	short Unknown7;
+	byte Unknown8;
+	byte Unknown9;
+	int reserve1;
+	int reserve2;
+}pmdObjectTable_t;
+
+
+typedef struct {
+
+	byte Unknown1;
+	byte BezierMax;
+	byte Unknown2;
+	byte Unknown3;
+	BezierCurve Curve[BezierMax];
+
+	byte Padding[(ItemSize + ItemAddress) - FTell()];
+	FSeek(ItemSize + ItemAddress);
+
+}pmdBezierTable_t;
+
+
+typedef struct {
+	Printf("Ran into unknown datatype: %d\n", Type);
+	SetBackColor(Type * 0x88888);
+	unkData Entries(ItemSize)[ItemCount]<optimize = true>;
+}unknownDataType;
+
+typedef struct {
+	PMD_DATATYPE Type;
+	int ItemSize;
+	int ItemCount;
+	int ItemAddress;
+	local long posBackup = FTell();
+	FSeek(ItemAddress);
+	switch (Type)
+	{
+	case PMD_DATATYPE_CUTINFO:
+		pmdCutInfo_t pmdCutInfo[ItemCount];
+		break;
+	case PMD_DATATYPE_STAGE:
+		unknownDataType Data<comment = "SMT Nocturne Left Over">;
+		break;
+	case PMD_DATATYPE_NAME:
+		NameTableAdd = FTell();
+		pmdNameTable_t pmdNameTable[ItemCount];
+		break;
+	case PMD_DATATYPE_UNIT:
+		pmdUnitTable_t pmdUnitTable[ItemCount]<optimize = false>;
+		break;
+	case PMD_DATATYPE_FRAME:
+		pmdFrameTable_t pmdFrameTable[ItemCount]<optimize = false>;
+		break;
+	case PMD_DATATYPE_EFFECT:
+		pmdEffectTable_t pmdEffectTable[ItemCount]<optimize = false>;
+		break;
+	case PMD_DATATYPE_F1:
+		unknownDataType Data<comment = "SMT Nocturne Left Over">;
+		break;
+	case PMD_DATATYPE_F2:
+		unknownDataType Data<comment = "SMT Nocturne Left Over">;
+		break;
+	case PMD_DATATYPE_FTB:
+		unknownDataType Data<comment = "SMT Nocturne Left Over">;
+		break;
+	case PMD_DATATYPE_OBJECT_TABLE:
+		pmdObjectTable_t pmdObjectTable[ItemCount];
+		break;
+	case PMD_DATATYPE_BEZIER_TABLE:
+		pmdBezierTable_t pmdBezierTable[ItemCount];
+		break;
+	default:
+		unknownDataType Data;
+		break;
+	}
+	//Assert((FTell() - ItemAddress) == (ItemCount * ItemSize));//Make sure that we made it the correct size
+	FSeek(posBackup);
+
+}pmdTypeTable_t <bgcolor = cDkBlue>;
+
+void CreatePM1(void) {
+	pmdHeader_t pmdHeader;
+	pmdTypeTable_t pmdTypeTable[pmdHeader.TypeTableCount]<optimize = false>;
+
+
+}
+
+struct File
+{
+	Printf("Starting...\n");
+	FSeek(8);
+	char Magic[4]<hidden = true>;
+	FSeek(0);
+	Printf("Magic: %s\n", Magic);
+	if (Magic == "PMD1") {
+		Printf("Creating PM1.\n");
+	CreatePM1();
+	}
+	else if (Magic == "PMD2") {
+		Printf("Creating PM2.\n");
+		CreatePM1();
+	}
+	else if (Magic == "PMD3") {
+		Printf("Creating PM3.\n");
+		CreatePM1();
+	}
+	else {
+		Printf("Error Parsing Magic.\n");
+
+	}
+}file < bgcolor = cDkRed>;
+
+

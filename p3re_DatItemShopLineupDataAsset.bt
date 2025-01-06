@@ -1,0 +1,49 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: HeroParameterDataAsset.uasset, HeroParameterDataAsset.uasset
+//   Authors: SCArkadia
+//   Version: 1.0
+//------------------------------------------------
+#include "ue4_iopackage.bt"
+
+LittleEndian();
+
+typedef struct
+{
+    byte unk[16] <name="Unknown">;
+}unk;
+
+typedef struct
+{
+    byte unk2[43] <name="Unknown">;
+}unk2;
+
+typedef struct
+{
+    byte unk3[35] <name="Unknown">;
+}unk3;
+
+unk unknown <name="Unknown">;
+ushort DataSize2 <name="Data Size + 53">;
+unk3 unknown3 <name="Unknown">;
+ushort DataSize <name="Data Size">;
+unk2 unknown2 <name="Unknown">;
+
+typedef struct
+{
+	byte padding1[13] <hidden=true>;
+    ushort ItemID <name="Item ID">;
+    byte padding2[25] <hidden=true>;
+    ushort SaleMonth <name="Sale Month">;
+	byte padding3[25] <hidden=true>;
+    ushort SaleDay <name="Sale Day">;
+	byte padding4[25] <hidden=true>;
+    u32 OpenFlag <name="Open Flag">;
+	byte padding5[20] <hidden=true>;
+}ItemData;
+
+struct
+{
+    ItemData itemdata[1024] <name="Item Data">;
+}fileData <name="Consumable Item">;

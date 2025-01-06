@@ -1,0 +1,39 @@
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+//
+//      File: p5_env.bt
+//   Authors: TGE
+//   Version: 1.0
+//   Purpose: Parse Persona 5 ENV files
+//  Category: 
+// File Mask: *.env
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "common/include.h"
+
+BigEndian();
+
+
+
+typedef struct
+{
+	f32 field1;
+	f32 field2;
+	f32 field3;
+	u32 field4;
+	f32 field5;
+	f32 field6;
+	f32 field7;
+	u32 field8;
+	f32 field9;
+	f32 field10;
+	f32 field11;
+	u32 field12;
+} ParamBlock<optimize=false>;
+
+struct
+{
+	ParamBlock Entries[ FileSize() / 0x30 ];
+} CmbModelPos<optimize=false>;

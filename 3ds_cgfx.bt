@@ -1,0 +1,722 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 3ds models
+//   Authors: Pioziomgames
+//   Version: 0.2 Very unfinished!!!!!
+//   Purpose: 
+//  Category: Models
+// File Mask: *.cgfx, *.bcmdl
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/common.bt"
+
+enum<ushort> ByteOrder
+{
+    LittleEndian = 65279,
+    BigEndian = 65534,
+};
+
+
+enum<uint>MaterialFlags
+{
+    FragmentLightEnabled = 1,
+    VertexLightEnabled = 2,
+    HemiSphereLightEnabled = 4,
+    HemiSphereOcclusionEnabled = 8,
+    FogEnabled = 16,
+    PolygonOffsetEnabled = 32,
+};
+
+enum<int>CullingMode
+{
+    dynamic = 0,
+    always = 1,
+    never = 2,
+};
+
+enum<uint>BlendMode
+{
+    notUsed = 0,
+    blend = 1,
+    Blend = 2,
+    logical = 3,
+};
+
+typedef struct
+{
+    float X;
+    float Y;
+    float Z;
+} vector;
+
+
+typedef struct
+{
+    float R;
+    float G;
+    float B;
+    float A;
+} RGBA;
+
+typedef struct
+{
+    ubyte R;
+    ubyte G;
+    ubyte B;
+    ubyte A;
+} ByteRGBA;
+
+typedef struct
+{
+    Bool bit0 : 1;
+    Bool bit1 : 1;
+    Bool bit2 : 1;
+    Bool bit3 : 1;
+    Bool bit4 : 1;
+    Bool bit5 : 1;
+    Bool bit6 : 1;
+    Bool bit7 : 1 <name="hasSkeletonSobj">;
+
+    Bool bit8 : 1;
+    Bool bit9 : 1;
+    Bool bit10 : 1;
+    Bool bit11 : 1;
+    Bool bit12: 1;
+    Bool bit13: 1;
+    Bool bit14: 1;
+    Bool bit15: 1;
+
+    Bool bit16 : 1;
+    Bool bit17 : 1;
+    Bool bit18 : 1;
+    Bool bit19 : 1;
+    Bool bit20: 1;
+    Bool bit21: 1;
+    Bool bit22: 1;
+    Bool bit23: 1;
+
+    Bool bit24 : 1;
+    Bool bit25 : 1;
+    Bool bit26 : 1;
+    Bool bit27 : 1;
+    Bool bit28: 1;
+    Bool bit29: 1;
+    Bool bit30: 1;
+    Bool bit31: 1;
+} CMDLFlags;
+
+typedef struct
+{
+    Bool bit0 : 1;
+    Bool bit1 : 1;
+    Bool bit2 : 1;
+    Bool bit3 : 1;
+    Bool bit4 : 1;
+    Bool bit5 : 1;
+    Bool bit6 : 1;
+    Bool bit7 : 1;
+
+    Bool bit8 : 1;
+    Bool bit9 : 1;
+    Bool bit10 : 1;
+    Bool bit11 : 1;
+    Bool bit12: 1;
+    Bool bit13: 1;
+    Bool bit14: 1;
+    Bool bit15: 1;
+
+    Bool bit16 : 1;
+    Bool bit17 : 1;
+    Bool bit18 : 1;
+    Bool bit19 : 1;
+    Bool bit20: 1;
+    Bool bit21: 1;
+    Bool bit22: 1;
+    Bool bit23: 1;
+
+    Bool bit24 : 1;
+    Bool bit25 : 1;
+    Bool bit26 : 1;
+    Bool bit27 : 1;
+    Bool bit28: 1;
+    Bool bit29: 1;
+    Bool bit30: 1;
+    Bool bit31: 1;
+} MTOBFlags;
+
+typedef struct
+{
+    Bool bit0 : 1;
+    Bool bit1 : 1;
+    Bool bit2 : 1;
+    Bool bit3 : 1;
+    Bool bit4 : 1;
+    Bool bit5 : 1;
+    Bool bit6 : 1;
+    Bool bit7 : 1;
+
+    Bool bit8 : 1;
+    Bool bit9 : 1;
+    Bool bit10 : 1;
+    Bool bit11 : 1;
+    Bool bit12: 1;
+    Bool bit13: 1;
+    Bool bit14: 1;
+    Bool bit15: 1;
+
+    Bool bit16 : 1;
+    Bool bit17 : 1;
+    Bool bit18 : 1;
+    Bool bit19 : 1;
+    Bool bit20: 1;
+    Bool bit21: 1;
+    Bool bit22: 1;
+    Bool bit23: 1;
+
+    Bool bit24 : 1;
+    Bool bit25 : 1;
+    Bool bit26 : 1;
+    Bool bit27 : 1;
+    Bool bit28: 1;
+    Bool bit29: 1;
+    Bool bit30: 1;
+    Bool bit31: 1;
+} TXOBFlags;
+
+
+
+
+
+typedef struct 
+{
+    char Magic[4];
+    if (Magic != "CGFX")
+    {
+        Warning("Not a proper CGFX file!");
+        Exit(1);
+    }
+    ByteOrder Order;
+    if (Order == BigEndian)
+    {
+        BigEndian();
+    }
+    else
+    {
+        LittleEndian();
+    }
+    ushort HeaderSize;
+    uint Revision;
+    uint FileSize;
+    uint NumberOfEntries;
+} CGFXHeader <optimize=false>;
+
+typedef struct 
+{
+    uint ModelEntryCount;
+    uint ModelOffset;
+
+    uint TextureEntryCount;
+    uint TextureOffset;
+
+    uint LUTSEntryCount;
+    uint LUTSOffset;
+
+    uint MaterialEntryCount;
+    uint MaterialOffset;
+
+    uint ShaderEntryCount;
+    uint ShaderOffset;
+
+    uint CameraEntryCount;
+    uint CameraOffset;
+
+    uint LightEntryCount;
+    uint LightOffset;
+
+    uint FogEntryCount;
+    uint FogOffset;
+
+    uint EnvironmentEntryCount;
+    uint EnvironmentOffset;
+
+    uint SkeletonAnimationEntryCount;
+    uint SkeletonAnimationOffset;
+
+    uint TextureAnimationEntryCount;
+    uint TextureAnimationOffset;
+
+    uint VisibilityAnimationEntryCount;
+    uint VisibilityAnimationOffset;
+
+    uint CameraAnimationEntryCount;
+    uint CameraAnimationOffset;
+
+    uint LightAnimationEntryCount;
+    uint LightAnimationOffset;
+
+    uint EmitterEntryCount;
+    uint EmitterOffset;
+
+    uint UnknownEntryCount;
+    uint UnknownOffset;
+}   DictHeaders <comment="unused entries are zeroed",optimize=false>;
+
+
+
+typedef struct 
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    uint Refbit;
+    ushort LeftNodeIndex;
+    ushort RightNodeIndex;
+    uint NameOffset;
+    uint DataOffset;
+
+    FSeek(Start + 8 + NameOffset);
+    string name;
+
+    FSeek(Start + 12 + DataOffset);
+    
+    FSeek(Start + 16);
+} DICTEntry <optimize=false,read=ReadDictEntry>;
+
+string ReadDictEntry (DICTEntry &v) {
+    local string s;
+
+    SPrintf(s, "%s", v.name);
+    return s;
+};
+
+typedef struct 
+{
+    SetRandomBackColor();
+    char Magic[4] <comment="DICT">;
+    uint Size;
+    uint EntryCount;
+
+    uint Unk0;
+    ushort Unk1;
+    ushort Unk2;
+    uint Unk3;
+    ushort Unk4;
+    ushort Unk5;
+
+    DICTEntry Entry[EntryCount];
+} DICT <optimize=false>;
+
+typedef struct 
+{
+    TXOBFlags Flags;
+} TXOB <optimize=false>;
+
+
+
+typedef struct 
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    uint Refbit;
+    ushort LeftNodeIndex;
+    ushort RightNodeIndex;
+    uint NameOffset;
+    uint DataOffset;
+
+    FSeek(Start + 8 + NameOffset);
+    string name;
+
+    FSeek(Start + 12 + DataOffset);
+    TXOB Data;
+
+    FSeek(Start + 16);
+} TXOBDICTEntry <optimize=false,read=ReadTXOBDictEntry>;
+
+string ReadTXOBDictEntry (TXOBDICTEntry &v) {
+    local string s;
+
+    SPrintf(s, "%s", v.name);
+    return s;
+};
+
+typedef struct 
+{
+    SetRandomBackColor();
+    char Magic[4] <comment="DICT">;
+    uint Size;
+    uint EntryCount;
+
+    uint Unk0;
+    ushort Unk1;
+    ushort Unk2;
+    uint Unk3;
+    ushort Unk4;
+    ushort Unk5;
+
+    TXOBDICTEntry Entry[EntryCount];
+} TXOBDICT <optimize=false>;
+
+typedef struct 
+{
+    char Magic[4] <comment="DATA">;
+    uint Size;
+    
+    DictHeaders Headers;
+} CGFXData <optimize=false>;
+
+
+typedef struct
+{
+    uint parameter;
+    uint Header;
+
+
+    local uint why = Header;
+    local uint extraParameters = (why >> 20) & 0x7ff;
+
+    local uint id = Header & 0xffff;
+
+    if (extraParameters > 0)
+        uint ExtraParameters[extraParameters];
+
+} MtobWord <optimize=false>;
+
+typedef struct 
+{
+    MTOBFlags Flags;
+    char MAGIC[4];
+    uint Revision;
+    uint NameOffset;
+    uint userDataEntries;
+    uint UserDataOffset;
+
+    MaterialFlags flags;
+    uint TextureCoordsConfig;
+    uint TranslucencyKind;
+
+    RGBA Emission;
+    RGBA Ambient;
+    RGBA Diffuse;
+    RGBA Specular0;
+    RGBA Specular1;
+    
+    RGBA Constant0;
+    RGBA Constant1;
+    RGBA Constant2;
+    RGBA Constant3;
+    RGBA Constant4;
+    RGBA Constant5;
+
+
+
+    ByteRGBA BEmission;
+    ByteRGBA BAmbient;
+    ByteRGBA BDiffuse;
+    ByteRGBA BSpecular0;
+    ByteRGBA BSpecular1;
+    
+    ByteRGBA BConstant0;
+    ByteRGBA BConstant1;
+    ByteRGBA BConstant2;
+    ByteRGBA BConstant3;
+    ByteRGBA BConstant4;
+    ByteRGBA BConstant5;
+
+
+    uint PolygonOffsetEnabled;
+    CullingMode CullMode;
+    uint PolygonOffsetUnit;
+
+    FSeek(FTell() + 4); // FSeek(FTell() + 12);
+
+    uint DepthFlags;
+    MtobWord Words[4];
+
+    BlendMode blendMode;
+    RGBA BlendColor;
+    
+} MTOB <optimize=false>;
+
+typedef struct 
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    uint Refbit;
+    ushort LeftNodeIndex;
+    ushort RightNodeIndex;
+    uint NameOffset;
+    uint DataOffset;
+
+    FSeek(Start + 8 + NameOffset);
+    string name;
+
+    FSeek(Start + 12 + DataOffset);
+    MTOB Data;
+    
+    FSeek(Start + 16);
+} MtobDICTEntry <optimize=false,read=ReadMtobDictEntry>;
+
+string ReadMtobDictEntry (MtobDICTEntry &v) {
+    local string s;
+
+    SPrintf(s, "%s", v.name);
+    return s;
+};
+
+typedef struct 
+{
+    SetRandomBackColor();
+    char Magic[4] <comment="DICT">;
+    uint Size;
+    uint EntryCount;
+
+    uint Unk0;
+    ushort Unk1;
+    ushort Unk2;
+    uint Unk3;
+    ushort Unk4;
+    ushort Unk5;
+
+    MtobDICTEntry Entry[EntryCount];
+} MtobDICT <optimize=false>;
+
+
+typedef struct 
+{
+    local int Start = FTell();
+    CMDLFlags ModelFlags;
+    char Magic[4] <comment="CMDL">;
+    uint Revision;
+    uint ModelNameOffset;
+    uint UserDataEntries;
+    uint UserDataOffset;
+    uint Unk3;
+    uint Flags;
+    uint ChildCount;
+    uint Unk6;
+    uint AnimationTypesEntriesCount;
+    uint AnimationTypesOffset;
+    vector Scale;
+    vector Rotation;
+    vector Translation;
+
+    Matrix4x3 LocalMatrix;
+    Matrix4x3 WorldMatrix;
+
+    uint MeshEntryCount;
+    uint MeshListOffset;
+
+    uint MaterialEntryCount;
+    uint MaterialOffset;
+    
+    uint ShapeEntryCount;
+    uint ShapeListOffset;
+
+    uint MeshVisibilityEntryCount;
+    uint MeshVisibilityOffset;
+
+    uint Unk13;
+    CullingMode CullMode;
+    uint LayerId;
+
+    if (ModelFlags.bit7 == True)
+    {
+        uint SkeletonInfoSOBJoffset;
+    }
+
+    if (MeshListOffset > 0)
+    {
+        FSeek(Start + 180 + MeshListOffset);
+        uint MeshOffset[MeshEntryCount];
+    }
+    
+    //uint MaterialOffset[MaterialEntryCount];
+    //uint MeshVisibilityOffset[MeshVisibilityEntryCount];
+    
+
+    if (ShapeListOffset > 0)
+    {
+        FSeek(Start + 196 + ShapeListOffset);
+        uint ShapeOffset[ShapeEntryCount];
+    }
+    
+    if (MaterialOffset > 0)
+    {
+        FSeek(Start + 188 + MaterialOffset + 4);
+        MtobDICT MaterialDict;
+    }
+
+    if (MeshVisibilityOffset > 0)
+    {
+        FSeek(Start + 204 + MeshVisibilityOffset + 4);
+        DICT MeshVisibilityDict;
+    }
+    
+
+} CMDL <optimize=false>;
+
+
+
+
+
+
+typedef struct 
+{
+    local int Start = FTell();
+    SetRandomBackColor();
+    uint Refbit;
+    ushort LeftNodeIndex;
+    ushort RightNodeIndex;
+    uint NameOffset;
+    uint DataOffset;
+
+    FSeek(Start + 8 + NameOffset);
+    string name;
+
+    FSeek(Start + 12 + DataOffset);
+    CMDL Data;
+    
+    FSeek(Start + 16);
+} CmdlDICTEntry <optimize=false,read=ReadCmdlDictEntry>;
+
+string ReadCmdlDictEntry (CmdlDICTEntry &v) {
+    local string s;
+
+    SPrintf(s, "%s", v.name);
+    return s;
+};
+
+typedef struct 
+{
+    SetRandomBackColor();
+    char Magic[4] <comment="DICT">;
+    uint Size;
+    uint EntryCount;
+
+    uint Unk0;
+    ushort Unk1;
+    ushort Unk2;
+    uint Unk3;
+    ushort Unk4;
+    ushort Unk5;
+
+    CmdlDICTEntry Entry[EntryCount];
+} CmdlDICT <optimize=false>;
+
+
+struct
+{
+    SetRandomBackColor();
+    CGFXHeader header;
+    SetRandomBackColor();
+    CGFXData Data;
+    
+    local uint Offset = header.HeaderSize + 4;
+
+    Offset += 8;
+    if (Data.Headers.ModelEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.ModelOffset);
+        CmdlDICT ModelDict;
+    }
+    Offset += 8;
+    if (Data.Headers.TextureEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.TextureOffset);
+        TXOBDICT TextureDict;
+    }
+    Offset += 8;
+    if (Data.Headers.LUTSEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.LUTSOffset);
+        DICT LUTSDict;
+    }
+    Offset += 8;
+    if (Data.Headers.MaterialEntryCount > 0)
+    {
+        
+        FSeek(Offset + Data.Headers.MaterialOffset);
+        MtobDICT MaterialDict;
+    }
+    Offset += 8;
+    if (Data.Headers.ShaderEntryCount > 0)
+    {
+        
+        FSeek(Offset + Data.Headers.ShaderOffset);
+        DICT ShaderDict;
+    }
+    Offset += 8;
+    if (Data.Headers.CameraEntryCount > 0)
+    {
+        
+        FSeek(Offset + Data.Headers.CameraOffset);
+        DICT CameraDict;
+    }
+    Offset += 8;
+    if (Data.Headers.LightEntryCount > 0)
+    {
+        
+        FSeek(Offset + Data.Headers.LightOffset);
+        DICT LightDict;
+    }
+    Offset += 8;
+    if (Data.Headers.FogEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.FogOffset);
+        DICT FogDict;
+    }
+    Offset += 8;
+    if (Data.Headers.EnvironmentEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.EnvironmentOffset);
+        DICT EnvironmentDict;
+    }
+    Offset += 8;
+    if (Data.Headers.SkeletonAnimationEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.SkeletonAnimationOffset);
+        DICT SkeletonAnimationDict;
+    }
+    Offset += 8;
+    if (Data.Headers.TextureAnimationEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.TextureAnimationOffset);
+        DICT TextureAnimationDict;
+    }
+    Offset += 8;
+    if (Data.Headers.VisibilityAnimationEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.VisibilityAnimationOffset);
+        DICT VisibilityAnimationDict;
+    }
+    Offset += 8;
+    if (Data.Headers.CameraAnimationEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.CameraAnimationOffset);
+        DICT CameraAnimationDict;
+    }
+    Offset += 8;
+    if (Data.Headers.LightAnimationEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.LightAnimationOffset);
+        DICT LightAnimationDict;
+    }
+    Offset += 8;
+    if (Data.Headers.EmitterEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.EmitterOffset);
+        DICT EmitterDict;
+    }
+    Offset += 8;
+    if (Data.Headers.UnknownEntryCount > 0)
+    {
+        FSeek(Offset + Data.Headers.UnknownOffset);
+        DICT UnknownDict;
+    }
+
+    
+    
+
+
+} File <optimize=false>;

@@ -1,0 +1,73 @@
+#include "include/common.bt"
+
+
+typedef struct
+{
+    uint Declaration[36];
+    uint Offset  <bgcolor=cPurple, name = "Offset or Index(Starting from 0)">;
+    if (Offset < DecCount * 192)
+    {
+        FileCount -= 1;
+    }
+    
+    uint Declaration2[2];
+    char DeclarationType[36] <bgcolor=cLtGreen>;
+} FileDeclaration <optimize=false,read=readDec,name="Ep Declaration">;
+
+string readDec(local FileDeclaration &c) {
+    local string s;
+    local int pain = c.Offset;
+    SPrintf(s,"%i - " + c.DeclarationType, pain);
+    return s;
+}
+
+typedef struct(int EplOffset)
+{
+    local int ChunkStart = FTell() - EplOffset;
+    uint Type;
+    uint unk1;
+    uint unk2;
+    uint unk3;
+    uint unk4;
+
+    uint32 EplDataSize <bgcolor=cPurple>;
+    uint unk5;
+    uint unk6;
+    uint unk7;
+    uint64 Size <bgcolor=cBlue>;
+            
+    ubyte EplData[EplDataSize] <bgcolor=cRed>;
+    FAlign(16);
+    ubyte File[Size];
+    FAlign(16);
+
+} file <optimize=false, name = "EP", read=readFile>;
+
+string readFile(local file &c) {
+    local string s;
+    SPrintf(s,"%i - ", c.ChunkStart);
+    if (c.Size != 0 && c.Size != 4)
+    {
+        s += "Has an embedded file";
+    }
+    else
+    {
+        s += "No embedded files";
+    }
+    
+    return s;
+}
+
+typedef struct {
+    local int Start = FTell();
+    SetRandomBackColor();
+    uint Header[29] <name="Main EPL header",bgcolor=cGreen>;
+    float Size <name="Effect Scale",bgcolor=cRed>;
+    uint Header2[2] <name="Main EPL header",bgcolor=cGreen>;
+    int32 DecCount <name="File Count",bgcolor=cPurple>;
+    uint Header3[3] <name="Main EPL header",bgcolor=cGreen>;
+    local int FileCount = DecCount;
+    local int Types[FileCount];
+    FileDeclaration FileDec[FileCount];
+    file files(Start)[FileCount];
+} Epl;

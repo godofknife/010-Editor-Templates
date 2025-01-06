@@ -1,0 +1,65 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: HeroParameterDataAsset.uasset, HeroParameterDataAsset.uasset
+//   Authors: SCArkadia
+//   Version: 1.0
+//------------------------------------------------
+#include "ue4_iopackage.bt"
+
+LittleEndian();
+
+typedef struct
+{
+    byte unk[121] <name="Unknown">;
+}unk;
+
+unk unknown <name="Unknown">;
+
+struct
+{
+	byte padding[2] <hidden=true>;
+    ushort Knowledgelvl1 <name="Knowledge Level 1">;
+    byte padding2[2] <hidden=true>;
+    ushort Knowledgelvl2 <name="Knowledge Level 2">;
+	byte padding3[2] <hidden=true>;
+    ushort Knowledgelvl3 <name="Knowledge Level 3">;
+	byte padding4[2] <hidden=true>;
+    ushort Knowledgelvl4 <name="Knowledge Level 4">;
+	byte padding5[2] <hidden=true>;
+    ushort Knowledgelvl5 <name="Knowledge Level 5">;
+	byte padding6[2] <hidden=true>;
+    ushort Knowledgelvl6 <name="Knowledge Level 6">;
+}fileData <name="Knowledge Section">;
+
+struct
+{
+	byte padding[47] <hidden=true>;
+    ushort Charmlvl1 <name="Charm Level 1">;
+    byte padding2[2] <hidden=true>;
+    ushort Charmlvl2 <name="Charm Level 2">;
+	byte padding3[2] <hidden=true>;
+    ushort Charmlvl3 <name="Charm Level 3">;
+	byte padding4[2] <hidden=true>;
+    ushort Charmlvl4 <name="Charm Level 4">;
+	byte padding5[2] <hidden=true>;
+    ushort Charmlvl5 <name="Charm Level 5">;
+	byte padding6[2] <hidden=true>;
+    ushort Charmlvl6 <name="Charm Level 6">;
+}fileData <name="Charm Section">;
+
+struct
+{
+	byte padding[47] <hidden=true>;
+    ushort Couragelvl1 <name="Courage Level 1">;
+    byte padding2[2] <hidden=true>;
+    ushort Couragelvl2 <name="Courage Level 2">;
+	byte padding3[2] <hidden=true>;
+    ushort Couragelvl3 <name="Courage Level 3">;
+	byte padding4[2] <hidden=true>;
+    ushort Couragelvl4 <name="Courage Level 4">;
+	byte padding5[2] <hidden=true>;
+    ushort Couragelvl5 <name="Courage Level 5">;
+	byte padding6[2] <hidden=true>;
+    ushort Couragelvl6 <name="Courage Level 6">;
+}fileData <name="Courage Section">;

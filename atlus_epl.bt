@@ -1,0 +1,19 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Atlus particle list files
+//   Authors: Pioziomgames
+//   Version: 2.1
+//   Purpose: Parsing atlus epl files
+//  Category: Other
+// File Mask: *.epl
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/eplinclude.bt"
+
+
+LittleEndian();
+
+
+Epl File <optimize=false>;

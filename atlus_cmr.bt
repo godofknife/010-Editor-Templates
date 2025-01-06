@@ -1,0 +1,57 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: Atlus camera files
+//   Authors: Pioziomgames
+//   Version: 1.1
+//   Purpose: Editing camera type and values
+//  Category: Other
+// File Mask: *.cmr
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+enum<short> CmrCameraType
+{
+    FollowPlayerAndRotateWithRStick = 0,
+    StaticAlwaysLookingAtPlayer = 1,
+    StaticAlwaysLookingAtPlayer2 = 2, //duplicates might be for following a path (needs checking)
+    Static = 3,
+    Static2 = 4,
+    FollowPlayer = 5,
+    // Any other value will make it static
+} ;
+
+struct 
+{
+    int Magic;
+    short Unk1;
+    short Unk2;
+    float FOV;
+    int Unk3;
+    float Unk4;
+    int Unk5;
+    float Unk6;
+    int Unk7;
+    float Unk8;
+    float Unk9;
+    float Unk10;
+    int Unk11;
+//All 3 ignored if camera is following the player
+    float RotationX; 
+    float RotationY;
+    float RotationZ;
+    int Unk15;
+    float PosX;
+    float PosY;
+    float PosZ;
+    float Unk16;
+    CmrCameraType CameraType;
+    short Unk17;
+    int Unk18;
+    float Unk19;
+    int Unk20;
+    float Unk21;
+    float Unk22;
+    int Unk23;
+//Any other data after this is just padding and can be safely deleted
+} CmrFile;
