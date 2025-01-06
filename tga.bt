@@ -1,0 +1,145 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: tga texture files
+//   Authors: Pio
+//   Version: 0.8
+//   Purpose: Having a template for tga that has readable variables and uses enums
+//  Category: Textures
+// File Mask: *.tga
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+#include "include/common.bt"
+
+LittleEndian(); 
+
+typedef enum<ubyte>
+{
+    None           = 0x00,
+    Indexed        = 0x01,
+    RGB            = 0x02,
+    GrayScale      = 0x03,
+    //run-length encoded
+    RLEIndexed     = 0x09,
+    RLERGB         = 0x0A,
+    RLEGrayScale   = 0x0B,
+    //Huffman Delta run-length encoded
+	//Cannot find any info about how this would be stored or any programs that support it
+    HDRLEIndexed   = 0x20,
+    HDRLERGB       = 0x21,
+} TgaFormat;
+
+typedef enum
+{
+    LeftToRight = 0x0,
+    RightToLeft = 0x1,
+} HorizontalOrder;
+
+typedef enum
+{
+    TopToBottom = 0x0,
+    BottomToTop = 0x1,
+} VerticalOrder;
+
+typedef struct
+{
+    BitfieldDisablePadding();
+    ubyte AlphaDepth : 4;
+    HorizontalOrder XOrder : 1;
+    VerticalOrder YOrder : 1;
+} TgaDescription;
+
+typedef struct{
+    ubyte B;
+    ubyte G;
+    ubyte R;
+    ubyte A;
+} RGBA8888;
+
+typedef struct{
+    ubyte B;
+    ubyte G;
+    ubyte R;
+} RGB888;
+
+typedef struct{
+    ubyte R : 5;
+    ubyte G : 5;
+    ubyte B : 5;
+} RGB555;
+
+typedef struct{
+   ubyte B:5;
+   ubyte G:5;
+   ubyte R:5;
+   ubyte A:1;
+} RGBA5551;
+
+typedef struct (ubyte Depth, ushort Size)
+{
+    switch (Depth)
+    {
+        case 15:
+	        RGB555 Palette[Size];
+		    break;
+	    case 16:
+		    RGBA5551 Palette[Size];
+		    break;
+	    case 24:
+		    RGB888 Palette[Size];
+		    break;
+	    case 32:
+		    RGBA8888 Palette[Size];
+		    break;
+    }
+} TgaPaletteData <bgcolor=cYellow>;
+
+typedef struct (ubyte Depth, uint Size, TgaFormat ImageFormat)
+{
+    switch (Depth)
+    {
+        case 8:
+            if (ImageFormat == GrayScale)
+                ubyte Gray[Size];
+            else
+	            ubyte ColorIndex[Size];
+		    break;
+	    case 16:
+		    RGBA5551 Pixel[Size];
+		    break;
+	    case 24:
+		    RGB888 Pixel[Size];
+		    break;
+	    case 32:
+		    RGBA8888 Pixel[Size];
+		    break;
+    }
+} TgaImageData <bgcolor=cGreen>;
+
+typedef struct {
+    ubyte UserDataSize;
+    Bool UsesPalette;
+    TgaFormat ImageFormat;
+    ushort PaletteStartIndex;
+    ushort PaletteSize;
+    ubyte PaletteDepth;
+    ushort XOrigin;
+    ushort YOrigin;
+    ushort Width;
+    ushort Height;
+    ubyte BitsPerPixel;
+    TgaDescription ImageDescription;
+} TgaHeader <bgcolor=cRed>;
+
+struct
+{
+    TgaHeader Header;
+    byte UserData[Header.UserDataSize];
+    if (Header.PaletteSize > 0)
+    {
+        TgaPaletteData PaletteData(Header.PaletteDepth, Header.PaletteSize);
+    }
+    
+    TgaImageData Image(Header.BitsPerPixel, (uint)Header.Width * Header.Height, Header.ImageFormat);
+} TgaFile;
