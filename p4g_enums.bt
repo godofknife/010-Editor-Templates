@@ -26,6 +26,25 @@ enum<byte> ArcanaID
     World = 24,
 };
 
+enum<byte>SkillEnabled
+{
+    Disabled = 0,
+	Enabled = 1,
+};
+
+// This enum represents the different party members available.
+enum<byte> PartyMember
+{
+	Protagonist = 1,
+    Yosuke = 2,
+    Chie = 3,
+    Yukiko = 4,
+    Rise = 5,
+    Kanji = 6,
+    Naoto = 7,
+    Teddie = 8,
+};
+
 enum<short> AffinityStatus
 {
 	Neutral5percentdamagereduced = 1,
@@ -1137,7 +1156,17 @@ enum<ushort>PersonasID
     h0FF = 255,
 };
 
-enum<ushort>EnemiesID
+enum<int>GearEquippable
+{
+    Unequippable = 0,
+};
+
+enum<ushort>GearEffect
+{
+    NONE24 = 0,
+};
+
+enum<ushort> BattleUnit
 {
     h000 = 0,
     CowardlyMaya = 1,

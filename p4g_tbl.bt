@@ -158,7 +158,7 @@ typedef struct
     b32 Flags <name = "Flags">;
     u16 Field04;
     u16 Field06;
-    EnemiesID Units[ 5 ] <name = "Battle Units">;
+    BattleUnit Units[ 5 ] <name = "Battle Units">;
     u16 FieldId <name = "Field ID">;
     u16 RoomId <name = "Room ID">;
     MusicID MusicId <name = "Music">;
@@ -259,10 +259,10 @@ typedef struct
 	u16 DropChance <name = "Drop Chance">;
 	Items Item2 <name = "Item 2 Drop">;
 	u16 DropChance2 <name = "Drop Chance">;
-	u16 Unknown9;
-	u16 Unknown10;
-	u16 Unknown11;
-	u16 Unknown12;
+	Items Item3 <name = "Item 3 Drop">;
+	u16 DropChance3 <name = "Drop Chance">;
+	Items Item4 <name = "Item 4 Drop">;
+	u16 DropChance4 <name = "Drop Chance">;
 	u16 Unknown13;
 	u16 Unknown14;
 	u16 Unknown15;
