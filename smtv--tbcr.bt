@@ -1,0 +1,126 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+//
+//      File: smtv--tbcr.bt
+//   Authors: lipsum, DeathChaos, Sierra, Tildehat
+//   Version: 0.1
+//   Purpose: Parses SMTV TBCR *.uexp files
+//  Category: Game
+// File Mask: *.uexp
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#include "formats/smtv_enums.h"
+/* Each file format is included in its own .h file */
+#include "formats/NKMBaseTable.h"
+#include "formats/SkillData.h"
+#include "formats/EncountData.h"
+#include "formats/UniteTable.h"
+#include "formats/PlayerGrow.h"
+
+
+/* Table */
+
+typedef struct ( int size )
+{
+  local int entry_index = entry_count++;
+  SetBackColor( cLtGreen - 0x002200 * ( entry_index % 2 ) );
+
+  local string tbl_id;
+  SPrintf( tbl_id, "%s%d", base_name, table_index );
+
+  switch ( tbl_id ) 
+  {
+    case "PlayerGrow0": PlayerGrow0 data; break;
+    case "NKMBaseTable0": NKMBaseTable0 data; break;
+    case "NKMBaseTable1": NKMBaseTable1 data; break;
+	  case "SkillData0": SkillData0 data; break;
+    case "UniteTable1": UniteTable1 data; break;
+    case "EncountData0": EncountData0 data; break;
+    case "EncountData1": EncountData1 data; break;
+
+    default: byte data[ size ]; break;
+  }
+
+  FSeek( startof( this ) + size );
+} TBL1Entry <optimize=false, read=TBL1Entry_Read>;
+
+string TBL1Entry_Read( TBL1Entry &o )
+{
+  local string s;
+
+  switch ( o.tbl_id )
+  {
+    case "PlayerGrow0": s = PlayerGrow0_Read( o.data ); break;
+    case "NKMBaseTable0": s = NKMBaseTable0_Read( o.data ); break;
+    case "NKMBaseTable1": s = NKMBaseTable1_Read( o.data ); break;
+    case "SkillData0": s = SkillData0_Read( o.data ); break;
+    case "UniteTable1": s = UniteTable1_Read( o.data ); break;
+    case "EncountData0": s = EncountData0_Read( o.data ); break;
+    case "EncountData1": s = EncountData1_Read( o.data ); break;
+  }
+
+  return s;
+}
+
+typedef struct
+{
+  local int table_index = tbl_count++;
+  local int entry_count = 0;
+  SetBackColor( cLtYellow - 0x002200 * ( table_index % 2 ) );
+
+  int offset;
+
+  SetBackColor( cPurple );
+
+  local int seek_back = FTell();
+  FSeek( 0x25 + header_size + offset ); // parent (tbcr) header_size
+
+  char magic[ 4 ];
+
+  int data_size;
+  int entry_size;
+  int header_size; // guess - always 16? alignment?
+
+  if ( data_size )
+  {
+    TBL1Entry entries( entry_size )[ data_size / entry_size ];
+  }
+
+  FSeek( seek_back );  
+} TBL1 <optimize=false, read=Str( "%s: %d entries (0x%X)",
+    this.magic, this.data_size / this.entry_size, this.entry_size )>;
+
+typedef struct
+{
+  local int tbl_count = 0;
+  SetBackColor( cLtBlue );
+
+  char magic[ 4 ] <bgcolor=cRed>;
+  int header_size; // with magic
+  int table_count;
+
+  TBL1 tables[ table_count ];
+} TBCR <optimize=false, read=Str( "%s: %d tables", this.magic, this.table_count )>;
+
+
+
+
+
+/* --- */
+
+local string file_name = GetFileName();
+local string base_name = FileNameGetBase( file_name, false );
+
+Printf( "%s\n", base_name );
+
+LittleEndian();
+
+byte uexp_header[ 0x21 ] <hidden=true>;
+int coll_size <hidden=true>;
+
+TBCR table_coll;
+
+FSeek( 0x21 + coll_size );
+byte uexp_footer[ FileSize() - FTell() ] <hidden=true>;
