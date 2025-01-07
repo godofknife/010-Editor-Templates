@@ -1,0 +1,27 @@
+#include "p4g_enums.bt"
+
+LittleEndian();
+
+typedef struct
+{
+  ubyte field00;
+  ubyte field01;
+  ubyte field02;
+  ubyte field03;
+  ubyte field04;
+  ubyte field05;
+  ubyte field06;
+  ubyte field07;
+  ubyte field08;
+  ubyte field09;
+  ubyte field0A;
+  ubyte field0B;
+} SkillEffect <size=0xC, optimize=false>;
+
+SetBackColor( 0x880000 );
+
+typedef struct {
+	SkillEffect List[( FileSize() / 12 )];
+} SkillEffectList1 <optimize=false>;
+SkillEffectList1 SkillEffectList;
+
