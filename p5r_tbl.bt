@@ -598,6 +598,20 @@ typedef struct
     u16 UnknownR;
 } TUnitVisualIndex <name = "Visual Index">;
 
+typedef struct
+{
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+    u16 Unknown;
+} TUnitUnknown <name = "Unknown">;
+
 
 // Skill
 typedef struct
@@ -605,20 +619,49 @@ typedef struct
     ElementalType Element <name = "Elemental Type">;
     Skill_PassiveOrActive PassiveOrActive <name = "Passive or Active?", comment = "Must be set correctly for the element icon to appear properly, even though it's otherwise redundant">;
     u8 InheritableSkill <name = "Inheritable", comment = "Put 1 until 8 for Inheritable skill. 0 if you don't want to">;
-    u8 UnknownR;
-    u8 UnknownR;
-    u8 UnknownR;
-    u8 UnknownR;
-    b8 RedundantBitfield_ThanksATLUS <name = "Redundant Bitfield", comment = "Rightmost 4 bits of the bitfield don't do anything. Probably leftovers from early P5 coding.">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u32 Unknown <name = "Unknown", comment = "Unused in code">;
 } TSkill_Elements <name = "Skill Elements">;
 
 typedef struct()
 {
-    u8 UnknownR;
-    Skill_Condition Condition <name = "Condition Usage", comment = "Must be accompanied with Value 8 in Caster Effect 2">;
-    Skill_CasterEffect1 CasterEffect1 <name = "Caster Effect", comment = "Needs more testing">;
-    Skill_CasterEffect2 CasterEffect2 <name = "Caster Effect", comment = "Needs more testing">;
-    u8 UnknownR;
+    //u8 Unknown <name = "Unknown", comment = "Technically part of flags as it's a uint, but this byte is unused">;
+    //Skill_Condition Condition <name = "Condition Usage", comment = "Must be accompanied with Value 8 in Caster Effect 2">;
+    //Skill_CasterEffect1 CasterEffect1 <name = "Caster Effect", comment = "Needs more testing">;
+    //Skill_CasterEffect2 CasterEffect2 <name = "Caster Effect", comment = "Needs more testing">;
+    struct
+        {
+            u8 Unknown <name = "Unknown", comment = "Technically part of flags as it's a uint, but this byte is unused">;
+
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool UsableOnlyInAmbsuh : 1 <name = "Usable only in ambush">;
+            bool UnknownItemAndInstantKillEffectsRelated : 1;
+            bool UnknownForNormalAction : 1;
+            bool UnknownForExplosionSkill : 1;
+            bool UnknownShowtimeRelated : 1;
+
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool UnknownStealInfoRelated : 1;
+            bool Unknown : 1;
+            bool Unknown : 1;
+            bool ReduceOwnHPToOne : 1 <name = "Reduce caster's HP to 1", comment = "Might depend on other flags and other things">;
+            bool UseRangedWeapon : 1 <name = "Modified by ranged weapon", comment = "If Modified by weapon is set, this changes the weapon modifying the skill to ranged weapon">;
+            bool UnknownSpecialMoveRelated : 1;
+
+            bool UnknownSaeRouletteRelated : 1;
+            bool UnknownFollowUpRelated : 1;
+            bool UnknownSaeRouletteRelated2 : 1;
+            bool UsePercentSPCost : 1 <name = "Percent SP cost">;
+            bool UnknownSupportRelated : 1;
+            bool UnknownSummonRelated : 1;
+            bool UseWeapon : 1 <name = "Modified by weapon", comment = "The skill's element and other values are modified by equipped melee weapon">;
+            bool KillCasterAfterUse : 1 <name = "Kill caster after use">;
+        } Flags <name = "Flags">;
+
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
     Skill_AreaType PlaceUsage <name = "Area Type", comment = "Determine if it is usable in battle, field, or both">;
     Skill_DamageStat DamageStat <name = "Damage Stat", comment = "Determines which stat is used to determine damage">;
     Skill_CostType CostType <name = "Cost Type">;
@@ -635,24 +678,44 @@ typedef struct()
         } ValidTargets <name = "Valid Targets">;
     
     Skill_TargetRestrictions TargetRestrictions <name = "Additional Target Restrictions">;
-    u8 Unknown <name = "Unknown">;
-    u8 Unknown <name = "Unknown">;
-    u8 Unknown <name = "Unknown">;
-    u8 Unknown <name = "Unknown">;
-    u8 Unknown <name = "Unknown">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u32 Unknown <name = "Unknown", comment = "Used but I don't know what for">;
     u8 Accuracy <name = "Accuracy">;
     u8 MinHits <name = "Minimum Number of Hits">;
     u8 MaxHits <name = "Maximum Number of Hits">;
-    Skill_HPEffect HPEffect <name = "Damage/Healing Type">;
-    u16 BaseDamage <name = "Base Damage">;
-    Skill_SPEffect SPEffect <name = "Deplete or Restore SP?">;
-    u8 Unknown <name = "Unknown">;
-    u16 SPAmount <name = "SP Amount">;
+    Skill_HPEffect HPEffect <name = "Damage/Healing Type for HP">;
+    u16 BaseDamage <name = "Base Damage to HP">;
+
+    //Skill_SPEffect SPEffect <name = "Damage/Healing Type for SP">;
+    enum<ubyte>
+        {
+            NoDamageOrHealingToSP = 0,
+            DamageSP = 1,
+            HealSP = 2,
+            SetSP = 3,
+            DamageExactSP = 4,
+            HealExactSP = 5,
+            DamageSPWith50BaseDamage = 6,
+            HealSPWith50BaseHealing = 7,
+            DamagePercentCurrentSP = 8,
+            HealPercentCurrentSP = 9,
+            DamagePercentMaxSP = 10,
+            HealPercentMaxSP = 11,
+            DrainSP = 12,
+            DrainExactSP = 13,
+            UnusedDefaultsToDamageSP = 14,
+            HealUpToSPAmountBasedOnChance = 15,
+            DamageSPBasedOnHealthyPartyMembers = 16
+        } SPEffect <name = "Damage/Healing Type for SP">;
+
+
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
+    u16 SPAmount <name = "SP amount">;
     Skill_ApplyOrCureEffect ApplyOrCureEffect <name = "Apply or Cure Effect?", comment = "Ignore resistance works 100% for Physical. Magic including Light, Dark, Almighty can only Semi Pierce (NULL, DRAIN, REPEL can't be pierced)">;
     u8 SecondaryEffectChance <name = "Effect Chance">;
-    u8 Unknown <name = "Unknown">;
 
-   struct
+    u8 Unknown <name = "Unknown", comment = "Technically part of ailment list as it's a uint, but this byte is unused">;
+    struct
         {
             bool Counter : 1 <name = "Counter?", comment = "it may be possibly counter mode exclusive to Yaldabaoth">;
             bool Mouse : 1 <name = "Mouse", comment = "Only affects the Phantom Thieves">;
@@ -662,7 +725,7 @@ typedef struct()
             bool WeakToAllElements : 1 <name = "Weak to all Elements", comment = "Shock,Knockdown,Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
             bool Jealousy : 1 <name = "Jealousy">;
             bool Wrath : 1 <name = "Wrath">;
-        } Effect1 <name = "Effect List 1">;
+        } Effect1 <name = "Ailment List 1">;
 
     struct
         {
@@ -674,9 +737,9 @@ typedef struct()
             bool Despair : 1 <name = "Despair", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
             bool Rage : 1 <name = "Rage", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
             bool Sleep : 1 <name = "Sleep", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-        } Effect2 <name = "Effect List 2">;
+        } Effect2 <name = "Ailment List 2">;
 
-   struct
+    struct
         {
             bool Hunger : 1 <name = "Hunger", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
             bool Forget : 1 <name = "Forget", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
@@ -686,9 +749,9 @@ typedef struct()
             bool Shock : 1 <name = "Shock", comment = "Shock, Weakness and Knockdown can be combined into 1 single ailment">;
             bool Freeze : 1 <name = "Freeze", comment = "Burn and Freeze can be combined into 1 single ailment">;
             bool Burn : 1 <name = "Burn", comment = "Burn and Freeze can be combined into 1 single ailment">;
-        } Effect3 <name = "Effect List 3">;
+        } Effect3 <name = "Ailment List 3">;
 
-   struct
+    struct
         {
             bool CoverPsy : 1 <name = "Cover Psy Weakness", comment = "Changes innate Psy weakness to neutral">;
             bool CoverNuke : 1 <name = "Cover Nuke Weakness", comment = "Changes innate Nuke weakness to neutral">;
@@ -698,9 +761,9 @@ typedef struct()
             bool CoverFire : 1 <name = "Cover Fire Weakness", comment = "Changes innate Fire weakness to neutral">;
             bool InstakillShield : 1 <name = "Instakill Shield", comment = "Blocks one instakill attack">;
             bool BreakMagicShield : 1 <name = "Break Magic Shield", comment = "Breaks magic-reflecting shields like Makarakarn">;
-        } Effect4 <name = "Effect List 4">;
+        } Effect4 <name = "Effect List 1">;
 
-   struct
+    struct
         {
             bool BreakPhysicalShield : 1 <name = "Break Physical Shield", comment = "Breaks physical-reflecting shields like Tetrakarn">;
             bool AilmentSusceptibility : 1 <name = "Ailment Susceptibility", comment = "increases the likelihood of recieving effects from Effect Lists 2 and 3">;
@@ -710,9 +773,9 @@ typedef struct()
             bool NegateElecResist : 1 <name = "Negate Electric Resistance", comment = "Changes innate Electric resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
             bool NegateIceResist : 1 <name = "Negate Ice Resistance", comment = "Changes innate Ice resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
             bool NegateFireResist : 1 <name = "Negate Fire Resistance", comment = "Changes innate Fire resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
-        } Effect5 <name = "Effect List 5">;
+        } Effect5 <name = "Effect List 2">;
 
-   struct
+    struct
         {
             bool MagicShield : 1 <name = "Magic Shield", comment = "Reflects the next magic attack received">;
             bool PhysicalShield : 1 <name = "Physical Shield", comment = "Reflects the next physical attack received">;
@@ -722,7 +785,7 @@ typedef struct()
             bool RemoveBuffs : 1 <name = "Remove Buffs", comment = "Removes stat-raising buffs from the Buff/Debuff List">;
             bool Concentrate : 1 <name = "Concentrate", comment = "Next Magic-based attack deals 2.5x damage">;
             bool Charge : 1 <name = "Charge", comment = "Next Strength-based attack deals 2.5x damage">;
-        } Effect6 <name = "Effect List 6">;
+        } Effect6 <name = "Effect List 3">;
 
     struct
         {
@@ -742,7 +805,7 @@ typedef struct()
     Skill_ExtraEffect ExtraEffect <name = "Extra Effects", comment = "Ignore resistance works 100% for Physical. Magic including Light, Dark, Almighty can only Semi Pierce (NULL, DRAIN, REPEL can't be pierced).">;
     u8 CritChance <name = "Crit Chance", comment = "Only works for Physical or Gun skills">;
     u8 ForItem <name = "For Item?", comment = "Not sure what this does since it has 20 value on Firecracker, Magatama item">;
-    u8 Unknown <name = "Unknown">;
+    u8 Unknown <name = "Unknown", comment = "Unused in code">;
 } TSkill_ActiveSkillData <name="Active Skill Data">;
 
 typedef struct
@@ -789,9 +852,7 @@ typedef struct
     AccessoriesShop isitavailable4 <name = "Show in Shop?", comment = "Put 1 to make it not shown. Put 0 to make it shown in Iwai Shop.">;
     PersonaStats Stats<name="Stat Boosts">;
     u8 RESERVE_STAT<name="RESERVE">;
-	u16 SKILLEQUIPPED<name="Skill ID Equipped">;
-    u16 UNKNOWN1;
-	u16 UNKNOWN2;
+    GearEffect Effect[3] <name = "Effect">;
     u16 level<name="Level">;
     u16 value<name="Value">;
     u16 RESERVE_1E<name="RESERVE">;
@@ -1131,17 +1192,25 @@ enum TableSegmentType
     TableSegmentType_Unit_PersonaElementalAffinities,
     TableSegmentType_Unit_VoiceIndex,
     TableSegmentType_Unit_VisualIndex,
+    TableSegmentType_Unit_Unknown,
     TableSegmentType_Visual_EnemyVisualVariablesA,
     TableSegmentType_Visual_PlayerVisualVariablesA,
     TableSegmentType_Visual_PersonaVisualVariablesA,
     TableSegmentType_Visual_PlayerVisualVariablesB,
     TableSegmentType_Visual_EnemyVisualVariablesB,
     TableSegmentType_Visual_PersonaVisualVariablesB,
+    TableSegmentType_ExpandedTable_Version
 };
 
 typedef struct( TableSegmentType _type )
 {
-    uint Size;
+    if (_type != TableSegmentType_ExpandedTable_Version) {
+        uint Size;
+    }
+    else {
+        uint Version;
+    }
+    
     local TableSegmentType type = _type; // for debugging
 
     switch ( type )
@@ -1316,6 +1385,10 @@ typedef struct( TableSegmentType _type )
             TUnitVisualIndex VisualIndices[ Size / sizeof( TUnitVisualIndex ) ];
             break;
 
+        case TableSegmentType_Unit_Unknown:
+            TUnitUnknown VisualIndices[ Size / sizeof( TUnitUnknown ) ];
+            break;
+
         case TableSegmentType_Visual_EnemyVisualVariablesA:
             TVisual_EnemyVisualVariablesA Data[ Size / sizeof( TVisual_EnemyVisualVariablesA ) ];
             break;
@@ -1338,6 +1411,9 @@ typedef struct( TableSegmentType _type )
 
         case TableSegmentType_Visual_PersonaVisualVariablesB:
             TVisual_PersonaVisualVariablesB Data[ Size / sizeof( TVisual_PersonaVisualVariablesB ) ];
+            break;
+
+        case TableSegmentType_ExpandedTable_Version:
             break;
 
         default:
@@ -1428,6 +1504,17 @@ typedef struct( string tableName, u32 endOffset )
                 case 3: segmentType = TableSegmentType_Skill_TraitData; break;
             }
         }
+        else if ( !Stricmp( tableName, "skill_expanded" ) )
+        {
+            switch ( segmentIndex )
+            {
+                case 0: segmentType = TableSegmentType_ExpandedTable_Version; break;
+                case 1: segmentType = TableSegmentType_Skill_Elements; break;
+                case 2: segmentType = TableSegmentType_Skill_ActiveSkillData; break;
+                case 3: segmentType = TableSegmentType_Skill_TechnicalMap; break;
+                case 4: segmentType = TableSegmentType_Skill_TraitData; break;
+            }
+        }
         else if ( !Stricmp( tableName, "item" ) )
         {
             switch ( segmentIndex )
@@ -1453,6 +1540,7 @@ typedef struct( string tableName, u32 endOffset )
                 case 2: segmentType = TableSegmentType_Unit_PersonaElementalAffinities; break;
                 case 3: segmentType = TableSegmentType_Unit_VoiceIndex; break;
                 case 4: segmentType = TableSegmentType_Unit_VisualIndex; break;
+                case 5: segmentType = TableSegmentType_Unit_Unknown; break;
             }
         }
         else if ( !Stricmp( tableName, "visual" ) )
