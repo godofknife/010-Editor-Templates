@@ -41,8 +41,8 @@ typedef struct
 {
     u8 bit0 : 1;
     u8 bit1 : 1;
-    u8 bit2 : 1;
-    u8 bit3 : 1;
+    u8 bit2 : 1 <name = "Hidden Analysis?">;
+    u8 bit3 : 1 <name = "Disable Knockdown?">;
     u8 bit4 : 1;
     u8 bit5 : 1;
     u8 bit6 : 1;
@@ -99,13 +99,13 @@ typedef struct
     u8 bit1 : 1;
     u8 bit2 : 1;
     u8 bit3 : 1;
-    u8 bit4 : 1;
+    u8 bit4 : 1 <name = "Enemy Gets First Turn?">;
     u8 bit5 : 1 <name = "Use an Encounter Script?">;
     u8 bit6 : 1;
     u8 bit7 : 1;
     u8 bit8 : 1;
     u8 bit9 : 1;
-    u8 bit10 : 1;
+    u8 bit10 : 1 <name = "No Navigator Voice?">;
     u8 bit11 : 1;
     u8 bit12 : 1;
     u8 bit13 : 1;
