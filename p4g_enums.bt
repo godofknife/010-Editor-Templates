@@ -164,6 +164,12 @@ enum<ubyte>Skill_ExtraEffect
     EscapeBattle = 2,
 	BonusDamageFoeKnockdown = 3,
     ThrowAwayMoney = 6,
+	AffectMalesOnly = 7,
+	AffectFemalesOnly = 8,
+	DizzyDown1moreGuaranteed = 9,
+	Guarantee1More = 10,
+	AlwaysKills = 13,
+	Instantlykillsallfoeswithstatusailments = 14,
 };
 
 enum<ubyte>Skill_HPEffect
@@ -238,7 +244,9 @@ enum<ubyte>Skill_CasterEffect1
     SummonAlly_CRASHES_ON_USE = 4, // summons an ally in enemy encounters - DO NOT USE LIKE A NORMAL SKILL, THE GAME WILL CRASH
     UnknownCasterEffect_SupportRelated = 8, // used by healing and support skills
     UnknownCasterEffect_RecarmdraRelated = 25, // used by Recarmdra
+	MightbeAnimfromUltraCharge = 32, //Used by Ultra Charge
     UnknownCasterEffect_TrafuriRelated = 40, // used by Trafuri
+	FollowUpAnim = 66, //used by Follow up Party members
 };
 
 

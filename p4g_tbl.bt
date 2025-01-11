@@ -679,7 +679,7 @@ typedef struct
 
     Skill_ExtraEffect ExtraEffect <name = "Extra Effects">;
     u8 CritChance <name = "Crit Chance", comment = "Only works for Physical skills">;
-    u8 Unknown <name = "Unknown">;
+    u8 SpecialEffectChance <name = "Special Effect Chance">;
     u8 Unknown <name = "Unknown">;
 } TSkill_ActiveSkillData <name="Active Skill Data: ">;
 
