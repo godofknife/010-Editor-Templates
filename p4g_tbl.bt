@@ -469,6 +469,89 @@ typedef struct
     MusicID MusicId <name = "Music">;
 } TEncounter <name = "Enemy Encounters">;
 
+typedef struct
+{
+    ushort FloorEncountersLookup;   // Encounters that can be spawned on floor
+    byte MinEncounterCount;         // Spawns more enemies if the count is below this value
+    byte InitialEncounterCount;     // How many enemies spawn on initial floor gen
+    byte MaxChestCount;             // Number of chests on floor gen
+    byte Unused;
+    uint LootLookup;                // What the contents of chests can be
+    /*
+        Need to pick a loot table that has a number of entries
+        >= MaxChestCount
+    */
+}TEncounterSegment1 <name = "Floor Spawn Data">;
+
+typedef struct
+{
+	ushort index_like<name="Encounter ID">;
+	ushort encount_id<name="Encounter Weight">;
+}EntryTable;
+
+typedef struct
+{
+    ubyte MaxDistributionRegular<name="Max Distribution %  (Normal Encounter) [Regular]">;
+    ubyte MaxDistributionRain<name="Max Distribution %  (Normal Encounter) [Rain]">;
+    ubyte RESERVEENC<name="Always FF">;
+    // Rare encounters are entries 20-24 [inclusive]
+    ubyte MaxDistributionRARERegular<name="Max Distribution % (Rare Encounter) [Regular]">;
+    ubyte MaxDistributionRARERain<name="Max Distribution % (Rare Encounter) [Rain]">;
+    ubyte ChanceReplace<name="Chance of replacing regular encounter">;
+
+    /*
+        Both the weight of rare encounters and the chance for replacing
+        regular encounters MUST GO UP in order for the effects to be noticed
+
+        If my observations are correct, max distribution accounts for the
+        HYPOTHETICAL maximum amount of an encounter type that saturates the floor,
+        while the chance of replacement is the chance for any individual encounter
+        to be of a given type
+
+        Since regular encounters are the default, they don't need to potentially
+        replace another encounter, hence why their third value is FF and also unused
+    */
+
+    // Gold hand encounters are entries 25-29 [inclusive]
+    ubyte MaxDistributionGOLDRegular<name="Max Distribution %  (Gold Hand)  [Regular]">;
+    ubyte MaxDistributionGOLDRain<name="Max Distribution %  (Gold Hand) [Rain]">;
+    ubyte ChanceReplace1<name="Chance of replacing regular encounter">;
+    ubyte RESERVEENC1<name="unused">;
+    ubyte RESERVEENC2<name="unused">;
+    ubyte RESERVEENC3<name="unused">;
+	
+	
+	
+    EntryTable upper_table[30]<name="Regular Encounters">;
+    EntryTable lower_table[30]<name="Rainy Encounters">;
+} TEncounterSegment3 <name = "Floor Encount Table">;
+
+typedef struct TLootEntry
+{
+    // Don't entirely get the minutia, but as I understand, bigger
+    // numbies are more likely to get picked as possible items
+    ushort weight<name="Weight">;
+    // Having multiple items of the same ID in seperate entries
+    // makes the game more unstable. If all entries reference the same
+    // item, game crashes upon loading dungeon. Best to limit to one entry
+    // per unique item
+    ushort id<name="Item ID">;          
+    // if value is 1, the chest is locked
+    // otherwise no lock is applied
+    ushort u3<name="Lock Value">;
+    // Needs to be set to 1 to be recognized as a valid loot possibility
+    ubyte valid<name="Valid Flag">;
+    // 0 for standard red chest
+    // 1 for big shiny gold chest
+    ubyte chestType<name="Chest Type">;
+    uint unused;
+};
+
+typedef struct
+{
+    TLootEntry data[29];
+} TEncounterSegment4 <name = "Chest Loot Table">;
+
 // Unit table
 typedef struct
 {
@@ -1059,6 +1142,10 @@ enum TableSegmentType
 	TableSegmentType_AICalc_Player_AI,
 	TableSegmentType_AICalc_Enemy_AI,
     TableSegmentType_Encounter,
+	TableSegmentType_EncounterSegment1,
+	TableSegmentType_EncounterSegment2,
+	TableSegmentType_EncounterSegment3,
+	TableSegmentType_EncounterSegment4,
     TableSegmentType_Skill_Elements,
     TableSegmentType_Skill_ActiveSkillData,
     TableSegmentType_Item_Accessories,
@@ -1175,6 +1262,22 @@ typedef struct( TableSegmentType _type )
 
         case TableSegmentType_Encounter:
             TEncounter TEncounters[ Size / sizeof( TEncounter ) ];
+            break;
+		
+		case TableSegmentType_EncounterSegment1:
+            TEncounterSegment1 Segment1[ Size / sizeof( TEncounterSegment1 ) ];
+            break;	
+		
+		case TableSegmentType_EncounterSegment2:
+            byte Data[ Size ];
+            break;	
+			
+		case TableSegmentType_EncounterSegment3:
+            TEncounterSegment3 Segment3[ Size / sizeof( TEncounterSegment3 ) ];
+            break;	
+
+		case TableSegmentType_EncounterSegment4:
+            TEncounterSegment4 Segment4[ Size / sizeof( TEncounterSegment4 ) ];
             break;
 
         case TableSegmentType_Skill_Elements:
@@ -1348,6 +1451,10 @@ typedef struct( string tableName, u32 endOffset )
             switch ( segmentIndex )
             {
                 case 0: segmentType = TableSegmentType_Encounter; break;
+				case 1: segmentType = TableSegmentType_EncounterSegment1; break;
+				case 2: segmentType = TableSegmentType_EncounterSegment2; break;
+				case 3: segmentType = TableSegmentType_EncounterSegment3; break;
+				case 4: segmentType = TableSegmentType_EncounterSegment4; break;
             }
         }
         else if ( !Stricmp( tableName, "skill" ) )
