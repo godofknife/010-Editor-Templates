@@ -247,8 +247,9 @@ typedef struct
 
 typedef struct
 {
-    PersonasID ID;
-} TExist <name = "EXIST.TBL Equivalent">;
+    BattleSkill SkillOriginal <name = "Original Skill">;
+	BattleSkill SkillMutation <name = "Mutation Skill">;
+} TMagicianCard <name = "Magician Arcana Card Mutation">;
 
 typedef struct
 {
@@ -1125,7 +1126,7 @@ enum TableSegmentType
     TableSegmentType_Persona_SkillSets,
 	TableSegmentType_Persona_PartyMembers,
     TableSegmentType_Persona_LevelUpThresholds,
-	TableSegmentType_Persona_Exist,
+	TableSegmentType_Persona_MagicianCard,
     TableSegmentType_Persona_Fusion,
     TableSegmentType_Player_LevelUpThresholds,
     TableSegmentType_Elsai_Segment0,
@@ -1196,8 +1197,8 @@ typedef struct( TableSegmentType _type )
             TPersonaLevelUpThresholds LevelUpThresholds[ Size / sizeof( TPersonaLevelUpThresholds ) ];
             break;
 			
-		case TableSegmentType_Persona_Exist:
-            TExist Exist[ Size / sizeof( TExist ) ];
+		case TableSegmentType_Persona_MagicianCard:
+            TMagicianCard MagicianArcanaCard[ Size / sizeof( TMagicianCard ) ];
             break;
 
         case TableSegmentType_Persona_Fusion:
@@ -1410,7 +1411,7 @@ typedef struct( string tableName, u32 endOffset )
                 case 1: segmentType = TableSegmentType_Persona_SkillSets; break;
 				case 2: segmentType = TableSegmentType_Persona_PartyMembers; break;
                 case 3: segmentType = TableSegmentType_Persona_LevelUpThresholds; break;
-				case 4: segmentType = TableSegmentType_Persona_Exist; break;
+				case 4: segmentType = TableSegmentType_Persona_MagicianCard; break;
                 case 5: segmentType = TableSegmentType_Persona_Fusion; break;
             }
         }
