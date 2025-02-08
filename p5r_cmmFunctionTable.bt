@@ -2,7 +2,7 @@
 // Includes
 //---------------------------------------------
 #include "common/include.h"
-#include "p5_enums_ftd.bt"
+#include "Persona_5R_ENUMS_FTD.bt"
 
 BigEndian();
 FSeek(0x20);
@@ -23,7 +23,9 @@ typedef struct
     ConfidantFunction_Type FunctionType <name = "Function Type">;
     short Rank <name = "Unlocks at Rank:">;
     ConfidantFunction Function <name = "Confidant Function">;
-    short Unknown <name = "Unknown">;
+    short field06;
+	short field08 <name = "Flag?">;
+	short field0A;
 } Table_cmmFunction <name = "Confidant Functions">;
 
 SetBackColor( 0x880000 );
@@ -35,7 +37,7 @@ Initialinfo Initialinfo1;
 
 typedef struct {
     Table_cmmFunction ConfidantSkill[10];
-} ConfidantFunction1 <size=0x50, optimize=false>;
+} ConfidantFunction1 <size=0x78, optimize=false>;
 
 local uint i = 0;
 for ( i = 0; i < ( 3040 ) / 80; i++ )

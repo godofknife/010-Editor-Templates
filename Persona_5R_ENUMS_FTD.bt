@@ -305,6 +305,7 @@ enum<short> ConfidantFunction
     SecondAwakening_Ryuji = 237,
     BLANKFUNC238 = 238,
     SecondAwakening_Futaba = 239,
+	ThirdAwakening_Morgana = 241,
     };
 
 enum<short> ConfidantFunction_OrganizedByArcana
