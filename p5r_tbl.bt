@@ -90,7 +90,7 @@ typedef struct
     u8 bit25 : 1;
     u8 bit26 : 1;
     u8 bit27 : 1;
-    u8 bit28 : 1;
+    u8 DownInefective2 : 1 <name="Prevent Knockdown", comment = "Allow benefit of weak,crit,hit but not the one more or knockdown">;
     u8 hidingstatus2 : 1 <name = "Hiding the status", comment = "Enemies status can be hidden similar to boss. This is used on Boss">;
     u8 infiniteSP : 1 <name = "Infinite SP", comment = "Enemies will be able to use any skill regardless of SP pool">;
     u8 bit31 : 1;
