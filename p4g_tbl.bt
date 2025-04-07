@@ -95,7 +95,7 @@ typedef struct
 
 typedef struct
 {
-    u8 bit0 : 1;
+    u8 bit0 : 1 <name = "Allow Escape?">;
     u8 bit1 : 1;
     u8 bit2 : 1;
     u8 bit3 : 1;
