@@ -536,15 +536,15 @@ typedef struct TLootEntry
     // makes the game more unstable. If all entries reference the same
     // item, game crashes upon loading dungeon. Best to limit to one entry
     // per unique item
-    ushort id<name="Item ID">;          
+    Items id<name="Item ID">;          
     // if value is 1, the chest is locked
     // otherwise no lock is applied
-    ushort u3<name="Lock Value">;
+    lockchest u3<name="Lock Value">;
     // Needs to be set to 1 to be recognized as a valid loot possibility
     ubyte valid<name="Valid Flag">;
     // 0 for standard red chest
     // 1 for big shiny gold chest
-    ubyte chestType<name="Chest Type">;
+    chesttypedun chestType<name="Chest Type">;
     uint unused;
 };
 

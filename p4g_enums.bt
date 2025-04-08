@@ -4331,3 +4331,15 @@ enum<ushort> BossParameter
 	UnknownParameter5 = 20,
 	InfiniteHP = 22,
 };
+
+enum<byte> chesttypedun
+{
+	Normalchest = 0,
+	Goldchest = 1,
+};
+
+enum<short> lockchest
+{
+	Unlocked = 0,
+	Locked = 1,
+};
