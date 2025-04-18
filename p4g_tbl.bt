@@ -48,7 +48,7 @@ typedef struct
     u8 bit6 : 1;
     u8 bit7 : 1;
     u8 bit8 : 1;
-    u8 bit9 : 1;
+    u8 bit9 : 1 <name = "Disable Critical?">;
     u8 bit10 : 1;
     u8 bit11 : 1 <name = "Gain Two Turns?">;
     u8 bit12 : 1;
