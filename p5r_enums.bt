@@ -7425,3 +7425,11 @@ enum<ubyte> ItemID
 	AmateurCurry = 509,
 	Tonfa = 510,
 };
+
+enum<u8> ShadowPersonality
+{
+	Timid = 0,
+	Irritable = 1,
+	Upbeat = 2,
+	Gloomy = 3,
+};
