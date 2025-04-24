@@ -600,16 +600,16 @@ typedef struct
 
 typedef struct
 {
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
-    u16 Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
+    BattleUnit Unknown;
 } TUnitUnknown <name = "Unknown">;
 
 
