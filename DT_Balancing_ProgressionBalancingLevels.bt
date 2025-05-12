@@ -1,0 +1,30 @@
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "common/include.h"
+
+typedef struct
+{
+  SetRandomBackColor();
+  u32 field00;
+  u32 Level;
+  u16 field08;
+  double ChromaLoot <name = "Chroma Drop">;
+} ChromaDropLoot <optimize=false>;
+
+SetBackColor( 0x880000 );
+
+ushort PointerSegmentSize <hidden=true>;
+ushort ValueCount <hidden=true>;
+
+FSeek(0x210);
+
+// Compute the number of complete 14-byte entries available
+local int dataSize = FileSize() - FTell();
+local int numEntries = dataSize / 0x12;
+
+local uint i = 0;
+local int j = 0;
+
+u32 TotalData;
+ChromaDropLoot ChromaDropLootList[numEntries];

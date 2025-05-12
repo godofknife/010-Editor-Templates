@@ -1,0 +1,68 @@
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "common/include.h"
+
+typedef struct
+{
+  SetRandomBackColor();
+  byte Unknown[10];
+  double TimeFrameDuration <name = "Time Frame Duration">;
+} DodgeEasyImmuneDuration <optimize=false>;
+
+typedef struct
+{
+  SetRandomBackColor();
+  byte Unknown[10];
+  double TimeFrameDuration <name = "Time Frame Duration">;
+} DodgeNormalImmuneDuration <optimize=false>;
+
+typedef struct
+{
+  SetRandomBackColor();
+  byte Unknown[10];
+  double TimeFrameDuration <name = "Time Frame Duration">;
+} DodgeHardImmuneDuration <optimize=false>;
+
+typedef struct
+{
+  SetRandomBackColor();
+  byte Unknown[10];
+  double TimeFrameDuration <name = "Time Frame Duration">;
+} ParryEasyImmuneDuration <optimize=false>;
+
+typedef struct
+{
+  SetRandomBackColor();
+  byte Unknown[10];
+  double TimeFrameDuration <name = "Time Frame Duration">;
+} ParryNormalImmuneDuration <optimize=false>;
+
+typedef struct
+{
+  SetRandomBackColor();
+  byte Unknown[10];
+  double TimeFrameDuration <name = "Time Frame Duration">;
+} ParryHardImmuneDuration <optimize=false>;
+
+SetBackColor( 0x880000 );
+
+ushort PointerSegmentSize <hidden=true>;
+ushort ValueCount <hidden=true>;
+
+FSeek(0x2E2);
+
+// Compute the number of complete 14-byte entries available
+local int dataSize = FileSize() - FTell();
+local int numEntries = dataSize / 0x12;
+
+local uint i = 0;
+local int j = 0;
+
+u32 TotalData;
+DodgeEasyImmuneDuration DodgeEasyImmuneDurationList;
+DodgeNormalImmuneDuration DodgeNormalImmuneDurationList;
+DodgeHardImmuneDuration DodgeHardImmuneDurationList;
+ParryEasyImmuneDuration ParryEasyImmuneDurationList;
+ParryNormalImmuneDuration ParryNormalImmuneDurationList;
+ParryHardImmuneDuration ParryHardImmuneDurationList;

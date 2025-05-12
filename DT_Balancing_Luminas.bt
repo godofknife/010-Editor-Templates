@@ -1,0 +1,62 @@
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "common/include.h"
+
+typedef struct
+{
+  SetRandomBackColor();
+  u16 field00 <name = "Lumina ID">;
+  u32 field02;
+  u32 field06;
+  double multipliervalue <name = "Multiplier Value">;
+} LuminaPassive <optimize=false>;
+
+typedef struct
+{
+  u16 LuminaID <name = "Lumina ID">;
+  ubyte field02;
+u32 MultiplierValue <name = "Multiplier Value">;
+u32 field07;
+} ZeroLuminaMultiplier <optimize=false>;
+
+SetBackColor( 0x880000 );
+
+ushort PointerSegmentSize <hidden=true>;
+ushort ValueCount <hidden=true>;
+
+FSeek(0x4862);
+
+// Compute the number of complete 14-byte entries available
+local int dataSize = FileSize() - FTell();
+local int numEntries = dataSize / 0x12;
+
+local uint i = 0;
+local int j = 0;
+
+u32 TotalData;
+
+for ( i = 0; i <= 71; i++ )
+{
+  SetBackColor( ( i % 2 ) * 0x440000 + 0x880000 );
+  LuminaPassive LuminaPassiveList<read="use ID - 71">;
+  j++;
+}
+
+ZeroLuminaMultiplier ZeroLuminaMultiplierList;
+
+for ( i = 72; i <= 212; i++ )
+{
+  SetBackColor( ( i % 2 ) * 0x440000 + 0x880000 );
+  LuminaPassive LuminaPassiveList<read="use ID - 212">;
+  j++;
+}
+
+ZeroLuminaMultiplier ZeroLuminaMultiplierList;
+
+for ( i = 213; i <= 381; i++ )
+{
+  SetBackColor( ( i % 2 ) * 0x440000 + 0x880000 );
+  LuminaPassive LuminaPassiveList<read="use ID - 381">;
+  j++;
+}

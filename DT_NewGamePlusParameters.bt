@@ -1,0 +1,35 @@
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "common/include.h"
+
+typedef struct
+{
+  SetRandomBackColor();
+  u32 field00;
+  u32 field04;
+  u16 field08;
+  u32 FinishedGameCount <name="Finished Game Count">;
+  u32 AdditionalLevelEncounter <name="Additional Level Encounter">;
+} NewGamePlusParam <optimize=false>;
+
+SetBackColor( 0x880000 );
+
+ushort PointerSegmentSize <hidden=true>;
+ushort ValueCount <hidden=true>;
+
+FSeek(0x226);
+
+// Compute the number of complete 14-byte entries available
+local int dataSize = FileSize() - FTell();
+local int numEntries = dataSize / 0x12;
+
+local uint i = 0;
+local int j = 0;
+
+u32 TotalData;
+NewGamePlusParam NewGamePlusParamList<read="Finished Game Count: 1">;
+NewGamePlusParam NewGamePlusParamList<read="Finished Game Count: 2">;
+NewGamePlusParam NewGamePlusParamList<read="Finished Game Count: 3">;
+NewGamePlusParam NewGamePlusParamList<read="Finished Game Count: 4">;
+NewGamePlusParam NewGamePlusParamList<read="Finished Game Count: 5">;
