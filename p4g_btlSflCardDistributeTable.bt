@@ -24,7 +24,15 @@ Initialinfo Initialinfo1;
 
 typedef struct {
 	FSeek(0x8);
-	Shuffletable List[( FileSize() / 292 )];
+	Shuffletable YukikoCastle;
+	Shuffletable SteamyBathhouse;
+	Shuffletable MarukyuStriptease;
+	Shuffletable VoidGame;
+	Shuffletable SecretLaboratory;
+	Shuffletable Heaven;
+	Shuffletable MagatsuInaba;
+	Shuffletable HollowForest;
+	Shuffletable YomotsuHirasaka;
 } TableShuffle <optimize=false>;
-TableShuffle ShuffleTable1;
+TableShuffle CardDistribute;
 

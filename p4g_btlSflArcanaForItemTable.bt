@@ -12,8 +12,14 @@ typedef struct
 
 typedef struct
 {
-  ubyte Unknown [160];
-} Shuffletable <size=0xA0, optimize=false>;
+  Items SkillCard <name="Skill Card ID">;
+  ushort ChanceDistributed <name="Chance Get", comment="If there are multiple skill cards, make sure they add final count to 100%">;
+} SwordCardItem <size=0x4, optimize=false>;
+
+typedef struct
+{
+  SwordCardItem List[40];
+} SwordCardItemList <size=0xA0, optimize=false>;
 
 SetBackColor( 0x880000 );
 
@@ -24,7 +30,16 @@ Initialinfo Initialinfo1;
 
 typedef struct {
 	FSeek(0x8);
-	Shuffletable List[( FileSize() / 160 )];
+	SwordCardItemList SwordRank1;
+	SwordCardItemList SwordRank2;
+	SwordCardItemList SwordRank3;
+	SwordCardItemList SwordRank4;
+	SwordCardItemList SwordRank5;
+	SwordCardItemList SwordRank6;
+	SwordCardItemList SwordRank7;
+	SwordCardItemList SwordRank8;
+	SwordCardItemList SwordRank9;
+	SwordCardItemList SwordRank10;
 } TableShuffle <optimize=false>;
-TableShuffle ShuffleTable1;
+TableShuffle SwordRankList;
 

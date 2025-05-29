@@ -12,15 +12,15 @@ typedef struct
 
 typedef struct
 {
-  ushort field00;
+  ushort HowmanyMore <name="How many More added">;
   ushort field02;
-  ushort field04;
-  ushort field08;
-  ushort field0A;
+  ArcanaIDforShufflingCardEffect CardEffect <name="Card Effect Happening">;
+  ArcanaIDforShuffling ArcanaEffect <name="What Arcana Effect?">;
+  ArcanaIDforStatusEffect WhatStatus <name="Which Status is affected?">;
   ushort field0C;
-  ushort field0E;
+  ushort HowManyStatusIncrease <name="How many Status increased?">;
   ushort field10;
-  ushort field12;
+  ArcanaIDforShufflingEffect ShiningEffect <name="Is it Rare?">;
   ushort field14;
 } Shuffletable <size=0x14, optimize=false>;
 
@@ -33,7 +33,28 @@ Initialinfo Initialinfo1;
 
 typedef struct {
 	FSeek(0x8);
-	Shuffletable List[( (FileSize() - 8 )/ 20 )];
+	Shuffletable Fool;
+	Shuffletable Magician;
+	Shuffletable Priestess;
+	Shuffletable Empress;
+	Shuffletable Emperor;
+	Shuffletable Hierophant;
+	Shuffletable Lovers;
+	Shuffletable Chariot;
+	Shuffletable Justice;
+	Shuffletable Hermit;
+	Shuffletable Fortune;
+	Shuffletable Strength;
+	Shuffletable HangedMan;
+	Shuffletable Death;
+	Shuffletable Temperance;
+	Shuffletable Devil;
+	Shuffletable Tower;
+	Shuffletable Star;
+	Shuffletable Moon;
+	Shuffletable Sun;
+	Shuffletable Judgement;
+	Shuffletable Aeon;
 } TableShuffle <optimize=false>;
-TableShuffle ShuffleTable1;
+TableShuffle ArcanaDataTable;
 

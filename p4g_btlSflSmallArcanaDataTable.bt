@@ -12,11 +12,11 @@ typedef struct
 
 typedef struct
 {
-  ushort field00;
+  MinorArcanaID WhatCard <name="What Minor Arcana Card?">;
   ushort field02;
-  ushort field04;
+  ushort HPRestored<name="HP restored/Effect Rank?">;
   ushort field08;
-  ushort field0A;
+  ushort SPRestored <name="SP restored">;
   ushort field0C;
 } Shuffletable <size=0xC, optimize=false>;
 
@@ -29,7 +29,46 @@ Initialinfo Initialinfo1;
 
 typedef struct {
 	FSeek(0x8);
-	Shuffletable List[( (FileSize() - 8 )/ 12 )-2];
+	Shuffletable SwordRank1;
+	Shuffletable SwordRank2;
+	Shuffletable SwordRank3;
+	Shuffletable SwordRank4;
+	Shuffletable SwordRank5;
+	Shuffletable SwordRank6;
+	Shuffletable SwordRank7;
+	Shuffletable SwordRank8;
+	Shuffletable SwordRank9;
+	Shuffletable SwordRank10;
+	Shuffletable CoinRank1;
+	Shuffletable CoinRank2;
+	Shuffletable CoinRank3;
+	Shuffletable CoinRank4;
+	Shuffletable CoinRank5;
+	Shuffletable CoinRank6;
+	Shuffletable CoinRank7;
+	Shuffletable CoinRank8;
+	Shuffletable CoinRank9;
+	Shuffletable CoinRank10;
+	Shuffletable WandRank1;
+	Shuffletable WandRank2;
+	Shuffletable WandRank3;
+	Shuffletable WandRank4;
+	Shuffletable WandRank5;
+	Shuffletable WandRank6;
+	Shuffletable WandRank7;
+	Shuffletable WandRank8;
+	Shuffletable WandRank9;
+	Shuffletable WandRank10;
+	Shuffletable CupRank1;
+	Shuffletable CupRank2;
+	Shuffletable CupRank3;
+	Shuffletable CupRank4;
+	Shuffletable CupRank5;
+	Shuffletable CupRank6;
+	Shuffletable CupRank7;
+	Shuffletable CupRank8;
+	Shuffletable CupRank9;
+	Shuffletable CupRank10;
 } TableShuffle <optimize=false>;
-TableShuffle ShuffleTable1;
+TableShuffle MinorArcanaCardList;
 

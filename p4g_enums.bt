@@ -4343,3 +4343,52 @@ enum<short> lockchest
 	Unlocked = 0,
 	Locked = 1,
 };
+
+enum<ushort> ArcanaIDforShuffling
+{
+	Nothing = 0,
+	StatusIncrease = 3,
+	OneChestKey = 5,
+	EXPReduction = 6,
+	MoneyReduction = 7,
+	PersonaInstaLvlup = 8,
+	UpgradeSkill = 9,
+	NoItemAfterBattle = 10,
+	ShadowBlind = 11,
+	NoEffectAtAll = 12,
+    Gives4More = 13,
+};
+
+enum<ushort> ArcanaIDforShufflingEffect
+{
+	NotRare = 0,
+    Rare = 1,
+};
+
+enum<ushort> ArcanaIDforShufflingCardEffect
+{
+	NoShuffleEffect = 0,
+	RemoveUnDrawnCard = 1,
+	RandomShufflePersonaChange = 2,
+	RandomShuffle = 3,
+    AllShuffled = 5,
+	EndShuffle = 9,
+	RemoveDrawnCard = 10,
+};
+
+enum<ushort> ArcanaIDforStatusEffect
+{
+	Strength1 = 0,
+	Magic = 1,
+	EnduranceOR50percentReduced = 2,
+	Agility = 3,
+	Luck = 4,
+};
+
+enum<ushort> MinorArcanaID
+{
+	SuitofSwords = 0,
+	SuitsofWands = 1,
+	SuitsofCoins = 2,
+	SuitofCups = 3,
+};

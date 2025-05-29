@@ -35,5 +35,5 @@ typedef struct {
 	Shuffletable List8<name="Hollow Forest">;
 	Shuffletable List9<name="Yomotsu Hirasaka">;
 } TableShuffle <optimize=false>;
-TableShuffle ShuffleTable1;
+TableShuffle DifficultyTable;
 
