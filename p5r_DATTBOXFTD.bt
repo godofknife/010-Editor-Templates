@@ -1,0 +1,48 @@
+//---------------------------------------------
+// Includes
+//---------------------------------------------
+#include "common/include.h"
+#include "p5_enums_ftd.bt"
+
+BigEndian();
+
+typedef struct
+{
+  SetRandomBackColor();
+  u32 field00;
+  u32 DataSize;
+  u32 EntryCount;
+  u16 EntryType;
+  u16 field0E;
+} TableInfo <optimize=false>;
+
+typedef struct
+{
+  SetRandomBackColor();
+  ItemizationType Type : 4 <name = "Chest Item Category ID">;
+  ushort Item : 12 <name = "Chest Item ID">;
+  
+  // Temporarily switch to little-endian for this field
+  local int currentEndian = IsBigEndian();
+  if (currentEndian) LittleEndian();
+  u16 ChestQuantity;
+  if (currentEndian) BigEndian();
+  
+} ChestItem <optimize=false>;
+
+SetBackColor( 0x880000 );
+
+ushort PointerSegmentSize <hidden=true>;
+ushort ValueCount <hidden=true>;
+
+FSeek(0x20);
+
+// Compute the number of complete 14-byte entries available
+local int dataSize = FileSize() - FTell();
+local int numEntries = dataSize / 0x4;
+
+local uint i = 0;
+local int j = 0;
+
+TableInfo TableInfoList;
+ChestItem ChestItemList[751];
