@@ -12,8 +12,19 @@ typedef struct
 
 typedef struct
 {
-  ubyte Unknown [292];
+  uint CardDeck[63];
+  uint HowManyCards[10] <name="How Many Cards on Deck">;
 } Shuffletable <size=0x124, optimize=false>;
+
+typedef struct
+{
+  uint CardType;
+} CardDeck <size=0x4, optimize=false>;
+
+typedef struct
+{
+  uint AmountCards;
+} HowManyCards <size=0x4, optimize=false>;
 
 SetBackColor( 0x880000 );
 
