@@ -98,37 +98,37 @@ typedef struct
 
 typedef struct
 {
-    u8 bit0 : 1;
-    u8 bit1 : 1;
-    u8 bit2 : 1;
+    u8 bit30 : 1;
+    u8 bit29 : 1;
+    u8 bit28 : 1;
     u8 FirstTurnEnemyNoAmbus : 1 <name = "Enemy First Turn No Ambush", comment = "This is only with CBT mod. This makes custom enemy always gets first turn when initiating battle">;
     u8 EnableEventBattleACBAWB : 1 <name = "Enable Event Battle ACB/AWB", comment = "This is only with CBT mod. This makes custom enemy to use event voiceline pack">;
     u8 EnableIntroBCD : 1 <name = "Enable Intro BCD", comment = "This is only with CBT mod. This makes custom enemy to use Intro BCD">;
     u8 CustomBossBattle : 1 <name = "Enable Custom Boss Battle", comment = "This is only with CBT mod. This makes the encounter set becomes custom boss encounter">;
-    u8 bit7 : 1;
-    u8 bit8 : 1;
-    u8 bit9 : 1;
-    u8 bit10 : 1;
-    u8 bit11 : 1;
+    u8 bit23 : 1;
+    u8 bit22 : 1;
+    u8 bit21 : 1;
+    u8 bit20 : 1;
+    u8 bit19 : 1;
     u8 NonNegotiable : 1 <name = "No Negotiation", comment = "If this turns on, every enemy in that battle can't be negotiated">;
-    u8 bit13 : 1;
-    u8 bit14 : 1;
-    u8 bit15 : 1;
+    u8 bit18 : 1;
+    u8 bit17 : 1;
+    u8 bit16 : 1;
     u8 PreventKnockdown : 1 <name = "Prevent Knockdown", comment = "Enemy can never get knockdown 100% by Critical but not WEAK">;
     u8 PositionHack : 1 <name = "Position Hack", comment = "Triggers Position Hack when you enter the battle">;
     u8 NoHoldUp : 1 <name = "No Hold Up", comment = "Hold up after downing all enemies will not trigger">;
     u8 shadownotdisappearinbattle : 1 <name = "Not Disappear in Battle", comment = "When the shadow HP reaches 0, it will not disperse if this is turned ON in ENCOUNT.TBL Flag">;
     u8 BulletHailonstart : 1 <name = "Bullet Hail on Start", comment = "When you start the battle, you will always start with Bullet Hail">;
     u8 NoNavigator : 1 <name = "No Navigator in Battle", comment = "This disables Navigator in battle">;
-    u8 bit22 : 1;
+    u8 bit9 : 1;
     u8 loadbattlescript : 1 <name = "Battle script load", comment = "This will load the battle script for this particular battle (CAUTION: Will cause freeze if the battle script file is not exist)">;
-    u8 bit24 : 1;
-    u8 bit25 : 1;
+    u8 bit7 : 1;
+    u8 bit6 : 1;
     u8 loadbattlescript2 : 1 <name = "BFL Battle script load", comment = "This will load the battle script including Battle Formation for this particular battle (CAUTION: Will cause freeze if the battle script file is not exist)">;
     u8 EnemyFirstAct : 1 <name = "Enemy First Act", comment = "This will cause all enemies to act first turn as if party got ambushed. (Whether it must be scripted or random encounter is still unknown.">;
     u8 NoCritical : 1 <name = "No Critical", comment = "Even if you have a skill with 100% Critical, it will never trigger critical if this is ON">;
-    u8 bit29 : 1;
-    u8 bit30 : 1;
+    u8 bit2 : 1;
+    u8 bit1 : 1;
     u8 NoEscape : 1 <name = "No Escape", comment = "This will make your battle unescapable if it is ON">;
 } b32;
 
