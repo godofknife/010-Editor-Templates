@@ -717,86 +717,86 @@ typedef struct()
     u8 Unknown <name = "Unknown", comment = "Technically part of ailment list as it's a uint, but this byte is unused">;
     struct
         {
-            bool Counter : 1 <name = "Counter?", comment = "it may be possibly counter mode exclusive to Yaldabaoth">;
-            bool Mouse : 1 <name = "Mouse", comment = "Only affects the Phantom Thieves">;
-            bool Gluttony : 1 <name = "Gluttony?", comment = "it may be possibly Gluttony ailment exclusive to Yaldabaoth">;
-            bool KnockDown : 1 <name = "Knock Down">;
-            bool Unconscious : 1 <name = "Unconscious">;
-            bool WeakToAllElements : 1 <name = "Weak to all Elements", comment = "Shock,Knockdown,Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-            bool Jealousy : 1 <name = "Jealousy">;
-            bool Wrath : 1 <name = "Wrath">;
+            bool Counter : 1 <name = "Counter? Flag 23", comment = "it may be possibly counter mode exclusive to Yaldabaoth">;
+            bool Mouse : 1 <name = "Mouse Flag 22", comment = "Only affects the Phantom Thieves">;
+            bool Gluttony : 1 <name = "Gluttony? Flag 21", comment = "it may be possibly Gluttony ailment exclusive to Yaldabaoth">;
+            bool KnockDown : 1 <name = "Knock Down Flag 20">;
+            bool Unconscious : 1 <name = "Unconscious Flag 19">;
+            bool WeakToAllElements : 1 <name = "Weak to all Elements Flag 18", comment = "Shock,Knockdown,Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Jealousy : 1 <name = "Jealousy Flag 17">;
+            bool Wrath : 1 <name = "Wrath Flag 16">;
         } Effect1 <name = "Ailment List 1">;
 
     struct
         {
-            bool Lust : 1 <name = "Lust", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
-            bool Panic : 1 <name = "Panic", comment = "Will cause Shadows to run away">;
-            bool Berserk : 1 <name = "Berserk", comment = "Visual effect only. Also, Lust, Rage, Berserk can be combined into 1 single ailment">;
-            bool Desparation : 1 <name = "Desparation", comment = "Attack up, Defense down; not affected by other buffs/debuffs">;
-            bool Brainwash : 1 <name = "Brainwash">;
-            bool Despair : 1 <name = "Despair", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-            bool Rage : 1 <name = "Rage", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
-            bool Sleep : 1 <name = "Sleep", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Lust : 1 <name = "Lust Flag 15", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
+            bool Panic : 1 <name = "Panic Flag 14", comment = "Will cause Shadows to run away">;
+            bool Berserk : 1 <name = "Berserk Flag 13", comment = "Visual effect only. Also, Lust, Rage, Berserk can be combined into 1 single ailment">;
+            bool Desparation : 1 <name = "Desparation Flag 12", comment = "Attack up, Defense down; not affected by other buffs/debuffs">;
+            bool Brainwash : 1 <name = "Brainwash Flag 11">;
+            bool Despair : 1 <name = "Despair Flag 10", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Rage : 1 <name = "Rage Flag 9", comment = "Lust, Rage, Berserk can be combined into 1 single ailment">;
+            bool Sleep : 1 <name = "Sleep Flag 8", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
         } Effect2 <name = "Ailment List 2">;
 
     struct
         {
-            bool Hunger : 1 <name = "Hunger", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-            bool Forget : 1 <name = "Forget", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-            bool Fear : 1 <name = "Fear", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-            bool Confuse : 1 <name = "Confuse", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
-            bool Dizzy : 1 <name = "Dizzy", comment = "Dizzy, Weakness and Knockdown can be combined into 1 single ailment">;
-            bool Shock : 1 <name = "Shock", comment = "Shock, Weakness and Knockdown can be combined into 1 single ailment">;
-            bool Freeze : 1 <name = "Freeze", comment = "Burn and Freeze can be combined into 1 single ailment">;
-            bool Burn : 1 <name = "Burn", comment = "Burn and Freeze can be combined into 1 single ailment">;
+            bool Hunger : 1 <name = "Hunger Flag 7", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Forget : 1 <name = "Forget Flag 6", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Fear : 1 <name = "Fear Flag 5", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Confuse : 1 <name = "Confuse Flag 4", comment = "Sleep,Hunger,Forget,Fear,Confuse,Weak,Despair can be combined into 1 single ailment">;
+            bool Dizzy : 1 <name = "Dizzy Flag 3", comment = "Dizzy, Weakness and Knockdown can be combined into 1 single ailment">;
+            bool Shock : 1 <name = "Shock Flag 2", comment = "Shock, Weakness and Knockdown can be combined into 1 single ailment">;
+            bool Freeze : 1 <name = "Freeze Flag 1", comment = "Burn and Freeze can be combined into 1 single ailment">;
+            bool Burn : 1 <name = "Burn Flag 0", comment = "Burn and Freeze can be combined into 1 single ailment">;
         } Effect3 <name = "Ailment List 3">;
 
     struct
         {
-            bool CoverPsy : 1 <name = "Cover Psy Weakness", comment = "Changes innate Psy weakness to neutral">;
-            bool CoverNuke : 1 <name = "Cover Nuke Weakness", comment = "Changes innate Nuke weakness to neutral">;
-            bool CoverWind : 1 <name = "Cover Wind Weakness", comment = "Changes innate Wind weakness to neutral">;
-            bool CoverElec : 1 <name = "Cover Electric Weakness", comment = "Changes innate Electric weakness to neutral">;
-            bool CoverIce : 1 <name = "Cover Ice Weakness", comment = "Changes innate Ice weakness to neutral">;
-            bool CoverFire : 1 <name = "Cover Fire Weakness", comment = "Changes innate Fire weakness to neutral">;
-            bool InstakillShield : 1 <name = "Instakill Shield", comment = "Blocks one instakill attack">;
-            bool BreakMagicShield : 1 <name = "Break Magic Shield", comment = "Breaks magic-reflecting shields like Makarakarn">;
+            bool CoverPsy : 1 <name = "Cover Psy Weakness Flag 63", comment = "Changes innate Psy weakness to neutral">;
+            bool CoverNuke : 1 <name = "Cover Nuke Weakness Flag 62", comment = "Changes innate Nuke weakness to neutral">;
+            bool CoverWind : 1 <name = "Cover Wind Weakness Flag 61", comment = "Changes innate Wind weakness to neutral">;
+            bool CoverElec : 1 <name = "Cover Electric Weakness Flag 60", comment = "Changes innate Electric weakness to neutral">;
+            bool CoverIce : 1 <name = "Cover Ice Weakness Flag 59", comment = "Changes innate Ice weakness to neutral">;
+            bool CoverFire : 1 <name = "Cover Fire Weakness Flag 58", comment = "Changes innate Fire weakness to neutral">;
+            bool InstakillShield : 1 <name = "Instakill Shield Flag 57", comment = "Blocks one instakill attack">;
+            bool BreakMagicShield : 1 <name = "Break Magic Shield Flag 56", comment = "Breaks magic-reflecting shields like Makarakarn">;
         } Effect4 <name = "Effect List 1">;
 
     struct
         {
-            bool BreakPhysicalShield : 1 <name = "Break Physical Shield", comment = "Breaks physical-reflecting shields like Tetrakarn">;
-            bool AilmentSusceptibility : 1 <name = "Ailment Susceptibility", comment = "increases the likelihood of recieving effects from Effect Lists 2 and 3">;
-            bool NegatePsyResist : 1 <name = "Negate Psy Resistance", comment = "Changes innate Psy resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
-            bool NegateNukeResist : 1 <name = "Negate Nuke Resistance", comment = "Changes innate Nuke resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
-            bool NegateWindResist : 1 <name = "Negate Wind Resistance", comment = "Changes innate Wind resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
-            bool NegateElecResist : 1 <name = "Negate Electric Resistance", comment = "Changes innate Electric resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
-            bool NegateIceResist : 1 <name = "Negate Ice Resistance", comment = "Changes innate Ice resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
-            bool NegateFireResist : 1 <name = "Negate Fire Resistance", comment = "Changes innate Fire resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool BreakPhysicalShield : 1 <name = "Break Physical Shield Flag 55", comment = "Breaks physical-reflecting shields like Tetrakarn">;
+            bool AilmentSusceptibility : 1 <name = "Ailment Susceptibility Flag 54", comment = "increases the likelihood of recieving effects from Effect Lists 2 and 3">;
+            bool NegatePsyResist : 1 <name = "Negate Psy Resistance Flag 53", comment = "Changes innate Psy resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateNukeResist : 1 <name = "Negate Nuke Resistance Flag 52", comment = "Changes innate Nuke resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateWindResist : 1 <name = "Negate Wind Resistance Flag 51", comment = "Changes innate Wind resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateElecResist : 1 <name = "Negate Electric Resistance Flag 50", comment = "Changes innate Electric resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateIceResist : 1 <name = "Negate Ice Resistance Flag 49", comment = "Changes innate Ice resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
+            bool NegateFireResist : 1 <name = "Negate Fire Resistance Flag 48", comment = "Changes innate Fire resistance to neutral; does not override Cover Weakness effects from Effect List 4">;
         } Effect5 <name = "Effect List 2">;
 
     struct
         {
-            bool MagicShield : 1 <name = "Magic Shield", comment = "Reflects the next magic attack received">;
-            bool PhysicalShield : 1 <name = "Physical Shield", comment = "Reflects the next physical attack received">;
-            bool CritWayUp : 1 <name = "Critical Chance Way Up">;
-            bool CritUp : 1 <name = "Critical Chance Up">;
-            bool RemoveDebuffs : 1 <name = "Remove Debuffs", comment = "Removes stat-lowering debuffs from the Buff/Debuff List">;
-            bool RemoveBuffs : 1 <name = "Remove Buffs", comment = "Removes stat-raising buffs from the Buff/Debuff List">;
-            bool Concentrate : 1 <name = "Concentrate", comment = "Next Magic-based attack deals 2.5x damage">;
-            bool Charge : 1 <name = "Charge", comment = "Next Strength-based attack deals 2.5x damage">;
+            bool MagicShield : 1 <name = "Magic Shield Flag 47", comment = "Reflects the next magic attack received">;
+            bool PhysicalShield : 1 <name = "Physical Shield Flag 46", comment = "Reflects the next physical attack received">;
+            bool CritWayUp : 1 <name = "Critical Chance Way Up Flag 45">;
+            bool CritUp : 1 <name = "Critical Chance Up Flag 44">;
+            bool RemoveDebuffs : 1 <name = "Remove Debuffs Flag 43", comment = "Removes stat-lowering debuffs from the Buff/Debuff List">;
+            bool RemoveBuffs : 1 <name = "Remove Buffs Flag 42", comment = "Removes stat-raising buffs from the Buff/Debuff List">;
+            bool Concentrate : 1 <name = "Concentrate Flag 41", comment = "Next Magic-based attack deals 2.5x damage">;
+            bool Charge : 1 <name = "Charge Flag 40", comment = "Next Strength-based attack deals 2.5x damage">;
         } Effect6 <name = "Effect List 3">;
 
     struct
         {
-            bool AccuracyDown : 1 <name = "Accuracy Down">;
-            bool AccuracyUp : 1 <name = "Accuracy Up">;
-            bool DefenseDown : 1 <name = "Defense Down">;
-            bool DefenseUp : 1 <name = "Defense Up">;
-            bool EvasionDown : 1 <name = "Evasion Down">;
-            bool EvasionUp : 1 <name = "Evasion Up">;
-            bool AttackDown : 1 <name = "Attack Down">;
-            bool AttackUp : 1 <name = "Attack Up">;
+            bool AccuracyDown : 1 <name = "Accuracy Down Flag 39">;
+            bool AccuracyUp : 1 <name = "Accuracy Up Flag 38">;
+            bool DefenseDown : 1 <name = "Defense Down Flag 37">;
+            bool DefenseUp : 1 <name = "Defense Up Flag 36">;
+            bool EvasionDown : 1 <name = "Evasion Down Flag 35">;
+            bool EvasionUp : 1 <name = "Evasion Up Flag 34">;
+            bool AttackDown : 1 <name = "Attack Down Flag 33">;
+            bool AttackUp : 1 <name = "Attack Up Flag 32">;
         } BuffDebuff <name = "Buffs and Debuffs">;
 
     u16 BattleMessage <name = "Battle Message", comment = "This is only working with CBT mod. This will allow you use to battle message from DatJyokoHelp file">;
@@ -1123,7 +1123,7 @@ typedef struct
     TVisual_AttackFrameDataPersona FrameData;
 	u8 Alpha<name="Model Alpha">;
 	u8 AlignmentReserve;
-} TVisual_PersonaVisualVariablesA <name = "Persona Visual Variables A">;
+} TVisual_PersonaVisualVariablesA <name = "Persona Visual Variables A Back View">;
 
 typedef struct
 {
@@ -1143,7 +1143,7 @@ typedef struct
 typedef struct
 {
     u8 Unknown[ 576 ];
-} TVisual_PersonaVisualVariablesB <name = "Persona Visual Variables B">;
+} TVisual_PersonaVisualVariablesB <name = "Persona Visual Variables B Front View">;
 
 //---------------------------------------------
 // Parse file structure
