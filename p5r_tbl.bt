@@ -12,7 +12,7 @@
 //   1.0 - Initial release
 //------------------------------------------------
 
-
+#include "p5r_UnitTBL.bt"
 //---------------------------------------------
 // Type definition
 //---------------------------------------------
@@ -542,7 +542,8 @@ typedef struct
 
 typedef struct
 {
-    u16 ItemId<name="Item ID">;
+    ItemizationType Type : 4 <name = "Item Type">;
+    u16 ItemUnitID : 12 <name = "Item ID">;
     u16 DropProbability<name="Drop Probability %">;
 } datEnemyItemTable;
 

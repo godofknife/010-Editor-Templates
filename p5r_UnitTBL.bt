@@ -1,0 +1,9 @@
+enum<short> ItemizationType
+{
+    MeleeWeapon_ItemizationType = 0,
+    Armor_ItemizationType = 1,
+    Accessory_ItemizationType = 2,
+	Consumables_ItemizationType = 3,
+    SkillCard_ItemizationType = 6,
+    RangedWeapon_ItemizationType = 8,
+};

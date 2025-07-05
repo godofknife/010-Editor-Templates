@@ -20,12 +20,12 @@ typedef struct
 
 typedef struct
 {
-    u32 TrueFlag<name="Enabling Bitflag ",format=hex>;
-    u32 TrueFlag<name="Enabling Bitflag ",format=hex>;
-    u32 TrueFlag<name="Enabling Bitflag ",format=hex>;
-    u32 FalseFlag<name="Disabling Bitflag ",format=hex>;
-    u32 FalseFlag<name="Disabling Bitflag ",format=hex>;
-    u32 FalseFlag<name="Disabling Bitflag ",format=hex>;
+    u32 TrueFlag<name="Enabling Bitflag ">;
+    u32 TrueFlag<name="Enabling Bitflag ">;
+    u32 TrueFlag<name="Enabling Bitflag ">;
+    u32 FalseFlag<name="Disabling Bitflag ">;
+    u32 FalseFlag<name="Disabling Bitflag ">;
+    u32 FalseFlag<name="Disabling Bitflag ">;
 } Bitflags;
 
 enum<short> PromptTypeList
