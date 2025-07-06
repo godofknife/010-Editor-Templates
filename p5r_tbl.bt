@@ -98,18 +98,18 @@ typedef struct
 
 typedef struct
 {
+    u8 bit31 : 1;
     u8 bit30 : 1;
     u8 bit29 : 1;
-    u8 bit28 : 1;
     u8 FirstTurnEnemyNoAmbus : 1 <name = "Enemy First Turn No Ambush", comment = "This is only with CBT mod. This makes custom enemy always gets first turn when initiating battle">;
     u8 EnableEventBattleACBAWB : 1 <name = "Enable Event Battle ACB/AWB", comment = "This is only with CBT mod. This makes custom enemy to use event voiceline pack">;
     u8 EnableIntroBCD : 1 <name = "Enable Intro BCD", comment = "This is only with CBT mod. This makes custom enemy to use Intro BCD">;
     u8 CustomBossBattle : 1 <name = "Enable Custom Boss Battle", comment = "This is only with CBT mod. This makes the encounter set becomes custom boss encounter">;
+    u8 bit24 : 1;
     u8 bit23 : 1;
     u8 bit22 : 1;
     u8 bit21 : 1;
     u8 bit20 : 1;
-    u8 bit19 : 1;
     u8 NonNegotiable : 1 <name = "No Negotiation", comment = "If this turns on, every enemy in that battle can't be negotiated">;
     u8 bit18 : 1;
     u8 bit17 : 1;
