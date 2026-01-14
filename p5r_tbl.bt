@@ -348,12 +348,39 @@ typedef struct
 
 typedef struct
 {
+    u8 pad : 8;
+    u8 bit7 : 1;
+    u8 bit6 : 1;
+    u8 bit5 : 1;
+    u8 bit4 : 1;
+    u8 Godlike : 1;
+    u8 Animal : 1;
+    u8 MartialArts : 1;
+    u8 Female : 1;
+} b16_negotiation_type<edit=flags>;
+
+typedef struct
+{
+    b16_negotiation_type negotiationType<name = "Shadow Personality Type">;
+    u8 formation;
+    u8 successChance;
+    u8 cmmAbilityID;
+    u8 pad;
+}NegotiationRetry <name = "Negotiation Related">;
+
+typedef struct
+{
     u32 UnknownR;
     u32 UnknownR;
     u32 UnknownR;
     u32 UnknownR;
     u32 UnknownR;
 } TPlayer_PlayerSegment4 <name = "Unknown Player Segment 4">;
+
+typedef struct
+{
+    NegotiationRetry ShadowTalkData[11];
+} TPlayer_PlayerSegment6 <name = "Shadow Negotiation Data">;
 
 // Exist
 
@@ -933,7 +960,8 @@ typedef struct
     u16 WeaponShopMenuSorting <name = "Melee Weapon Shop Menu Sorting", comment = "Lower Value will put it on top.">;
     EquippableUsers Users;
     MeleeWeaponShop isitavailable <name = "Show in Shop?", comment = "Put 1 to make it not shown. Put 0 to make it shown in Iwai Shop.">;
-    u16 RESERVE;
+    ElementalType ElementalAttack <name = "Weapon Elemental Attack">;
+	u8 RESERVED;
     u16 Attack <name = "Attack">;
     u16 Accuracy <name = "Accuracy">;
     PersonaStats Stats<name="Stat Boosts">;
@@ -1160,6 +1188,7 @@ enum TableSegmentType
     TableSegmentType_Player_HPSPPerLevel,
     TableSegmentType_Player_PlayerSegment3,
     TableSegmentType_Player_PlayerSegment4,
+	TableSegmentType_Player_PlayerSegment6,
     TableSegmentType_Exist_Segment1,
     TableSegmentType_Exist_Segment2,
     TableSegmentType_Elsai_Segment0,
@@ -1247,7 +1276,9 @@ typedef struct( TableSegmentType _type )
         case TableSegmentType_Player_PlayerSegment4:
             TPlayer_PlayerSegment4 PlayerSegment4[ Size / sizeof( TPlayer_PlayerSegment4 ) ];
             break;
-
+case TableSegmentType_Player_PlayerSegment6:
+            TPlayer_PlayerSegment6 PlayerSegment6[ Size / sizeof( TPlayer_PlayerSegment6 ) ];
+            break;
         case TableSegmentType_Exist_Segment1:
             TExist_Segment1 Entries[ Size / sizeof( TExist_Segment1 ) ];
             break;
@@ -1455,6 +1486,7 @@ typedef struct( string tableName, u32 endOffset )
                 case 1: segmentType = TableSegmentType_Player_HPSPPerLevel; break;
                 case 2: segmentType = TableSegmentType_Player_PlayerSegment3; break;
                 case 3: segmentType = TableSegmentType_Player_PlayerSegment4; break;
+				case 5: segmentType = TableSegmentType_Player_PlayerSegment6; break;
             }
         }
         else if ( !Stricmp( tableName, "exist" ) )
