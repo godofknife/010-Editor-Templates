@@ -1,0 +1,26 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+//
+//      File: fclConstTable.ftd
+//   Authors: Gemini
+//   Purpose: Edit Sell Price Modifier for P4G
+//------------------------------------------------
+
+LittleEndian(); 
+
+struct FCL_CONSTS {
+    // Skip the first 16 bytes (Header/Padding)
+    byte    padding[16] <hidden=true, bgcolor=0xCCCCCC>;
+
+    // Byte Position 16: Integer value
+    float     SellPriceModifier <bgcolor=0xFFD700, name="Sell Item Price", comment="Multiplier for selling items (Default 0.2 = 20%)">;
+
+    // Byte Position 20: The Sell Price Modifier
+    float   SellPriceModifier2 <bgcolor=0x98FB98, name="Sell Item Price 2", comment="Multiplier for selling items 2 (Default 0.2 = 20%)">;
+    
+    // Remainder of file - FIXED LINE BELOW
+    if( !FEof() ) {
+        byte    remainingData[ FileSize() - FTell() ] <bgcolor=0xE0E0E0>;
+    }
+
+} file;

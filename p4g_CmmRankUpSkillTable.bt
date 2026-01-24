@@ -14,20 +14,20 @@
 
 LittleEndian();
 
-enum<ushort> PartyMember
+enum<ushort> PartyMember1
 {
-  Yosuke = 2,
-  Chie = 3,
-  Yukiko = 4,
-  Rise = 5,
-  Kanji = 6,
-  Naoto = 7,
-  Teddie = 8
+  Yosuke1 = 2,
+  Chie1 = 3,
+  Yukiko1 = 4,
+  Rise1 = 5,
+  Kanji1 = 6,
+  Naoto1 = 7,
+  Teddie1 = 8
 };
 
 typedef struct
 {
-  PartyMember Member;
+  PartyMember1 Member;
   ushort Rank;
   BattleSkill SkillToLearn;
   BattleSkill SkillToReplace;
