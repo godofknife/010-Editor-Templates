@@ -6569,7 +6569,6 @@ enum<ubyte> ElementalType
     Support = 21,
 };
 
-
 enum<ubyte>Skill_ApplyOrCureEffect
 {
     NoEffect = 0,
@@ -7426,7 +7425,7 @@ enum<ubyte> ItemID
 	Tonfa = 510,
 };
 
-enum<u8> ShadowPersonality
+enum<ubyte> ShadowPersonality
 {
 	Timid = 0,
 	Irritable = 1,

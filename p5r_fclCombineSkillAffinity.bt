@@ -1,0 +1,79 @@
+//------------------------------------------------
+//--- 010 Editor Template
+//--- File: fclCombineSkillAffinity.bt
+//--- Alignment: Header (64b), Entries (46b x 16)
+//------------------------------------------------
+#include "p5r_enums.bt"
+BigEndian(); 
+
+struct Header {
+    // --- FTD Table Section (0x00 - 0x1F) ---
+    uint32 Field00;     
+    char   Magic[4];         // "FTD0"
+    uint32 FileSize;    
+    uint16 DataType;
+    uint16 DataCount;
+    uint32 DataOffsets[1];   
+    byte   TablePadding[12]; // Fill to 0x20
+
+    // --- List Section (0x20 - 0x2F) ---
+    uint32 ListField00;
+    uint32 ListDataSize;
+    uint32 ListEntryCount;   
+    uint16 ListEntryType;
+    uint16 Field0E;          // Ends at 0x2E
+
+} header <style=sHeading1, bgcolor=cLtGray>;
+
+// Each entry is 46 bytes
+typedef struct {
+    // 23 slots of 2-byte skill inheritance types
+    uint16 Physical; 
+    uint16 Gun; 
+    uint16 Fire; 
+    uint16 Ice; 
+    uint16 Electric; 
+    uint16 Wind; 
+    uint16 Psy; 
+    uint16 Nuke; 
+    uint16 Bless; 
+    uint16 Curse; 
+    uint16 Almighty; 
+    uint16 Dizzy; 
+    uint16 Confuse; 
+    uint16 Fear; 
+    uint16 Forget; 
+    uint16 Hunger; 
+    uint16 Sleep; 
+    uint16 Rage; 
+    uint16 Despair; 
+    uint16 Brainwash; 
+    uint16 Healing; 
+    uint16 Support; 
+    uint16 Passive; 
+} Entry;
+
+// Body starts at byte 65 (Offset 0x40)
+struct Body {
+    Entry InheritNone;
+    Entry InheritPhysical;
+    Entry InheritFire;
+    Entry InheritIce;
+    Entry InheritElec;
+    Entry InheritWind;
+    Entry InheritBless;
+    Entry InheritCurse;
+    Entry InheritHealing;
+	Entry InheritRESERVE;
+    Entry InheritAilment;
+	Entry InheritRESERVE;
+    Entry InheritAlmighty;
+    Entry InheritRESERVE;
+    Entry InheritNuke;
+    Entry InheritPsy;
+} body <style=sSection1, bgcolor=cLtPurple>;
+
+// Final bytes of the file
+struct Footer {
+    byte trailingData[16];
+} footer <style=sHeading3, bgcolor=cLtBlue>;
