@@ -155,7 +155,7 @@ typedef struct
 typedef struct
 {
 	char stationName[32] <name = "Station Name">;
-	Bitflag Field20 <name = "Bitflag requirement">;
+	u32 Field20 <name = "Bitflag requirement">;
 	u32 Field24;
 	u16 bf_procedure <name = "lmap.bf Procedure Index">;
 	u16 Field2A <name = "Something Mode">;
@@ -322,7 +322,7 @@ typedef struct( u32 entrySize, string fileName )
 			short Rank <name = "Unlocks at Rank:">;
 			ConfidantFunction Function <name = "Confidant Function">;
 			short Unknown <name = "Unknown">;
-			Bitflag EnablingBitflag;
+			u32 EnablingBitflag;
 			readString=Str("Function Type: %s || Function ID: %02d || Rank %02d || Enabling Bitflag: %05d", EnumToString(FunctionType), Function, Rank, FlagConvert(EnablingBitflag));
 			break;
 			

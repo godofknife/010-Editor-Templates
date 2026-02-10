@@ -23,7 +23,13 @@ typedef struct
   uint FtdSize;
   uint FtdNumber;
   byte Padding[8];
-  FtdEntry Entry[FtdNumber];
+  FtdEntry Yosuke;
+  FtdEntry Chie;
+  FtdEntry Yukiko;
+  FtdEntry Rise;
+  FtdEntry Kanji;
+  FtdEntry Naoto;
+  FtdEntry Teddie;
 } TFtd;
 
 TFtd File;
